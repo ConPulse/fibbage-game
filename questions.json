@@ -1,57 +1,1973 @@
 [
-  {"id":1,"category":"Florida Man","question":"In 2019, a Florida man was arrested for throwing a ____ at a Wendy's employee.","answer":"alligator","alternateAnswers":["gator","an alligator"]},
-  {"id":2,"category":"Florida Man","question":"A Florida man called 911 after a restaurant put ____ on his hamburger.","answer":"salt","alternateAnswers":["too much salt"]},
-  {"id":3,"category":"Florida Man","question":"A Florida man was caught riding a ____ down the highway during rush hour.","answer":"lawnmower","alternateAnswers":["lawn mower","riding mower"]},
-  {"id":4,"category":"Florida Man","question":"A Florida man broke into a home and fell asleep on the couch while wearing ____.","answer":"the homeowner's clothes","alternateAnswers":["their clothes","stolen clothes"]},
-  {"id":5,"category":"Florida Man","question":"A Florida man tried to pay for his McDonald's order with a bag of ____.","answer":"marijuana","alternateAnswers":["weed","pot","cannabis"]},
-  {"id":6,"category":"World Records","question":"The world record for most ____ eaten in one minute is 72.","answer":"grapes","alternateAnswers":["grape"]},
-  {"id":7,"category":"World Records","question":"The longest ____ ever recorded lasted 68 days.","answer":"hiccup attack","alternateAnswers":["hiccups","hiccupping","case of hiccups"]},
-  {"id":8,"category":"World Records","question":"The world record for balancing ____ on the chin is 17 minutes.","answer":"a lawnmower","alternateAnswers":["lawnmower","lawn mower"]},
-  {"id":9,"category":"World Records","question":"A man in India holds the record for having the longest ____ at over 6 meters.","answer":"fingernails","alternateAnswers":["nails","finger nails"]},
-  {"id":10,"category":"World Records","question":"The record for most people inside a ____ at once is 28.","answer":"smart car","alternateAnswers":["smartcar","mini cooper","small car"]},
-  {"id":11,"category":"Weird Laws","question":"In Switzerland, it is illegal to own just one ____.","answer":"guinea pig","alternateAnswers":["guinea pigs"]},
-  {"id":12,"category":"Weird Laws","question":"In Alabama, it is illegal to wear a ____ that could frighten a child.","answer":"fake mustache","alternateAnswers":["fake moustache","mustache"]},
-  {"id":13,"category":"Weird Laws","question":"In France, it is illegal to name a pig ____.","answer":"Napoleon","alternateAnswers":[]},
-  {"id":14,"category":"Weird Laws","question":"In Thailand, it is illegal to step on ____.","answer":"money","alternateAnswers":["currency","a coin","coins","Thai money"]},
-  {"id":15,"category":"Weird Laws","question":"In Victoria, Australia, only licensed ____ are allowed to change a light bulb.","answer":"electricians","alternateAnswers":["electrician","an electrician"]},
-  {"id":16,"category":"Food & Drink","question":"The most expensive pizza in the world costs $12,000 and is topped with ____.","answer":"gold leaf","alternateAnswers":["gold","edible gold"]},
-  {"id":17,"category":"Food & Drink","question":"Ketchup was originally sold as a ____ in the 1830s.","answer":"medicine","alternateAnswers":["medication","drug"]},
-  {"id":18,"category":"Food & Drink","question":"Honey never ____. Edible honey has been found in 3,000-year-old Egyptian tombs.","answer":"expires","alternateAnswers":["spoils","goes bad","rots"]},
-  {"id":19,"category":"Food & Drink","question":"The original flavor of Froot Loops is actually ____ regardless of color.","answer":"the same","alternateAnswers":["all the same","identical","one flavor"]},
-  {"id":20,"category":"Food & Drink","question":"Ranch dressing is dyed with ____ to make it look whiter.","answer":"titanium dioxide","alternateAnswers":["titanium"]},
-  {"id":21,"category":"Science","question":"Octopuses have ____ hearts.","answer":"three","alternateAnswers":["3"]},
-  {"id":22,"category":"Science","question":"A teaspoon of a neutron star would weigh about ____ pounds.","answer":"6 billion","alternateAnswers":["6000000000","six billion","billions"]},
-  {"id":23,"category":"Science","question":"Bananas are slightly ____ due to their potassium content.","answer":"radioactive","alternateAnswers":["radio active"]},
-  {"id":24,"category":"Science","question":"The smell of freshly cut grass is actually a plant ____ signal.","answer":"distress","alternateAnswers":["danger","warning","stress","sos"]},
-  {"id":25,"category":"Science","question":"Hot water freezes ____ than cold water, a phenomenon called the Mpemba effect.","answer":"faster","alternateAnswers":["quicker","more quickly"]},
-  {"id":26,"category":"History","question":"Cleopatra lived closer in time to the ____ than to the building of the Great Pyramid.","answer":"moon landing","alternateAnswers":["lunar landing","moon landings"]},
-  {"id":27,"category":"History","question":"In ancient Rome, ____ was used as mouthwash.","answer":"urine","alternateAnswers":["pee","piss"]},
-  {"id":28,"category":"History","question":"Napoleon was once attacked by a horde of ____.","answer":"rabbits","alternateAnswers":["bunnies","rabbit","bunny"]},
-  {"id":29,"category":"History","question":"The Great Emu War of 1932 was fought in ____ and the emus won.","answer":"Australia","alternateAnswers":[]},
-  {"id":30,"category":"History","question":"Vikings used to give ____ to kittens as wedding gifts.","answer":"kittens","alternateAnswers":["cats","a kitten"]},
-  {"id":31,"category":"Celebrity","question":"Before becoming famous, Danny DeVito worked as a ____.","answer":"hairdresser","alternateAnswers":["hair dresser","beautician","cosmetologist"]},
-  {"id":32,"category":"Celebrity","question":"Keanu Reeves once gave ____ from his Matrix salary to the special effects team.","answer":"$75 million","alternateAnswers":["75 million","millions","75 million dollars"]},
-  {"id":33,"category":"Celebrity","question":"Christopher Walken used to work as a ____ at a circus.","answer":"lion tamer","alternateAnswers":["lion-tamer"]},
-  {"id":34,"category":"Celebrity","question":"Steve Buscemi volunteered as a ____ in New York City after 9/11.","answer":"firefighter","alternateAnswers":["fire fighter","fireman"]},
-  {"id":35,"category":"Celebrity","question":"Dolph Lundgren has a master's degree in ____.","answer":"chemical engineering","alternateAnswers":["chemistry"]},
-  {"id":36,"category":"Sports","question":"In professional baseball, the average lifespan of a ball is ____ pitches.","answer":"six","alternateAnswers":["6","seven","7"]},
-  {"id":37,"category":"Sports","question":"Golf balls originally had ____ surfaces before dimples were discovered.","answer":"smooth","alternateAnswers":["flat","plain"]},
-  {"id":38,"category":"Sports","question":"The Olympic gold medal is actually made mostly of ____.","answer":"silver","alternateAnswers":[]},
-  {"id":39,"category":"Sports","question":"In cricket, a score of zero is called a ____.","answer":"duck","alternateAnswers":[]},
-  {"id":40,"category":"Sports","question":"Tug of war was an Olympic sport until ____.","answer":"1920","alternateAnswers":[]},
-  {"id":41,"category":"Animals","question":"A group of flamingos is called a ____.","answer":"flamboyance","alternateAnswers":[]},
-  {"id":42,"category":"Animals","question":"Cows have best friends and get ____ when separated.","answer":"stressed","alternateAnswers":["sad","anxious","depressed","upset"]},
-  {"id":43,"category":"Animals","question":"A shrimp's heart is located in its ____.","answer":"head","alternateAnswers":[]},
-  {"id":44,"category":"Animals","question":"Sea otters hold ____ while they sleep so they don't drift apart.","answer":"hands","alternateAnswers":["paws","each other's hands"]},
-  {"id":45,"category":"Animals","question":"Dolphins sleep with one ____ open.","answer":"eye","alternateAnswers":[]},
-  {"id":46,"category":"Technology","question":"The first computer bug was an actual ____ found in a computer.","answer":"moth","alternateAnswers":["bug","insect"]},
-  {"id":47,"category":"Technology","question":"The average smartphone has more computing power than the computers used for the ____.","answer":"Apollo moon landing","alternateAnswers":["moon landing","Apollo missions","Apollo 11"]},
-  {"id":48,"category":"Technology","question":"The first YouTube video ever uploaded was about a visit to the ____.","answer":"zoo","alternateAnswers":["San Diego Zoo"]},
-  {"id":49,"category":"Technology","question":"The @ symbol was almost replaced by ____ for email addresses.","answer":"the exclamation mark","alternateAnswers":["exclamation point","!","exclamation mark"]},
-  {"id":50,"category":"Technology","question":"Amazon's original name was ____.","answer":"Cadabra","alternateAnswers":["cadabra.com"]},
-  {"id":51,"category":"Florida Man","question":"A Florida man was arrested for practicing ____ without a license on an alligator.","answer":"dentistry","alternateAnswers":["dental work","dental"]},
-  {"id":52,"category":"Weird Laws","question":"In Singapore, it is illegal to sell ____.","answer":"chewing gum","alternateAnswers":["gum"]},
-  {"id":53,"category":"History","question":"Ancient Egyptians used ____ as pillows.","answer":"stones","alternateAnswers":["stone","rocks","rock"]},
-  {"id":54,"category":"Animals","question":"Wombat poop is shaped like a ____.","answer":"cube","alternateAnswers":["cubes","square","box"]},
-  {"id":55,"category":"Science","question":"There are more ____ in your body than human cells.","answer":"bacteria","alternateAnswers":["bacterial cells","microbes"]}
+  {
+    "id": 1,
+    "category": "Florida Man",
+    "question": "In 2019, a Florida man was arrested for throwing a ____ at a Wendy's employee.",
+    "answer": "alligator",
+    "alternateAnswers": [
+      "gator",
+      "an alligator"
+    ]
+  },
+  {
+    "id": 2,
+    "category": "Florida Man",
+    "question": "A Florida man called 911 after a restaurant put ____ on his hamburger.",
+    "answer": "salt",
+    "alternateAnswers": [
+      "too much salt"
+    ]
+  },
+  {
+    "id": 3,
+    "category": "Florida Man",
+    "question": "A Florida man was caught riding a ____ down the highway during rush hour.",
+    "answer": "lawnmower",
+    "alternateAnswers": [
+      "lawn mower",
+      "riding mower"
+    ]
+  },
+  {
+    "id": 4,
+    "category": "Florida Man",
+    "question": "A Florida man broke into a home and fell asleep on the couch while wearing ____.",
+    "answer": "the homeowner's clothes",
+    "alternateAnswers": [
+      "their clothes",
+      "stolen clothes"
+    ]
+  },
+  {
+    "id": 5,
+    "category": "Florida Man",
+    "question": "A Florida man tried to pay for his McDonald's order with a bag of ____.",
+    "answer": "marijuana",
+    "alternateAnswers": [
+      "weed",
+      "pot",
+      "cannabis"
+    ]
+  },
+  {
+    "id": 6,
+    "category": "World Records",
+    "question": "The world record for most ____ eaten in one minute is 72.",
+    "answer": "grapes",
+    "alternateAnswers": [
+      "grape"
+    ]
+  },
+  {
+    "id": 7,
+    "category": "World Records",
+    "question": "The longest ____ ever recorded lasted 68 days.",
+    "answer": "hiccup attack",
+    "alternateAnswers": [
+      "hiccups",
+      "hiccupping",
+      "case of hiccups"
+    ]
+  },
+  {
+    "id": 8,
+    "category": "World Records",
+    "question": "The world record for balancing ____ on the chin is 17 minutes.",
+    "answer": "a lawnmower",
+    "alternateAnswers": [
+      "lawnmower",
+      "lawn mower"
+    ]
+  },
+  {
+    "id": 9,
+    "category": "World Records",
+    "question": "A man in India holds the record for having the longest ____ at over 6 meters.",
+    "answer": "fingernails",
+    "alternateAnswers": [
+      "nails",
+      "finger nails"
+    ]
+  },
+  {
+    "id": 10,
+    "category": "World Records",
+    "question": "The record for most people inside a ____ at once is 28.",
+    "answer": "smart car",
+    "alternateAnswers": [
+      "smartcar",
+      "mini cooper",
+      "small car"
+    ]
+  },
+  {
+    "id": 11,
+    "category": "Weird Laws",
+    "question": "In Switzerland, it is illegal to own just one ____.",
+    "answer": "guinea pig",
+    "alternateAnswers": [
+      "guinea pigs"
+    ]
+  },
+  {
+    "id": 12,
+    "category": "Weird Laws",
+    "question": "In Alabama, it is illegal to wear a ____ that could frighten a child.",
+    "answer": "fake mustache",
+    "alternateAnswers": [
+      "fake moustache",
+      "mustache"
+    ]
+  },
+  {
+    "id": 13,
+    "category": "Weird Laws",
+    "question": "In France, it is illegal to name a pig ____.",
+    "answer": "Napoleon",
+    "alternateAnswers": []
+  },
+  {
+    "id": 14,
+    "category": "Weird Laws",
+    "question": "In Thailand, it is illegal to step on ____.",
+    "answer": "money",
+    "alternateAnswers": [
+      "currency",
+      "a coin",
+      "coins",
+      "Thai money"
+    ]
+  },
+  {
+    "id": 15,
+    "category": "Weird Laws",
+    "question": "In Victoria, Australia, only licensed ____ are allowed to change a light bulb.",
+    "answer": "electricians",
+    "alternateAnswers": [
+      "electrician",
+      "an electrician"
+    ]
+  },
+  {
+    "id": 16,
+    "category": "Food & Drink",
+    "question": "The most expensive pizza in the world costs $12,000 and is topped with ____.",
+    "answer": "gold leaf",
+    "alternateAnswers": [
+      "gold",
+      "edible gold"
+    ]
+  },
+  {
+    "id": 17,
+    "category": "Food & Drink",
+    "question": "Ketchup was originally sold as a ____ in the 1830s.",
+    "answer": "medicine",
+    "alternateAnswers": [
+      "medication",
+      "drug"
+    ]
+  },
+  {
+    "id": 18,
+    "category": "Food & Drink",
+    "question": "Honey never ____. Edible honey has been found in 3,000-year-old Egyptian tombs.",
+    "answer": "expires",
+    "alternateAnswers": [
+      "spoils",
+      "goes bad",
+      "rots"
+    ]
+  },
+  {
+    "id": 19,
+    "category": "Food & Drink",
+    "question": "The original flavor of Froot Loops is actually ____ regardless of color.",
+    "answer": "the same",
+    "alternateAnswers": [
+      "all the same",
+      "identical",
+      "one flavor"
+    ]
+  },
+  {
+    "id": 20,
+    "category": "Food & Drink",
+    "question": "Ranch dressing is dyed with ____ to make it look whiter.",
+    "answer": "titanium dioxide",
+    "alternateAnswers": [
+      "titanium"
+    ]
+  },
+  {
+    "id": 21,
+    "category": "Science",
+    "question": "Octopuses have ____ hearts.",
+    "answer": "three",
+    "alternateAnswers": [
+      "3"
+    ]
+  },
+  {
+    "id": 22,
+    "category": "Science",
+    "question": "A teaspoon of a neutron star would weigh about ____ pounds.",
+    "answer": "6 billion",
+    "alternateAnswers": [
+      "6000000000",
+      "six billion",
+      "billions"
+    ]
+  },
+  {
+    "id": 23,
+    "category": "Science",
+    "question": "Bananas are slightly ____ due to their potassium content.",
+    "answer": "radioactive",
+    "alternateAnswers": [
+      "radio active"
+    ]
+  },
+  {
+    "id": 24,
+    "category": "Science",
+    "question": "The smell of freshly cut grass is actually a plant ____ signal.",
+    "answer": "distress",
+    "alternateAnswers": [
+      "danger",
+      "warning",
+      "stress",
+      "sos"
+    ]
+  },
+  {
+    "id": 25,
+    "category": "Science",
+    "question": "Hot water freezes ____ than cold water, a phenomenon called the Mpemba effect.",
+    "answer": "faster",
+    "alternateAnswers": [
+      "quicker",
+      "more quickly"
+    ]
+  },
+  {
+    "id": 26,
+    "category": "History",
+    "question": "Cleopatra lived closer in time to the ____ than to the building of the Great Pyramid.",
+    "answer": "moon landing",
+    "alternateAnswers": [
+      "lunar landing",
+      "moon landings"
+    ]
+  },
+  {
+    "id": 27,
+    "category": "History",
+    "question": "In ancient Rome, ____ was used as mouthwash.",
+    "answer": "urine",
+    "alternateAnswers": [
+      "pee",
+      "piss"
+    ]
+  },
+  {
+    "id": 28,
+    "category": "History",
+    "question": "Napoleon was once attacked by a horde of ____.",
+    "answer": "rabbits",
+    "alternateAnswers": [
+      "bunnies",
+      "rabbit",
+      "bunny"
+    ]
+  },
+  {
+    "id": 29,
+    "category": "History",
+    "question": "The Great Emu War of 1932 was fought in ____ and the emus won.",
+    "answer": "Australia",
+    "alternateAnswers": []
+  },
+  {
+    "id": 30,
+    "category": "History",
+    "question": "Vikings used to give ____ to kittens as wedding gifts.",
+    "answer": "kittens",
+    "alternateAnswers": [
+      "cats",
+      "a kitten"
+    ]
+  },
+  {
+    "id": 31,
+    "category": "Celebrity",
+    "question": "Before becoming famous, Danny DeVito worked as a ____.",
+    "answer": "hairdresser",
+    "alternateAnswers": [
+      "hair dresser",
+      "beautician",
+      "cosmetologist"
+    ]
+  },
+  {
+    "id": 32,
+    "category": "Celebrity",
+    "question": "Keanu Reeves once gave ____ from his Matrix salary to the special effects team.",
+    "answer": "$75 million",
+    "alternateAnswers": [
+      "75 million",
+      "millions",
+      "75 million dollars"
+    ]
+  },
+  {
+    "id": 33,
+    "category": "Celebrity",
+    "question": "Christopher Walken used to work as a ____ at a circus.",
+    "answer": "lion tamer",
+    "alternateAnswers": [
+      "lion-tamer"
+    ]
+  },
+  {
+    "id": 34,
+    "category": "Celebrity",
+    "question": "Steve Buscemi volunteered as a ____ in New York City after 9/11.",
+    "answer": "firefighter",
+    "alternateAnswers": [
+      "fire fighter",
+      "fireman"
+    ]
+  },
+  {
+    "id": 35,
+    "category": "Celebrity",
+    "question": "Dolph Lundgren has a master's degree in ____.",
+    "answer": "chemical engineering",
+    "alternateAnswers": [
+      "chemistry"
+    ]
+  },
+  {
+    "id": 36,
+    "category": "Sports",
+    "question": "In professional baseball, the average lifespan of a ball is ____ pitches.",
+    "answer": "six",
+    "alternateAnswers": [
+      "6",
+      "seven",
+      "7"
+    ]
+  },
+  {
+    "id": 37,
+    "category": "Sports",
+    "question": "Golf balls originally had ____ surfaces before dimples were discovered.",
+    "answer": "smooth",
+    "alternateAnswers": [
+      "flat",
+      "plain"
+    ]
+  },
+  {
+    "id": 38,
+    "category": "Sports",
+    "question": "The Olympic gold medal is actually made mostly of ____.",
+    "answer": "silver",
+    "alternateAnswers": []
+  },
+  {
+    "id": 39,
+    "category": "Sports",
+    "question": "In cricket, a score of zero is called a ____.",
+    "answer": "duck",
+    "alternateAnswers": []
+  },
+  {
+    "id": 40,
+    "category": "Sports",
+    "question": "Tug of war was an Olympic sport until ____.",
+    "answer": "1920",
+    "alternateAnswers": []
+  },
+  {
+    "id": 41,
+    "category": "Animals",
+    "question": "A group of flamingos is called a ____.",
+    "answer": "flamboyance",
+    "alternateAnswers": []
+  },
+  {
+    "id": 42,
+    "category": "Animals",
+    "question": "Cows have best friends and get ____ when separated.",
+    "answer": "stressed",
+    "alternateAnswers": [
+      "sad",
+      "anxious",
+      "depressed",
+      "upset"
+    ]
+  },
+  {
+    "id": 43,
+    "category": "Animals",
+    "question": "A shrimp's heart is located in its ____.",
+    "answer": "head",
+    "alternateAnswers": []
+  },
+  {
+    "id": 44,
+    "category": "Animals",
+    "question": "Sea otters hold ____ while they sleep so they don't drift apart.",
+    "answer": "hands",
+    "alternateAnswers": [
+      "paws",
+      "each other's hands"
+    ]
+  },
+  {
+    "id": 45,
+    "category": "Animals",
+    "question": "Dolphins sleep with one ____ open.",
+    "answer": "eye",
+    "alternateAnswers": []
+  },
+  {
+    "id": 46,
+    "category": "Technology",
+    "question": "The first computer bug was an actual ____ found in a computer.",
+    "answer": "moth",
+    "alternateAnswers": [
+      "bug",
+      "insect"
+    ]
+  },
+  {
+    "id": 47,
+    "category": "Technology",
+    "question": "The average smartphone has more computing power than the computers used for the ____.",
+    "answer": "Apollo moon landing",
+    "alternateAnswers": [
+      "moon landing",
+      "Apollo missions",
+      "Apollo 11"
+    ]
+  },
+  {
+    "id": 48,
+    "category": "Technology",
+    "question": "The first YouTube video ever uploaded was about a visit to the ____.",
+    "answer": "zoo",
+    "alternateAnswers": [
+      "San Diego Zoo"
+    ]
+  },
+  {
+    "id": 49,
+    "category": "Technology",
+    "question": "The @ symbol was almost replaced by ____ for email addresses.",
+    "answer": "the exclamation mark",
+    "alternateAnswers": [
+      "exclamation point",
+      "!",
+      "exclamation mark"
+    ]
+  },
+  {
+    "id": 50,
+    "category": "Technology",
+    "question": "Amazon's original name was ____.",
+    "answer": "Cadabra",
+    "alternateAnswers": [
+      "cadabra.com"
+    ]
+  },
+  {
+    "id": 51,
+    "category": "Florida Man",
+    "question": "A Florida man was arrested for practicing ____ without a license on an alligator.",
+    "answer": "dentistry",
+    "alternateAnswers": [
+      "dental work",
+      "dental"
+    ]
+  },
+  {
+    "id": 52,
+    "category": "Weird Laws",
+    "question": "In Singapore, it is illegal to sell ____.",
+    "answer": "chewing gum",
+    "alternateAnswers": [
+      "gum"
+    ]
+  },
+  {
+    "id": 53,
+    "category": "History",
+    "question": "Ancient Egyptians used ____ as pillows.",
+    "answer": "stones",
+    "alternateAnswers": [
+      "stone",
+      "rocks",
+      "rock"
+    ]
+  },
+  {
+    "id": 54,
+    "category": "Animals",
+    "question": "Wombat poop is shaped like a ____.",
+    "answer": "cube",
+    "alternateAnswers": [
+      "cubes",
+      "square",
+      "box"
+    ]
+  },
+  {
+    "id": 55,
+    "category": "Science",
+    "question": "There are more ____ in your body than human cells.",
+    "answer": "bacteria",
+    "alternateAnswers": [
+      "bacterial cells",
+      "microbes"
+    ]
+  },
+  {
+    "id": 56,
+    "category": "US History",
+    "question": "During the Civil War, the Union Army used hot air balloons for ____.",
+    "answer": "aerial reconnaissance",
+    "alternateAnswers": [
+      "spying",
+      "spy missions",
+      "reconnaissance"
+    ]
+  },
+  {
+    "id": 57,
+    "category": "US History",
+    "question": "The Liberty Bell cracked while ringing for the funeral of ____.",
+    "answer": "Chief Justice John Marshall",
+    "alternateAnswers": [
+      "John Marshall"
+    ]
+  },
+  {
+    "id": 58,
+    "category": "US History",
+    "question": "Before the bald eagle was chosen, Benjamin Franklin wanted America's national bird to be the ____.",
+    "answer": "turkey",
+    "alternateAnswers": [
+      "wild turkey"
+    ]
+  },
+  {
+    "id": 59,
+    "category": "US History",
+    "question": "During Prohibition, the U.S. government deliberately poisoned ____ to discourage drinking.",
+    "answer": "industrial alcohol",
+    "alternateAnswers": [
+      "alcohol",
+      "industrial liquor"
+    ]
+  },
+  {
+    "id": 60,
+    "category": "US History",
+    "question": "The shortest war in U.S. history lasted only ____ against Grenada in 1983.",
+    "answer": "four days",
+    "alternateAnswers": [
+      "4 days"
+    ]
+  },
+  {
+    "id": 61,
+    "category": "US History",
+    "question": "Paul Revere never actually shouted \"The British are coming!\" — he reportedly said \"The ____ are coming!\"",
+    "answer": "Regulars",
+    "alternateAnswers": [
+      "the regulars"
+    ]
+  },
+  {
+    "id": 62,
+    "category": "US History",
+    "question": "In 1867, the U.S. purchased Alaska from Russia for ____ per acre.",
+    "answer": "two cents",
+    "alternateAnswers": [
+      "2 cents",
+      "about 2 cents"
+    ]
+  },
+  {
+    "id": 63,
+    "category": "US History",
+    "question": "The original Pledge of Allegiance was written in 1892 as a marketing campaign for ____.",
+    "answer": "a children's magazine",
+    "alternateAnswers": [
+      "Youth's Companion",
+      "a magazine"
+    ]
+  },
+  {
+    "id": 64,
+    "category": "US History",
+    "question": "During World War II, the U.S. military created a secret unit of artists and sound engineers called the ____ to deceive the enemy.",
+    "answer": "Ghost Army",
+    "alternateAnswers": [
+      "the Ghost Army"
+    ]
+  },
+  {
+    "id": 65,
+    "category": "US History",
+    "question": "The 1848 California Gold Rush started when gold was found at ____.",
+    "answer": "Sutter's Mill",
+    "alternateAnswers": [
+      "Sutter's mill",
+      "Sutters Mill"
+    ]
+  },
+  {
+    "id": 66,
+    "category": "US History",
+    "question": "Before it was the White House, the presidential residence was called the ____.",
+    "answer": "President's House",
+    "alternateAnswers": [
+      "President's Palace",
+      "Executive Mansion"
+    ]
+  },
+  {
+    "id": 67,
+    "category": "US History",
+    "question": "The Boston Tea Party protesters disguised themselves as ____.",
+    "answer": "Mohawk Indians",
+    "alternateAnswers": [
+      "Native Americans",
+      "Mohawks",
+      "Indians"
+    ]
+  },
+  {
+    "id": 68,
+    "category": "US History",
+    "question": "In 1919, a massive wave of ____ killed 21 people and destroyed buildings in Boston.",
+    "answer": "molasses",
+    "alternateAnswers": [
+      "a molasses flood",
+      "hot molasses"
+    ]
+  },
+  {
+    "id": 69,
+    "category": "US History",
+    "question": "The Pony Express mail delivery service lasted only ____ before being replaced by the telegraph.",
+    "answer": "18 months",
+    "alternateAnswers": [
+      "nineteen months",
+      "about 18 months"
+    ]
+  },
+  {
+    "id": 70,
+    "category": "US History",
+    "question": "During the War of 1812, the British burned down every government building in Washington D.C. except the ____.",
+    "answer": "Patent Office",
+    "alternateAnswers": [
+      "U.S. Patent Office"
+    ]
+  },
+  {
+    "id": 71,
+    "category": "US History",
+    "question": "The original 13 colonies were founded between 1607 and 1733, with ____ being the last.",
+    "answer": "Georgia",
+    "alternateAnswers": []
+  },
+  {
+    "id": 72,
+    "category": "US History",
+    "question": "The Statue of Liberty's original color was ____ before it turned green from oxidation.",
+    "answer": "shiny copper brown",
+    "alternateAnswers": [
+      "copper",
+      "brown",
+      "reddish brown"
+    ]
+  },
+  {
+    "id": 73,
+    "category": "US History",
+    "question": "In 1958, the current 50-star American flag was designed by a ____ for a school project.",
+    "answer": "17-year-old high school student",
+    "alternateAnswers": [
+      "high school student",
+      "a teenager",
+      "a student"
+    ]
+  },
+  {
+    "id": 74,
+    "category": "US History",
+    "question": "The Pentagon was built with twice as many bathrooms as necessary because of ____ segregation laws.",
+    "answer": "racial",
+    "alternateAnswers": [
+      "race",
+      "Virginia's racial",
+      "Virginia segregation"
+    ]
+  },
+  {
+    "id": 75,
+    "category": "US History",
+    "question": "America's first capital city was not Washington D.C. — it was ____.",
+    "answer": "New York City",
+    "alternateAnswers": [
+      "New York",
+      "NYC"
+    ]
+  },
+  {
+    "id": 76,
+    "category": "US History",
+    "question": "During the Dust Bowl, massive dust storms were so dark that people called them ____.",
+    "answer": "black blizzards",
+    "alternateAnswers": [
+      "black rollers"
+    ]
+  },
+  {
+    "id": 77,
+    "category": "US History",
+    "question": "The Erie Canal, completed in 1825, connected the Great Lakes to the ____.",
+    "answer": "Hudson River",
+    "alternateAnswers": [
+      "Atlantic Ocean via the Hudson River"
+    ]
+  },
+  {
+    "id": 78,
+    "category": "US History",
+    "question": "Harriet Tubman not only led slaves to freedom, she also served as a ____ for the Union Army during the Civil War.",
+    "answer": "spy",
+    "alternateAnswers": [
+      "scout",
+      "spy and scout"
+    ]
+  },
+  {
+    "id": 79,
+    "category": "US History",
+    "question": "The last state to join the Union was ____ in 1959.",
+    "answer": "Hawaii",
+    "alternateAnswers": []
+  },
+  {
+    "id": 80,
+    "category": "US History",
+    "question": "In 1835, the U.S. national debt was briefly reduced to ____ — the only time in history.",
+    "answer": "zero",
+    "alternateAnswers": [
+      "nothing",
+      "sh",
+      "zero dollars"
+    ]
+  },
+  {
+    "id": 81,
+    "category": "US History",
+    "question": "The Transcontinental Railroad was completed in 1869 when the two lines met at ____, Utah.",
+    "answer": "Promontory Summit",
+    "alternateAnswers": [
+      "Promontory Point",
+      "Promontory"
+    ]
+  },
+  {
+    "id": 82,
+    "category": "US History",
+    "question": "Before the American Revolution, colonists protested British taxes by refusing to buy ____.",
+    "answer": "tea",
+    "alternateAnswers": [
+      "British tea"
+    ]
+  },
+  {
+    "id": 83,
+    "category": "US History",
+    "question": "During World War II, Americans collected ____ from their kitchens to help make explosives.",
+    "answer": "cooking grease",
+    "alternateAnswers": [
+      "bacon grease",
+      "grease",
+      "fat",
+      "cooking fat"
+    ]
+  },
+  {
+    "id": 84,
+    "category": "US History",
+    "question": "The Great Chicago Fire of 1871 burned for ____ straight days.",
+    "answer": "two",
+    "alternateAnswers": [
+      "2",
+      "2 days",
+      "two days"
+    ]
+  },
+  {
+    "id": 85,
+    "category": "US History",
+    "question": "Salem's famous witch trials of 1692 resulted in the execution of ____ people.",
+    "answer": "20",
+    "alternateAnswers": [
+      "twenty",
+      "20 people"
+    ]
+  },
+  {
+    "id": 86,
+    "category": "US History",
+    "question": "The Alamo, the famous 1836 battle site, was originally built as a ____.",
+    "answer": "Spanish mission",
+    "alternateAnswers": [
+      "mission",
+      "church",
+      "a mission"
+    ]
+  },
+  {
+    "id": 87,
+    "category": "US History",
+    "question": "In 1804, the Lewis and Clark expedition brought a ____ as a key member who helped them survive.",
+    "answer": "Newfoundland dog",
+    "alternateAnswers": [
+      "dog",
+      "a dog named Seaman"
+    ]
+  },
+  {
+    "id": 88,
+    "category": "US History",
+    "question": "The first Thanksgiving in 1621 lasted ____ days.",
+    "answer": "three",
+    "alternateAnswers": [
+      "3",
+      "3 days",
+      "three days"
+    ]
+  },
+  {
+    "id": 89,
+    "category": "US History",
+    "question": "The Declaration of Independence was actually signed by most delegates on ____, not July 4th.",
+    "answer": "August 2nd",
+    "alternateAnswers": [
+      "August 2",
+      "August second"
+    ]
+  },
+  {
+    "id": 90,
+    "category": "US History",
+    "question": "In 1929, the stock market crash that started the Great Depression happened on a day nicknamed ____.",
+    "answer": "Black Tuesday",
+    "alternateAnswers": []
+  },
+  {
+    "id": 91,
+    "category": "US History",
+    "question": "The underground railroad was neither underground nor a railroad — it was a network of ____.",
+    "answer": "safe houses",
+    "alternateAnswers": [
+      "secret routes and safe houses",
+      "hidden routes"
+    ]
+  },
+  {
+    "id": 92,
+    "category": "US History",
+    "question": "During the Revolutionary War, George Washington famously crossed the ____ River on Christmas night 1776.",
+    "answer": "Delaware",
+    "alternateAnswers": []
+  },
+  {
+    "id": 93,
+    "category": "US History",
+    "question": "The first woman to run for President of the United States was ____ in 1872.",
+    "answer": "Victoria Woodhull",
+    "alternateAnswers": [
+      "Woodhull"
+    ]
+  },
+  {
+    "id": 94,
+    "category": "US History",
+    "question": "Route 66, the famous highway from Chicago to Los Angeles, was nicknamed the ____.",
+    "answer": "Mother Road",
+    "alternateAnswers": [
+      "Main Street of America"
+    ]
+  },
+  {
+    "id": 95,
+    "category": "US History",
+    "question": "In 1947, a pilot named Kenneth Arnold saw objects in the sky and described them as ____, coining a famous term.",
+    "answer": "flying saucers",
+    "alternateAnswers": [
+      "saucers",
+      "flying discs"
+    ]
+  },
+  {
+    "id": 96,
+    "category": "US History",
+    "question": "The Emancipation Proclamation of 1863 only freed slaves in ____.",
+    "answer": "Confederate states",
+    "alternateAnswers": [
+      "rebel states",
+      "states in rebellion",
+      "the South"
+    ]
+  },
+  {
+    "id": 97,
+    "category": "US History",
+    "question": "Before the Star-Spangled Banner, America's unofficial national anthem was ____.",
+    "answer": "My Country 'Tis of Thee",
+    "alternateAnswers": [
+      "Hail Columbia",
+      "America"
+    ]
+  },
+  {
+    "id": 98,
+    "category": "US History",
+    "question": "In 1961, the Freedom Riders were civil rights activists who rode ____ through the segregated South.",
+    "answer": "interstate buses",
+    "alternateAnswers": [
+      "buses",
+      "Greyhound buses"
+    ]
+  },
+  {
+    "id": 99,
+    "category": "US History",
+    "question": "The Louisiana Purchase in 1803 doubled the size of the U.S. and cost about ____ per acre.",
+    "answer": "three cents",
+    "alternateAnswers": [
+      "3 cents",
+      "4 cents"
+    ]
+  },
+  {
+    "id": 100,
+    "category": "US History",
+    "question": "America's bloodiest single day of combat was the Battle of ____ during the Civil War.",
+    "answer": "Antietam",
+    "alternateAnswers": [
+      "Sharpsburg"
+    ]
+  },
+  {
+    "id": 101,
+    "category": "US History",
+    "question": "The 19th Amendment, giving women the right to vote, wasn't ratified until ____.",
+    "answer": "1920",
+    "alternateAnswers": []
+  },
+  {
+    "id": 102,
+    "category": "US History",
+    "question": "During the Cold War, American schoolchildren practiced ____ drills in case of nuclear attack.",
+    "answer": "duck and cover",
+    "alternateAnswers": [
+      "duck-and-cover"
+    ]
+  },
+  {
+    "id": 103,
+    "category": "US History",
+    "question": "In 1803, the duel between Alexander Hamilton and Aaron Burr took place in ____.",
+    "answer": "Weehawken, New Jersey",
+    "alternateAnswers": [
+      "Weehawken",
+      "New Jersey"
+    ]
+  },
+  {
+    "id": 104,
+    "category": "US History",
+    "question": "The American flag's nickname \"Old Glory\" was given by a ____ captain named William Driver.",
+    "answer": "sea",
+    "alternateAnswers": [
+      "ship",
+      "ship captain",
+      "sea captain"
+    ]
+  },
+  {
+    "id": 105,
+    "category": "US History",
+    "question": "In 1773, the amount of tea dumped in the Boston Tea Party was worth approximately ____ in today's money.",
+    "answer": ".7 million",
+    "alternateAnswers": [
+      "1.7 million dollars",
+      "about 1.7 million",
+      "over a million dollars"
+    ]
+  },
+  {
+    "id": 106,
+    "category": "US Presidents",
+    "question": "Before becoming president, Abraham Lincoln was a licensed ____.",
+    "answer": "bartender",
+    "alternateAnswers": [
+      "bar keeper"
+    ]
+  },
+  {
+    "id": 107,
+    "category": "US Presidents",
+    "question": "President William Howard Taft once got stuck in the ____ at the White House.",
+    "answer": "bathtub",
+    "alternateAnswers": [
+      "White House bathtub"
+    ]
+  },
+  {
+    "id": 108,
+    "category": "US Presidents",
+    "question": "John Quincy Adams reportedly kept a pet ____ in the White House.",
+    "answer": "alligator",
+    "alternateAnswers": [
+      "gator"
+    ]
+  },
+  {
+    "id": 109,
+    "category": "US Presidents",
+    "question": "Calvin Coolidge's nickname was \"____\" because he rarely spoke.",
+    "answer": "Silent Cal",
+    "alternateAnswers": []
+  },
+  {
+    "id": 110,
+    "category": "US Presidents",
+    "question": "Theodore Roosevelt was shot in the chest before a speech and still ____.",
+    "answer": "delivered the entire 90-minute speech",
+    "alternateAnswers": [
+      "gave the speech",
+      "finished the speech",
+      "kept speaking"
+    ]
+  },
+  {
+    "id": 111,
+    "category": "US Presidents",
+    "question": "James Buchanan is the only president who never ____.",
+    "answer": "married",
+    "alternateAnswers": [
+      "got married",
+      "had a wife"
+    ]
+  },
+  {
+    "id": 112,
+    "category": "US Presidents",
+    "question": "Before becoming president, Ulysses S. Grant was working as a ____ and was essentially broke.",
+    "answer": "leather store clerk",
+    "alternateAnswers": [
+      "store clerk",
+      "clerk"
+    ]
+  },
+  {
+    "id": 113,
+    "category": "US Presidents",
+    "question": "President Andrew Jackson's pet parrot had to be removed from his funeral because it wouldn't stop ____.",
+    "answer": "swearing",
+    "alternateAnswers": [
+      "cursing",
+      "cussing",
+      "using profanity"
+    ]
+  },
+  {
+    "id": 114,
+    "category": "US Presidents",
+    "question": "George Washington's famous teeth were not made of wood — they were actually made of ____.",
+    "answer": "hippo ivory and human teeth",
+    "alternateAnswers": [
+      "hippopotamus ivory",
+      "ivory",
+      "hippo tusks"
+    ]
+  },
+  {
+    "id": 115,
+    "category": "US Presidents",
+    "question": "Jimmy Carter was the first president born in a ____.",
+    "answer": "hospital",
+    "alternateAnswers": []
+  },
+  {
+    "id": 116,
+    "category": "US Presidents",
+    "question": "President Lyndon B. Johnson owned an amphibious car and loved scaring guests by driving it into a ____.",
+    "answer": "lake",
+    "alternateAnswers": [
+      "a lake",
+      "the lake"
+    ]
+  },
+  {
+    "id": 117,
+    "category": "US Presidents",
+    "question": "William Henry Harrison gave the longest inaugural address in history and died ____ days later.",
+    "answer": "31",
+    "alternateAnswers": [
+      "thirty-one",
+      "32"
+    ]
+  },
+  {
+    "id": 118,
+    "category": "US Presidents",
+    "question": "Barack Obama's favorite TV show was reportedly ____.",
+    "answer": "The Wire",
+    "alternateAnswers": []
+  },
+  {
+    "id": 119,
+    "category": "US Presidents",
+    "question": "Richard Nixon was an accomplished ____ and once performed at the Grand Ole Opry.",
+    "answer": "pianist",
+    "alternateAnswers": [
+      "piano player"
+    ]
+  },
+  {
+    "id": 120,
+    "category": "US Presidents",
+    "question": "Thomas Jefferson and John Adams both died on the same day: ____.",
+    "answer": "July 4th, 1826",
+    "alternateAnswers": [
+      "July 4, 1826",
+      "the 4th of July 1826"
+    ]
+  },
+  {
+    "id": 121,
+    "category": "US Presidents",
+    "question": "Harry Truman's middle initial \"S\" didn't actually stand for ____.",
+    "answer": "anything",
+    "alternateAnswers": [
+      "nothing",
+      "no name"
+    ]
+  },
+  {
+    "id": 122,
+    "category": "US Presidents",
+    "question": "President James Garfield could simultaneously write in ____ with one hand and Greek with the other.",
+    "answer": "Latin",
+    "alternateAnswers": []
+  },
+  {
+    "id": 123,
+    "category": "US Presidents",
+    "question": "Gerald Ford was the only president who was never ____ as either president or vice president.",
+    "answer": "elected",
+    "alternateAnswers": [
+      "voted in",
+      "elected by voters"
+    ]
+  },
+  {
+    "id": 124,
+    "category": "US Presidents",
+    "question": "Grover Cleveland is the only president to serve ____ non-consecutive terms.",
+    "answer": "two",
+    "alternateAnswers": [
+      "2"
+    ]
+  },
+  {
+    "id": 125,
+    "category": "US Presidents",
+    "question": "Before becoming president, Ronald Reagan was president of the ____.",
+    "answer": "Screen Actors Guild",
+    "alternateAnswers": [
+      "actors union",
+      "SAG"
+    ]
+  },
+  {
+    "id": 126,
+    "category": "US Presidents",
+    "question": "President Herbert Hoover and his wife spoke ____ in the White House to prevent staff from eavesdropping.",
+    "answer": "Mandarin Chinese",
+    "alternateAnswers": [
+      "Chinese",
+      "Mandarin"
+    ]
+  },
+  {
+    "id": 127,
+    "category": "US Presidents",
+    "question": "George H.W. Bush celebrated his 90th birthday by ____.",
+    "answer": "skydiving",
+    "alternateAnswers": [
+      "jumping out of a plane",
+      "parachuting"
+    ]
+  },
+  {
+    "id": 128,
+    "category": "US Presidents",
+    "question": "President Dwight Eisenhower was an amazing ____ and painted over 250 works.",
+    "answer": "painter",
+    "alternateAnswers": [
+      "artist",
+      "oil painter"
+    ]
+  },
+  {
+    "id": 129,
+    "category": "US Presidents",
+    "question": "Abraham Lincoln is enshrined in the ____ Hall of Fame.",
+    "answer": "Wrestling",
+    "alternateAnswers": [
+      "National Wrestling"
+    ]
+  },
+  {
+    "id": 130,
+    "category": "US Presidents",
+    "question": "John Tyler, the 10th president born in 1790, still has living ____ as of 2024.",
+    "answer": "grandchildren",
+    "alternateAnswers": [
+      "grandsons"
+    ]
+  },
+  {
+    "id": 131,
+    "category": "US Presidents",
+    "question": "Woodrow Wilson is the only president who held a ____ degree.",
+    "answer": "PhD",
+    "alternateAnswers": [
+      "doctorate",
+      "doctoral degree"
+    ]
+  },
+  {
+    "id": 132,
+    "category": "US Presidents",
+    "question": "President Franklin Pierce was arrested while in office for running over a woman with his ____.",
+    "answer": "horse",
+    "alternateAnswers": [
+      "horse and carriage"
+    ]
+  },
+  {
+    "id": 133,
+    "category": "US Presidents",
+    "question": "James Madison, the shortest president, stood only ____ tall.",
+    "answer": "5 foot 4",
+    "alternateAnswers": [
+      "5'4\"",
+      "five foot four",
+      "5 feet 4 inches"
+    ]
+  },
+  {
+    "id": 134,
+    "category": "US Presidents",
+    "question": "President Chester Arthur was accused of being born in ____ and not being a natural-born citizen.",
+    "answer": "Canada",
+    "alternateAnswers": []
+  },
+  {
+    "id": 135,
+    "category": "US Presidents",
+    "question": "Teddy Roosevelt's famous stuffed ____ toy was named after him.",
+    "answer": "bear",
+    "alternateAnswers": [
+      "teddy bear"
+    ]
+  },
+  {
+    "id": 136,
+    "category": "US Presidents",
+    "question": "Bill Clinton's favorite fast food restaurant was ____.",
+    "answer": "McDonald's",
+    "alternateAnswers": [
+      "McDonalds"
+    ]
+  },
+  {
+    "id": 137,
+    "category": "US Presidents",
+    "question": "President Martin Van Buren was the first president born as a citizen of ____ rather than a British subject.",
+    "answer": "the United States",
+    "alternateAnswers": [
+      "America",
+      "the USA",
+      "the US"
+    ]
+  },
+  {
+    "id": 138,
+    "category": "US Presidents",
+    "question": "Zachary Taylor died after eating too many ____ at a Fourth of July celebration.",
+    "answer": "cherries and milk",
+    "alternateAnswers": [
+      "cherries",
+      "raw cherries"
+    ]
+  },
+  {
+    "id": 139,
+    "category": "US Presidents",
+    "question": "JFK was the first president to hold a press conference on ____.",
+    "answer": "live television",
+    "alternateAnswers": [
+      "TV",
+      "live TV",
+      "television"
+    ]
+  },
+  {
+    "id": 140,
+    "category": "US Presidents",
+    "question": "Benjamin Harrison was the first president to have ____ in the White House, but he was afraid to touch the switches.",
+    "answer": "electricity",
+    "alternateAnswers": [
+      "electric lights",
+      "electric lighting"
+    ]
+  },
+  {
+    "id": 141,
+    "category": "US Presidents",
+    "question": "George Washington's annual salary as president was ____ of the total U.S. budget.",
+    "answer": "2 percent",
+    "alternateAnswers": [
+      "2%",
+      "two percent"
+    ]
+  },
+  {
+    "id": 142,
+    "category": "US Presidents",
+    "question": "Warren G. Harding once lost the White House ____ set in a poker game.",
+    "answer": "china",
+    "alternateAnswers": [
+      "china set",
+      "presidential china"
+    ]
+  },
+  {
+    "id": 143,
+    "category": "US Presidents",
+    "question": "President Millard Fillmore reportedly installed the first ____ in the White House.",
+    "answer": "bathtub",
+    "alternateAnswers": [
+      "permanent bathtub"
+    ]
+  },
+  {
+    "id": 144,
+    "category": "US Presidents",
+    "question": "Andrew Johnson never attended a single day of ____ in his life.",
+    "answer": "school",
+    "alternateAnswers": [
+      "formal school",
+      "formal education"
+    ]
+  },
+  {
+    "id": 145,
+    "category": "US Presidents",
+    "question": "Franklin Roosevelt served an unprecedented ____ terms as president.",
+    "answer": "four",
+    "alternateAnswers": [
+      "4"
+    ]
+  },
+  {
+    "id": 146,
+    "category": "US Presidents",
+    "question": "President James Polk promised to serve only one term and accomplished every ____ he set during his campaign.",
+    "answer": "goal",
+    "alternateAnswers": [
+      "campaign promise",
+      "objective",
+      "pledge"
+    ]
+  },
+  {
+    "id": 147,
+    "category": "US Presidents",
+    "question": "John F. Kennedy donated his entire presidential ____ to charity.",
+    "answer": "salary",
+    "alternateAnswers": [
+      "paycheck",
+      "pay"
+    ]
+  },
+  {
+    "id": 148,
+    "category": "US Presidents",
+    "question": "President Rutherford B. Hayes hosted the first ____ hunt at the White House.",
+    "answer": "Easter egg",
+    "alternateAnswers": [
+      "Easter egg roll",
+      "egg roll"
+    ]
+  },
+  {
+    "id": 149,
+    "category": "US Presidents",
+    "question": "Dwight Eisenhower was so popular that ____ political parties tried to recruit him to run for president.",
+    "answer": "both",
+    "alternateAnswers": [
+      "two",
+      "both major"
+    ]
+  },
+  {
+    "id": 150,
+    "category": "US Presidents",
+    "question": "Richard Nixon's last words were reportedly asking for ____.",
+    "answer": "a glass of orange juice",
+    "alternateAnswers": [
+      "orange juice",
+      "OJ"
+    ]
+  },
+  {
+    "id": 151,
+    "category": "US Presidents",
+    "question": "Theodore Roosevelt was blind in one ____ from a boxing match while president.",
+    "answer": "eye",
+    "alternateAnswers": [
+      "his left eye"
+    ]
+  },
+  {
+    "id": 152,
+    "category": "US Presidents",
+    "question": "President Obama was known for always wearing only ____ or blue suits to reduce decision fatigue.",
+    "answer": "gray",
+    "alternateAnswers": [
+      "grey"
+    ]
+  },
+  {
+    "id": 153,
+    "category": "US Presidents",
+    "question": "Abraham Lincoln kept important documents stored in his ____.",
+    "answer": "top hat",
+    "alternateAnswers": [
+      "hat",
+      "stovepipe hat"
+    ]
+  },
+  {
+    "id": 154,
+    "category": "US Presidents",
+    "question": "George Washington's favorite food was reportedly ____.",
+    "answer": "ice cream",
+    "alternateAnswers": []
+  },
+  {
+    "id": 155,
+    "category": "US Presidents",
+    "question": "John Adams was the first president to live in the ____.",
+    "answer": "White House",
+    "alternateAnswers": [
+      "the White House",
+      "President's House"
+    ]
+  },
+  {
+    "id": 156,
+    "category": "President Trump",
+    "question": "Before entering politics, Donald Trump made a cameo appearance in the movie ____.",
+    "answer": "Home Alone 2",
+    "alternateAnswers": [
+      "Home Alone 2: Lost in New York"
+    ]
+  },
+  {
+    "id": 157,
+    "category": "President Trump",
+    "question": "Trump's childhood dream job was to be a ____.",
+    "answer": "movie producer",
+    "alternateAnswers": [
+      "filmmaker",
+      "Hollywood producer"
+    ]
+  },
+  {
+    "id": 158,
+    "category": "President Trump",
+    "question": "Donald Trump received a ____ deferment from the Vietnam War draft.",
+    "answer": "bone spurs",
+    "alternateAnswers": [
+      "medical",
+      "bone spur"
+    ]
+  },
+  {
+    "id": 159,
+    "category": "President Trump",
+    "question": "Trump Tower in Manhattan has ____ floors, though Trump claims it has more.",
+    "answer": "58",
+    "alternateAnswers": [
+      "fifty-eight"
+    ]
+  },
+  {
+    "id": 160,
+    "category": "President Trump",
+    "question": "In the 1990s, Trump owned the ____ beauty pageant organization.",
+    "answer": "Miss Universe",
+    "alternateAnswers": [
+      "Miss Universe Organization"
+    ]
+  },
+  {
+    "id": 161,
+    "category": "President Trump",
+    "question": "Trump's first wife, Ivana, was a competitive ____ from Czechoslovakia.",
+    "answer": "skier",
+    "alternateAnswers": [
+      "ski racer",
+      "alpine skier"
+    ]
+  },
+  {
+    "id": 162,
+    "category": "President Trump",
+    "question": "Donald Trump's star on the Hollywood Walk of Fame was given for his work in ____.",
+    "answer": "television",
+    "alternateAnswers": [
+      "TV",
+      "The Apprentice"
+    ]
+  },
+  {
+    "id": 163,
+    "category": "President Trump",
+    "question": "Trump's book \"The Art of the Deal\" was co-written by ghostwriter ____.",
+    "answer": "Tony Schwartz",
+    "alternateAnswers": [
+      "Schwartz"
+    ]
+  },
+  {
+    "id": 164,
+    "category": "President Trump",
+    "question": "Before becoming president, Trump made a memorable appearance at WrestleMania where he ____ Vince McMahon's head.",
+    "answer": "shaved",
+    "alternateAnswers": [
+      "shaved off the hair of"
+    ]
+  },
+  {
+    "id": 165,
+    "category": "President Trump",
+    "question": "Trump served McDonald's hamburgers as dinner at the White House to celebrate the ____ football team.",
+    "answer": "Clemson Tigers",
+    "alternateAnswers": [
+      "Clemson",
+      "Clemson University"
+    ]
+  },
+  {
+    "id": 166,
+    "category": "President Trump",
+    "question": "Donald Trump's favorite food at McDonald's is reportedly the ____.",
+    "answer": "Big Mac",
+    "alternateAnswers": [
+      "Filet-O-Fish",
+      "Big Macs"
+    ]
+  },
+  {
+    "id": 167,
+    "category": "President Trump",
+    "question": "Trump played himself in the 2011 comedy series \"____\" on Comedy Central.",
+    "answer": "Roast of Donald Trump",
+    "alternateAnswers": [
+      "his own Comedy Central roast",
+      "the Donald Trump roast"
+    ]
+  },
+  {
+    "id": 168,
+    "category": "President Trump",
+    "question": "Trump's Mar-a-Lago estate in Florida was originally built by cereal heiress ____.",
+    "answer": "Marjorie Merriweather Post",
+    "alternateAnswers": [
+      "Marjorie Post",
+      "Post"
+    ]
+  },
+  {
+    "id": 169,
+    "category": "President Trump",
+    "question": "During the 2016 campaign, Trump famously descended a golden ____ to announce his candidacy.",
+    "answer": "escalator",
+    "alternateAnswers": []
+  },
+  {
+    "id": 170,
+    "category": "President Trump",
+    "question": "Trump was the first president to communicate major policy decisions via ____.",
+    "answer": "Twitter",
+    "alternateAnswers": [
+      "tweets",
+      "social media"
+    ]
+  },
+  {
+    "id": 171,
+    "category": "President Trump",
+    "question": "In the 1990s, Trump owned a professional ____ league called the New Jersey Generals.",
+    "answer": "football",
+    "alternateAnswers": [
+      "USFL football",
+      "USFL"
+    ]
+  },
+  {
+    "id": 172,
+    "category": "President Trump",
+    "question": "Trump's Secret Service code name was ____.",
+    "answer": "Mogul",
+    "alternateAnswers": []
+  },
+  {
+    "id": 173,
+    "category": "President Trump",
+    "question": "Before politics, Trump had his own branded ____ that sold at The Sharper Image.",
+    "answer": "steaks",
+    "alternateAnswers": [
+      "Trump Steaks",
+      "steak"
+    ]
+  },
+  {
+    "id": 174,
+    "category": "President Trump",
+    "question": "Trump attended the ____ military academy as a teenager in New York.",
+    "answer": "New York Military Academy",
+    "alternateAnswers": [
+      "NYMA"
+    ]
+  },
+  {
+    "id": 175,
+    "category": "President Trump",
+    "question": "Donald Trump's father, Fred, made his fortune building ____ in Brooklyn and Queens.",
+    "answer": "affordable housing",
+    "alternateAnswers": [
+      "housing",
+      "apartments",
+      "middle-class housing"
+    ]
+  },
+  {
+    "id": 176,
+    "category": "President Trump",
+    "question": "Trump once owned the iconic ____ Hotel and Casino in Atlantic City.",
+    "answer": "Taj Mahal",
+    "alternateAnswers": [
+      "Trump Taj Mahal"
+    ]
+  },
+  {
+    "id": 177,
+    "category": "President Trump",
+    "question": "In 2006, Trump started ____ University, which later faced fraud lawsuits.",
+    "answer": "Trump",
+    "alternateAnswers": [
+      "Trump University"
+    ]
+  },
+  {
+    "id": 178,
+    "category": "President Trump",
+    "question": "Trump's catchphrase on The Apprentice was \"You're ____!\"",
+    "answer": "fired",
+    "alternateAnswers": []
+  },
+  {
+    "id": 179,
+    "category": "President Trump",
+    "question": "During his presidency, Trump served ____ flavors of ice cream while guests got one.",
+    "answer": "two",
+    "alternateAnswers": [
+      "2",
+      "two scoops"
+    ]
+  },
+  {
+    "id": 180,
+    "category": "President Trump",
+    "question": "Trump was the first president to meet a sitting leader of North Korea at the ____ border.",
+    "answer": "DMZ",
+    "alternateAnswers": [
+      "demilitarized zone",
+      "Korean DMZ"
+    ]
+  },
+  {
+    "id": 181,
+    "category": "President Trump",
+    "question": "Melania Trump is originally from ____.",
+    "answer": "Slovenia",
+    "alternateAnswers": [
+      "the Republic of Slovenia"
+    ]
+  },
+  {
+    "id": 182,
+    "category": "President Trump",
+    "question": "Trump reportedly drinks ____ cans of Diet Coke per day.",
+    "answer": "12",
+    "alternateAnswers": [
+      "twelve",
+      "a dozen"
+    ]
+  },
+  {
+    "id": 183,
+    "category": "President Trump",
+    "question": "During his 2016 campaign, Trump threw rolls of ____ to hurricane survivors in Puerto Rico.",
+    "answer": "paper towels",
+    "alternateAnswers": [
+      "paper towel"
+    ]
+  },
+  {
+    "id": 184,
+    "category": "President Trump",
+    "question": "Trump Tower was built using concrete instead of steel partly because Trump had connections to the ____ industry.",
+    "answer": "concrete",
+    "alternateAnswers": [
+      "cement",
+      "concrete business"
+    ]
+  },
+  {
+    "id": 185,
+    "category": "President Trump",
+    "question": "Donald Trump's net worth dropped by about ____ during his first presidency, making him one of few presidents to lose money in office.",
+    "answer": " billion",
+    "alternateAnswers": [
+      "a billion dollars",
+      "1 billion",
+      "a billion"
+    ]
+  },
+  {
+    "id": 186,
+    "category": "President Trump",
+    "question": "Trump made a brief cameo on the TV show \"____\" playing himself.",
+    "answer": "The Fresh Prince of Bel-Air",
+    "alternateAnswers": [
+      "Fresh Prince"
+    ]
+  },
+  {
+    "id": 187,
+    "category": "President Trump",
+    "question": "Before The Apprentice, Trump hosted ____ on NBC with beauty pageant contestants.",
+    "answer": "the Miss Universe pageant",
+    "alternateAnswers": [
+      "Miss Universe",
+      "Miss USA pageant"
+    ]
+  },
+  {
+    "id": 188,
+    "category": "President Trump",
+    "question": "Trump's childhood home in Jamaica Estates, Queens was listed on Airbnb for ____ per night.",
+    "answer": "\u0015",
+    "alternateAnswers": [
+      "725 dollars",
+      "seven hundred dollars"
+    ]
+  },
+  {
+    "id": 189,
+    "category": "President Trump",
+    "question": "During his presidency, Trump installed a ____ simulator in the White House.",
+    "answer": "golf",
+    "alternateAnswers": [
+      "golf simulator"
+    ]
+  },
+  {
+    "id": 190,
+    "category": "President Trump",
+    "question": "Trump has appeared on the cover of ____ magazine more times than any other person at the time.",
+    "answer": "Time",
+    "alternateAnswers": [
+      "TIME magazine"
+    ]
+  },
+  {
+    "id": 191,
+    "category": "President Trump",
+    "question": "In 1989, Trump bought an airline called ____ Shuttle.",
+    "answer": "Trump",
+    "alternateAnswers": [
+      "Trump Shuttle",
+      "Eastern"
+    ]
+  },
+  {
+    "id": 192,
+    "category": "President Trump",
+    "question": "Trump's 2017 inauguration crowd size became a major controversy when his press secretary called it the ____ ever.",
+    "answer": "largest audience",
+    "alternateAnswers": [
+      "largest",
+      "biggest ever",
+      "largest crowd"
+    ]
+  },
+  {
+    "id": 193,
+    "category": "President Trump",
+    "question": "At his rallies, Trump's signature walkout song is \"____\" by the Village People.",
+    "answer": "Y.M.C.A.",
+    "alternateAnswers": [
+      "YMCA"
+    ]
+  },
+  {
+    "id": 194,
+    "category": "President Trump",
+    "question": "Trump reportedly asked about buying the country of ____ from Denmark.",
+    "answer": "Greenland",
+    "alternateAnswers": []
+  },
+  {
+    "id": 195,
+    "category": "President Trump",
+    "question": "Before running for president in 2016, Trump previously explored running in the year ____ under the Reform Party.",
+    "answer": "2000",
+    "alternateAnswers": []
+  },
+  {
+    "id": 196,
+    "category": "President Trump",
+    "question": "Trump once owned the General Motors Building in Manhattan, which he renamed the ____.",
+    "answer": "Trump International Tower",
+    "alternateAnswers": [
+      "Trump Tower"
+    ]
+  },
+  {
+    "id": 197,
+    "category": "President Trump",
+    "question": "During COVID-19, Trump suggested that injecting ____ might treat the virus, causing widespread controversy.",
+    "answer": "disinfectant",
+    "alternateAnswers": [
+      "bleach",
+      "disinfectants"
+    ]
+  },
+  {
+    "id": 198,
+    "category": "President Trump",
+    "question": "Trump's youngest son, Barron, is notably tall — standing over ____ feet at age 18.",
+    "answer": "6 foot 7",
+    "alternateAnswers": [
+      "6'7\"",
+      "six foot seven",
+      "6 foot 9"
+    ]
+  },
+  {
+    "id": 199,
+    "category": "President Trump",
+    "question": "In 2020, Trump became the first sitting president to visit the ____ in Jerusalem.",
+    "answer": "Western Wall",
+    "alternateAnswers": [
+      "Wailing Wall"
+    ]
+  },
+  {
+    "id": 200,
+    "category": "President Trump",
+    "question": "Trump branded his own line of ____ called \"Success\" and \"Empire.\"",
+    "answer": "cologne",
+    "alternateAnswers": [
+      "fragrance",
+      "perfume",
+      "fragrances"
+    ]
+  },
+  {
+    "id": 201,
+    "category": "President Trump",
+    "question": "Trump's first major real estate project was converting the old Commodore Hotel into the Grand ____.",
+    "answer": "Hyatt",
+    "alternateAnswers": [
+      "Grand Hyatt",
+      "Hyatt Hotel"
+    ]
+  },
+  {
+    "id": 202,
+    "category": "President Trump",
+    "question": "When asked about his hair, Trump has said it takes him about ____ to style it each morning.",
+    "answer": "an hour",
+    "alternateAnswers": [
+      "one hour",
+      "1 hour",
+      "60 minutes"
+    ]
+  },
+  {
+    "id": 203,
+    "category": "President Trump",
+    "question": "Trump was impeached ____ times during his first term as president.",
+    "answer": "twice",
+    "alternateAnswers": [
+      "two",
+      "2",
+      "two times"
+    ]
+  },
+  {
+    "id": 204,
+    "category": "President Trump",
+    "question": "In 2019, Trump served as grand marshal of the ____ 500 auto race.",
+    "answer": "Daytona",
+    "alternateAnswers": [
+      "Daytona 500"
+    ]
+  },
+  {
+    "id": 205,
+    "category": "President Trump",
+    "question": "Trump holds a degree in ____ from the Wharton School at the University of Pennsylvania.",
+    "answer": "economics",
+    "alternateAnswers": [
+      "business",
+      "finance"
+    ]
+  }
 ]
