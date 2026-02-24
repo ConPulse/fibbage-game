@@ -9,6 +9,7 @@ const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.get('/health', (req, res) => res.send('ok'));
 
 const questions = JSON.parse(fs.readFileSync(path.join(__dirname, 'questions.json'), 'utf8'));
 const rooms = new Map();
@@ -447,4 +448,4 @@ wss.on('connection', (ws) => {
 });
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => console.log(`Fibbage server running on port ${PORT}`));
+server.listen(PORT, '0.0.0.0', () => console.log(`Fibbage server running on port ${PORT}`));
