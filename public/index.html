@@ -42,7 +42,7 @@ input::placeholder{color:rgba(255,255,255,.4)}
 </div>
 <script>
 document.getElementById('createBtn').onclick = () => {
-  const ws = new WebSocket(`ws://${location.host}`);
+  const ws = new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}`);
   ws.onopen = () => ws.send(JSON.stringify({type:'create-room'}));
   ws.onmessage = e => {
     const msg = JSON.parse(e.data);

@@ -114,7 +114,7 @@ document.getElementById('joinUrl').textContent = location.host;
 
 let ws, timerInterval;
 function connect() {
-  ws = new WebSocket(`ws://${location.host}`);
+  ws = new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}`);
   ws.onopen = () => ws.send(JSON.stringify({type:'host-join',code}));
   ws.onmessage = e => handleMsg(JSON.parse(e.data));
   ws.onclose = () => setTimeout(connect, 2000);
