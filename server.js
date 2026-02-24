@@ -284,6 +284,9 @@ function doReveal(room) {
     if (!answer) continue;
     if (answer.isTrue) {
       for (const v of voters) scoreChanges[v] = (scoreChanges[v]||0) + 1000 * mult;
+    } else if (answer.author === '__GAME__') {
+      // Penalty for picking a game decoy
+      for (const v of voters) scoreChanges[v] = (scoreChanges[v]||0) - 500 * mult;
     } else if (answer.author) {
       scoreChanges[answer.author] = (scoreChanges[answer.author]||0) + 500 * mult * voters.length;
     }
