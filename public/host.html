@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fibbage - Host</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a2e;color:#fff;font-family:'Segoe UI',sans-serif;overflow:hidden;height:100vh}
+.room-code{position:fixed;top:20px;right:30px;background:rgba(233,69,96,.2);border:2px solid #e94560;border-radius:12px;padding:10px 24px;font-size:1.5rem;font-weight:700;letter-spacing:6px;z-index:10}
+.timer-bar{position:fixed;top:0;left:0;height:6px;background:linear-gradient(90deg,#4ecdc4,#2ecc71);transition:width .3s linear;z-index:20}
+.screen{display:none;flex-direction:column;align-items:center;justify-content:center;height:100vh;width:100%;padding:2rem;text-align:center}
+.screen.active{display:flex}
+/* Lobby */
+#lobby h1{font-size:4rem;color:#e94560;margin-bottom:.5rem;text-shadow:0 0 40px rgba(233,69,96,.4)}
+#lobby .sub{color:#4ecdc4;font-size:1.5rem;margin-bottom:2rem}
+.player-grid{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;margin:2rem 0}
+.player-chip{background:rgba(78,205,196,.15);border:2px solid #4ecdc4;border-radius:12px;padding:14px 28px;font-size:1.4rem;font-weight:600;transition:all .3s}
+.player-chip.disconnected{opacity:.4;border-color:#666}
+.start-btn{padding:18px 60px;font-size:1.6rem;font-weight:700;background:linear-gradient(135deg,#e94560,#c23152);color:#fff;border:none;border-radius:14px;cursor:pointer;box-shadow:0 6px 30px rgba(233,69,96,.4);transition:transform .15s}
+.start-btn:active{transform:scale(.96)}
+.start-btn:disabled{opacity:.4;cursor:default}
+/* Category */
+.category-title{font-size:2rem;color:#4ecdc4;margin-bottom:2rem}
+.cat-options{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center}
+.cat-opt{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.15);border-radius:16px;padding:24px 40px;font-size:1.6rem;font-weight:600;transition:all .5s}
+.cat-opt.chosen{border-color:#e94560;background:rgba(233,69,96,.2);transform:scale(1.1)}
+/* Question */
+.question-text{font-size:2.8rem;line-height:1.4;max-width:900px;margin:0 auto}
+.question-text .blank{color:#e94560;border-bottom:4px solid #e94560;padding:0 8px}
+.round-badge{background:rgba(78,205,196,.15);border:1px solid #4ecdc4;border-radius:8px;padding:6px 18px;font-size:1rem;margin-bottom:1.5rem;display:inline-block}
+/* Voting answers */
+.answer-grid{display:flex;flex-wrap:wrap;gap:1.2rem;justify-content:center;margin:2rem 0;max-width:1000px}
+.answer-card{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.12);border-radius:14px;padding:20px 32px;font-size:1.6rem;min-width:250px;transition:all .5s}
+/* Reveal */
+.answer-card.truth{border-color:#2ecc71;background:rgba(46,204,113,.15);box-shadow:0 0 30px rgba(46,204,113,.3)}
+.answer-card.lie{border-color:#e94560;background:rgba(233,69,96,.1)}
+.picked-by{font-size:.9rem;color:#f39c12;margin-top:6px}
+.author{font-size:.85rem;color:#4ecdc4;margin-top:4px}
+/* Scoreboard */
+.score-list{list-style:none;max-width:600px;width:100%}
+.score-item{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;margin:8px 0;background:rgba(255,255,255,.06);border-radius:12px;font-size:1.5rem;transition:all .5s}
+.score-item:first-child{background:rgba(233,69,96,.15);border:2px solid #e94560;font-size:1.8rem}
+.score-val{color:#4ecdc4;font-weight:700}
+.score-change{color:#2ecc71;font-size:1rem;margin-left:8px}
+/* Game Over */
+.winner{font-size:3rem;color:#f39c12;margin:1rem 0}
+.crown{font-size:5rem}
+.lie-count{font-size:1.2rem;color:rgba(255,255,255,.5);margin-top:1rem}
+.info-text{font-size:1.3rem;color:rgba(255,255,255,.5);margin-top:1rem}
+</style>
+</head>
+<body>
+<div class="room-code" id="roomCode"></div>
+<div class="timer-bar" id="timerBar" style="width:0%"></div>
+
+<!-- Lobby -->
+<div class="screen active" id="lobby">
+<h1>FIBBAGE</h1>
+<p class="sub">Join at <span id="joinUrl"></span></p>
+<div class="player-grid" id="lobbyPlayers"></div>
+<button class="start-btn" id="startBtn" disabled>Waiting for players...</button>
+</div>
+
+<!-- Category Select -->
+<div class="screen" id="categoryScreen">
+<div class="round-badge" id="roundBadge"></div>
+<p class="category-title">Players are choosing a category...</p>
+<div class="cat-options" id="catOptions"></div>
+</div>
+
+<!-- Question Display -->
+<div class="screen" id="questionScreen">
+<div class="round-badge" id="qRound"></div>
+<p class="question-text" id="questionText"></p>
+<p class="lie-count" id="lieCount"></p>
+</div>
+
+<!-- Voting -->
+<div class="screen" id="voteScreen">
+<p class="question-text" id="voteQuestion" style="font-size:1.8rem;margin-bottom:1rem"></p>
+<p class="info-text">Which one is the TRUTH?</p>
+<div class="answer-grid" id="answerGrid"></div>
+<p class="lie-count" id="voteCount"></p>
+</div>
+
+<!-- Reveal -->
+<div class="screen" id="revealScreen">
+<p class="question-text" id="revealQuestion" style="font-size:1.6rem;margin-bottom:1.5rem"></p>
+<div class="answer-grid" id="revealGrid"></div>
+</div>
+
+<!-- Scoreboard -->
+<div class="screen" id="scoreScreen">
+<h2 style="font-size:2rem;margin-bottom:1.5rem;color:#4ecdc4">Scoreboard</h2>
+<ul class="score-list" id="scoreList"></ul>
+</div>
+
+<!-- Game Over -->
+<div class="screen" id="gameOverScreen">
+<div class="crown">👑</div>
+<h2 class="winner" id="winnerName"></h2>
+<p style="font-size:1.2rem;color:rgba(255,255,255,.5);margin-bottom:2rem">wins the game!</p>
+<ul class="score-list" id="finalScores"></ul>
+<button class="start-btn" id="playAgainBtn" style="margin-top:2rem">Play Again</button>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const code = params.get('code');
+if (!code) { location.href='/'; }
+document.getElementById('roomCode').textContent = code;
+document.getElementById('joinUrl').textContent = location.host;
+
+let ws, timerInterval;
+function connect() {
+  ws = new WebSocket(`ws://${location.host}`);
+  ws.onopen = () => ws.send(JSON.stringify({type:'host-join',code}));
+  ws.onmessage = e => handleMsg(JSON.parse(e.data));
+  ws.onclose = () => setTimeout(connect, 2000);
+}
+connect();
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startTimer(ms) {
+  const bar = document.getElementById('timerBar');
+  bar.style.transition = 'none'; bar.style.width = '100%';
+  requestAnimationFrame(()=>{requestAnimationFrame(()=>{
+    bar.style.transition = `width ${ms}ms linear`; bar.style.width = '0%';
+  })});
+}
+
+function formatQ(text) {
+  return text.replace('____', '<span class="blank">________</span>');
+}
+
+function renderPlayers(players, containerId) {
+  const c = document.getElementById(containerId);
+  c.innerHTML = '';
+  players.forEach(p => {
+    const d = document.createElement('div');
+    d.className = 'player-chip' + (p.connected?'':' disconnected');
+    d.textContent = p.name;
+    c.appendChild(d);
+  });
+}
+
+function renderScores(players, containerId, changes) {
+  const c = document.getElementById(containerId);
+  c.innerHTML = '';
+  const sorted = [...players].sort((a,b)=>b.score-a.score);
+  sorted.forEach(p => {
+    const li = document.createElement('li');
+    li.className = 'score-item';
+    let changeHtml = '';
+    if (changes && changes[p.name]) changeHtml = `<span class="score-change">+${changes[p.name]}</span>`;
+    li.innerHTML = `<span>${p.name}</span><span><span class="score-val">${p.score}</span>${changeHtml}</span>`;
+    c.appendChild(li);
+  });
+}
+
+function handleMsg(msg) {
+  switch(msg.type) {
+    case 'host-joined':
+    case 'player-list':
+      if (msg.players) {
+        renderPlayers(msg.players, 'lobbyPlayers');
+        const btn = document.getElementById('startBtn');
+        const count = msg.players.length;
+        btn.disabled = count < 2;
+        btn.textContent = count < 2 ? `Need ${2-count} more player${2-count>1?'s':''}...` : `Start Game (${count} players)`;
+      }
+      break;
+    case 'game-start':
+      break;
+    case 'new-round':
+      break;
+    case 'category-select':
+      showScreen('categoryScreen');
+      document.getElementById('roundBadge').textContent = `Round ${msg.round} — Question ${msg.questionNum}/${msg.totalQuestions}`;
+      const co = document.getElementById('catOptions');
+      co.innerHTML = '';
+      msg.categories.forEach(cat => {
+        const d = document.createElement('div');
+        d.className = 'cat-opt'; d.textContent = cat;
+        co.appendChild(d);
+      });
+      startTimer(msg.timeMs);
+      break;
+    case 'show-question':
+      showScreen('questionScreen');
+      document.getElementById('qRound').textContent = `Round ${msg.round} — ${msg.category}`;
+      document.getElementById('questionText').innerHTML = formatQ(msg.question);
+      document.getElementById('lieCount').textContent = '';
+      startTimer(msg.timeMs);
+      break;
+    case 'lie-phase':
+      showScreen('questionScreen');
+      document.getElementById('questionText').innerHTML = formatQ(msg.question);
+      document.getElementById('lieCount').textContent = 'Waiting for lies...';
+      startTimer(msg.timeMs);
+      break;
+    case 'lie-count':
+      document.getElementById('lieCount').textContent = `${msg.count}/${msg.total} lies submitted`;
+      break;
+    case 'vote-phase':
+      showScreen('voteScreen');
+      document.getElementById('voteQuestion').innerHTML = formatQ(msg.question);
+      const ag = document.getElementById('answerGrid');
+      ag.innerHTML = '';
+      msg.answers.forEach(a => {
+        const d = document.createElement('div');
+        d.className = 'answer-card'; d.textContent = a.text; d.dataset.id = a.id;
+        ag.appendChild(d);
+      });
+      document.getElementById('voteCount').textContent = 'Voting...';
+      startTimer(msg.timeMs);
+      break;
+    case 'vote-count':
+      document.getElementById('voteCount').textContent = `${msg.count}/${msg.total} votes in`;
+      break;
+    case 'reveal':
+      showScreen('revealScreen');
+      document.getElementById('revealQuestion').innerHTML = formatQ(msg.reveals.length > 0 ? '' : '');
+      // Retrieve question from voteQuestion
+      document.getElementById('revealQuestion').innerHTML = document.getElementById('voteQuestion').innerHTML;
+      const rg = document.getElementById('revealGrid');
+      rg.innerHTML = '';
+      // Reveal one by one with animation
+      msg.reveals.forEach((r, i) => {
+        setTimeout(() => {
+          const d = document.createElement('div');
+          d.className = 'answer-card ' + (r.isTrue ? 'truth' : 'lie');
+          let html = `<div style="font-size:1.6rem">${r.text}</div>`;
+          if (r.isTrue) html += `<div class="author">✅ THE TRUTH</div>`;
+          else if (r.author) html += `<div class="author">Written by ${r.author}</div>`;
+          if (r.pickedBy.length > 0) html += `<div class="picked-by">Picked by: ${r.pickedBy.join(', ')}</div>`;
+          d.innerHTML = html;
+          rg.appendChild(d);
+        }, i * 2500);
+      });
+      break;
+    case 'scoreboard':
+      showScreen('scoreScreen');
+      renderScores(msg.players, 'scoreList');
+      break;
+    case 'game-over':
+      showScreen('gameOverScreen');
+      document.getElementById('winnerName').textContent = msg.players[0]?.name || 'Nobody';
+      renderScores(msg.players, 'finalScores');
+      break;
+    case 'back-to-lobby':
+      showScreen('lobby');
+      renderPlayers(msg.players, 'lobbyPlayers');
+      break;
+  }
+}
+
+document.getElementById('startBtn').onclick = () => {
+  ws.send(JSON.stringify({type:'start-game'}));
+};
+document.getElementById('playAgainBtn').onclick = () => {
+  ws.send(JSON.stringify({type:'play-again'}));
+};
+</script>
+</body>
+</html>

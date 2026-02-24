@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Fibbage - Player</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a2e;color:#fff;font-family:'Segoe UI',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+.header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(0,0,0,.3)}
+.header .name{font-weight:700;font-size:1.1rem}
+.header .score{color:#4ecdc4;font-weight:700;font-size:1.1rem}
+.screen{display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;text-align:center}
+.screen.active{display:flex}
+.timer-bar{height:5px;background:linear-gradient(90deg,#4ecdc4,#2ecc71);transition:width .3s linear;width:0%}
+h2{font-size:1.5rem;margin-bottom:1rem}
+.sub{color:rgba(255,255,255,.5);font-size:.95rem;margin-bottom:1.5rem}
+/* Category buttons */
+.cat-btn{width:100%;max-width:400px;padding:18px;margin:6px 0;border:2px solid rgba(255,255,255,.15);border-radius:12px;background:rgba(255,255,255,.06);color:#fff;font-size:1.2rem;font-weight:600;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.cat-btn:active,.cat-btn.selected{background:rgba(78,205,196,.2);border-color:#4ecdc4;transform:scale(.97)}
+/* Lie input */
+.lie-input{width:100%;max-width:400px;padding:16px;border:2px solid rgba(255,255,255,.15);border-radius:12px;background:rgba(255,255,255,.08);color:#fff;font-size:1.2rem;outline:none;margin-bottom:12px}
+.lie-input:focus{border-color:#4ecdc4}
+.submit-btn{width:100%;max-width:400px;padding:16px;border:none;border-radius:12px;font-size:1.3rem;font-weight:700;cursor:pointer;transition:transform .15s;-webkit-tap-highlight-color:transparent}
+.submit-btn:active{transform:scale(.96)}
+.btn-red{background:linear-gradient(135deg,#e94560,#c23152);color:#fff;box-shadow:0 4px 20px rgba(233,69,96,.3)}
+.btn-teal{background:linear-gradient(135deg,#4ecdc4,#2ca89e);color:#fff;box-shadow:0 4px 20px rgba(78,205,196,.3)}
+/* Vote buttons */
+.vote-btn{width:100%;max-width:400px;padding:18px;margin:6px 0;border:2px solid rgba(255,255,255,.12);border-radius:12px;background:rgba(255,255,255,.06);color:#fff;font-size:1.15rem;font-weight:500;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.vote-btn:active,.vote-btn.selected{background:rgba(233,69,96,.2);border-color:#e94560}
+/* Results */
+.result-card{background:rgba(255,255,255,.06);border-radius:14px;padding:1.2rem;margin:8px 0;width:100%;max-width:400px}
+.result-truth{color:#2ecc71;font-weight:700}
+.result-lie{color:#e94560}
+.points-gained{font-size:2rem;font-weight:700;color:#2ecc71;margin:.5rem 0}
+.question-display{font-size:1.1rem;line-height:1.4;margin-bottom:1.2rem;color:rgba(255,255,255,.8)}
+.error-msg{color:#e94560;font-size:.9rem;margin-top:8px;min-height:1.2rem}
+.waiting-icon{font-size:3rem;margin-bottom:1rem;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
+.emoji-big{font-size:4rem;margin-bottom:1rem}
+</style>
+</head>
+<body>
+<div class="header">
+<span class="name" id="playerName">—</span>
+<span class="score" id="playerScore">0 pts</span>
+</div>
+<div class="timer-bar" id="timerBar"></div>
+
+<!-- Connecting -->
+<div class="screen active" id="connectScreen">
+<div class="waiting-icon">🔌</div>
+<h2>Connecting...</h2>
+</div>
+
+<!-- Lobby -->
+<div class="screen" id="lobbyScreen">
+<div class="emoji-big">🎮</div>
+<h2>You're in!</h2>
+<p class="sub">Waiting for the host to start the game...</p>
+</div>
+
+<!-- Category -->
+<div class="screen" id="categoryScreen">
+<h2>Pick a Category</h2>
+<p class="sub">Vote for what you want to play</p>
+<div id="catButtons"></div>
+</div>
+
+<!-- Show Question -->
+<div class="screen" id="showQuestionScreen">
+<div class="waiting-icon">🤔</div>
+<p class="question-display" id="showQText"></p>
+</div>
+
+<!-- Lie Phase -->
+<div class="screen" id="lieScreen">
+<h2>Write a Fake Answer</h2>
+<p class="question-display" id="lieQuestion"></p>
+<input type="text" class="lie-input" id="lieInput" placeholder="Your fake answer..." maxlength="80" autocomplete="off">
+<button class="submit-btn btn-red" id="lieSubmit">Submit Lie</button>
+<p class="error-msg" id="lieError"></p>
+</div>
+
+<!-- Lie Accepted -->
+<div class="screen" id="lieWaitScreen">
+<div class="emoji-big">✅</div>
+<h2>Lie Submitted!</h2>
+<p class="sub">Waiting for other players...</p>
+</div>
+
+<!-- Vote Phase -->
+<div class="screen" id="voteScreen">
+<h2>Find the Truth!</h2>
+<p class="question-display" id="voteQuestion"></p>
+<div id="voteButtons"></div>
+</div>
+
+<!-- Vote Accepted -->
+<div class="screen" id="voteWaitScreen">
+<div class="emoji-big">🗳️</div>
+<h2>Vote Locked In!</h2>
+<p class="sub">Let's see who got fooled...</p>
+</div>
+
+<!-- Reveal / Results -->
+<div class="screen" id="revealScreen">
+<div class="emoji-big" id="revealEmoji">🎉</div>
+<h2 id="revealTitle">Results</h2>
+<div id="revealInfo"></div>
+</div>
+
+<!-- Scoreboard -->
+<div class="screen" id="scoreScreen">
+<div class="emoji-big">📊</div>
+<h2>Scoreboard</h2>
+<div id="scoreInfo"></div>
+</div>
+
+<!-- Game Over -->
+<div class="screen" id="gameOverScreen">
+<div class="emoji-big">🏆</div>
+<h2 id="goTitle">Game Over!</h2>
+<div id="goInfo"></div>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const code = params.get('code');
+const name = params.get('name');
+if (!code || !name) location.href = '/';
+document.getElementById('playerName').textContent = name;
+let myScore = 0;
+let ws;
+
+function vib(ms) { try { navigator.vibrate(ms); } catch{} }
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startTimer(ms) {
+  const bar = document.getElementById('timerBar');
+  bar.style.transition = 'none'; bar.style.width = '100%';
+  requestAnimationFrame(()=>{requestAnimationFrame(()=>{
+    bar.style.transition = `width ${ms}ms linear`; bar.style.width = '0%';
+  })});
+}
+
+function updateScore(s) { myScore = s; document.getElementById('playerScore').textContent = s + ' pts'; }
+
+function connect() {
+  ws = new WebSocket(`ws://${location.host}`);
+  ws.onopen = () => {
+    ws.send(JSON.stringify({type:'join-room', code, name}));
+  };
+  ws.onmessage = e => handleMsg(JSON.parse(e.data));
+  ws.onclose = () => { showScreen('connectScreen'); setTimeout(connect, 2000); };
+}
+connect();
+
+function handleMsg(msg) {
+  switch(msg.type) {
+    case 'error':
+      alert(msg.message);
+      if (msg.message === 'Room not found') location.href = '/';
+      break;
+    case 'joined':
+      updateScore(msg.score);
+      if (msg.phase === 'lobby') showScreen('lobbyScreen');
+      else showScreen('lobbyScreen'); // rejoin — will get next phase msg
+      break;
+    case 'player-list':
+      break;
+    case 'game-start':
+      vib(200);
+      break;
+    case 'new-round':
+      vib([100,50,100]);
+      break;
+    case 'category-select':
+      showScreen('categoryScreen');
+      startTimer(msg.timeMs);
+      const cb = document.getElementById('catButtons');
+      cb.innerHTML = '';
+      msg.categories.forEach(cat => {
+        const b = document.createElement('button');
+        b.className = 'cat-btn'; b.textContent = cat;
+        b.onclick = () => {
+          cb.querySelectorAll('.cat-btn').forEach(x=>x.classList.remove('selected'));
+          b.classList.add('selected');
+          ws.send(JSON.stringify({type:'vote-category', category: cat}));
+          vib(30);
+        };
+        cb.appendChild(b);
+      });
+      break;
+    case 'show-question':
+      showScreen('showQuestionScreen');
+      document.getElementById('showQText').textContent = msg.question;
+      startTimer(msg.timeMs);
+      break;
+    case 'lie-phase':
+      showScreen('lieScreen');
+      document.getElementById('lieQuestion').textContent = msg.question;
+      document.getElementById('lieInput').value = '';
+      document.getElementById('lieError').textContent = '';
+      startTimer(msg.timeMs);
+      document.getElementById('lieInput').focus();
+      break;
+    case 'lie-rejected':
+      document.getElementById('lieError').textContent = msg.message;
+      vib([50,30,50]);
+      break;
+    case 'lie-accepted':
+      showScreen('lieWaitScreen');
+      vib(100);
+      break;
+    case 'vote-phase':
+      // Wait for your-choices
+      break;
+    case 'your-choices':
+      showScreen('voteScreen');
+      vib(200);
+      startTimer(30000);
+      const vb = document.getElementById('voteButtons');
+      vb.innerHTML = '';
+      msg.answers.forEach(a => {
+        const b = document.createElement('button');
+        b.className = 'vote-btn'; b.textContent = a.text;
+        b.onclick = () => {
+          vb.querySelectorAll('.vote-btn').forEach(x=>x.classList.remove('selected'));
+          b.classList.add('selected');
+          ws.send(JSON.stringify({type:'submit-vote', answerId: a.id}));
+          vib(30);
+        };
+        vb.appendChild(b);
+      });
+      break;
+    case 'vote-accepted':
+      showScreen('voteWaitScreen');
+      break;
+    case 'reveal':
+      showScreen('revealScreen');
+      vib([100,80,100,80,200]);
+      const myChange = msg.scoreChanges[name] || 0;
+      const me = msg.players.find(p=>p.name===name);
+      if (me) updateScore(me.score);
+      document.getElementById('revealEmoji').textContent = myChange > 0 ? '🎉' : '😅';
+      document.getElementById('revealTitle').textContent = myChange > 0 ? `+${myChange} points!` : 'No points this round';
+      const ri = document.getElementById('revealInfo');
+      ri.innerHTML = '';
+      const truth = msg.reveals.find(r=>r.isTrue);
+      if (truth) {
+        const d = document.createElement('div');
+        d.className = 'result-card';
+        d.innerHTML = `<div class="result-truth">The truth: ${truth.text}</div>`;
+        ri.appendChild(d);
+      }
+      break;
+    case 'scoreboard':
+      showScreen('scoreScreen');
+      const si = document.getElementById('scoreInfo');
+      si.innerHTML = '';
+      const sorted = [...msg.players].sort((a,b)=>b.score-a.score);
+      sorted.forEach((p,i) => {
+        const d = document.createElement('div');
+        d.className = 'result-card';
+        d.style.borderLeft = p.name===name ? '3px solid #4ecdc4' : 'none';
+        d.innerHTML = `<strong>${i+1}. ${p.name}</strong> — <span style="color:#4ecdc4">${p.score} pts</span>`;
+        si.appendChild(d);
+      });
+      break;
+    case 'game-over':
+      showScreen('gameOverScreen');
+      vib([200,100,200,100,400]);
+      const winner = msg.players[0];
+      document.getElementById('goTitle').textContent = winner?.name === name ? '🎉 You Win!' : `${winner?.name} Wins!`;
+      const gi = document.getElementById('goInfo');
+      gi.innerHTML = '';
+      msg.players.forEach((p,i) => {
+        const d = document.createElement('div');
+        d.className = 'result-card';
+        d.style.borderLeft = p.name===name ? '3px solid #4ecdc4' : 'none';
+        d.innerHTML = `<strong>${i+1}. ${p.name}</strong> — <span style="color:#4ecdc4">${p.score} pts</span>`;
+        gi.appendChild(d);
+      });
+      break;
+    case 'back-to-lobby':
+      showScreen('lobbyScreen');
+      updateScore(0);
+      break;
+  }
+}
+
+document.getElementById('lieSubmit').onclick = () => {
+  const val = document.getElementById('lieInput').value.trim();
+  if (!val) { document.getElementById('lieError').textContent = 'Enter something!'; return; }
+  ws.send(JSON.stringify({type:'submit-lie', lie: val}));
+};
+document.getElementById('lieInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('lieSubmit').click();
+});
+</script>
+</body>
+</html>

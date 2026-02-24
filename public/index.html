@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fibbage</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a2e;color:#fff;font-family:'Segoe UI',sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh}
+.container{text-align:center;padding:2rem;max-width:480px;width:100%}
+h1{font-size:3.5rem;color:#e94560;margin-bottom:.5rem;text-shadow:0 0 30px rgba(233,69,96,.4)}
+.subtitle{color:#4ecdc4;font-size:1.1rem;margin-bottom:2.5rem}
+.card{background:rgba(255,255,255,.06);border-radius:16px;padding:2rem;margin-bottom:1.5rem;border:1px solid rgba(255,255,255,.08)}
+.card h2{font-size:1.3rem;margin-bottom:1rem;color:#fff}
+input{width:100%;padding:14px;border:2px solid rgba(255,255,255,.15);border-radius:10px;background:rgba(255,255,255,.08);color:#fff;font-size:1.1rem;margin-bottom:.8rem;outline:none;transition:border .2s}
+input:focus{border-color:#4ecdc4}
+input::placeholder{color:rgba(255,255,255,.4)}
+.btn{width:100%;padding:14px;border:none;border-radius:10px;font-size:1.2rem;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(135deg,#e94560,#c23152);color:#fff;box-shadow:0 4px 20px rgba(233,69,96,.3)}
+.btn-accent{background:linear-gradient(135deg,#4ecdc4,#2ca89e);color:#fff;box-shadow:0 4px 20px rgba(78,205,196,.3)}
+.or{color:rgba(255,255,255,.3);margin:1rem 0;font-size:.9rem}
+.error{color:#e94560;font-size:.9rem;margin-top:.5rem;display:none}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>FIBBAGE</h1>
+<p class="subtitle">The bluffing party game</p>
+<div class="card">
+<h2>Host a Game</h2>
+<button class="btn btn-primary" id="createBtn">Create Game</button>
+</div>
+<div class="or">— or join a game —</div>
+<div class="card">
+<h2>Join a Game</h2>
+<input type="text" id="code" placeholder="Room Code" maxlength="4" autocapitalize="characters">
+<input type="text" id="name" placeholder="Your Name" maxlength="16">
+<button class="btn btn-accent" id="joinBtn">Join</button>
+<p class="error" id="err"></p>
+</div>
+</div>
+<script>
+document.getElementById('createBtn').onclick = () => {
+  const ws = new WebSocket(`ws://${location.host}`);
+  ws.onopen = () => ws.send(JSON.stringify({type:'create-room'}));
+  ws.onmessage = e => {
+    const msg = JSON.parse(e.data);
+    if (msg.type==='room-created') { ws.close(); location.href=`/host.html?code=${msg.code}`; }
+  };
+};
+document.getElementById('joinBtn').onclick = () => {
+  const code = document.getElementById('code').value.trim().toUpperCase();
+  const name = document.getElementById('name').value.trim();
+  const err = document.getElementById('err');
+  if (!code||code.length!==4) { err.style.display='block'; err.textContent='Enter a 4-letter room code'; return; }
+  if (!name) { err.style.display='block'; err.textContent='Enter your name'; return; }
+  location.href=`/player.html?code=${code}&name=${encodeURIComponent(name)}`;
+};
+document.getElementById('code').addEventListener('input', e => { e.target.value = e.target.value.toUpperCase(); });
+</script>
+</body>
+</html>
