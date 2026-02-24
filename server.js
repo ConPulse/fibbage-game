@@ -203,12 +203,27 @@ function checkAllLiesIn(room) {
 function startVoting(room) {
   clearTimer(room);
   room.phase = 'vote';
-  // Build answer list: all lies + the truth, shuffled
+  // Build answer list: all lies + the truth + game decoys, shuffled
   const answers = [];
   const truth = room.currentQuestion.answer;
   answers.push({ text: truth, isTrue: true, author: null });
   for (const [playerName, lie] of Object.entries(room.lies)) {
     answers.push({ text: lie, isTrue: false, author: playerName });
+  }
+  // Add game-generated decoy lies to pad to at least 6 total options
+  const decoys = room.currentQuestion.decoys || [];
+  const playerCount = Object.keys(room.lies).length;
+  const totalWithoutDecoys = 1 + playerCount; // truth + player lies
+  const decoysNeeded = Math.max(0, 6 - totalWithoutDecoys);
+  const usedTexts = new Set(answers.map(a => normalize(a.text)));
+  let decoysAdded = 0;
+  for (const d of decoys) {
+    if (decoysAdded >= decoysNeeded) break;
+    if (!usedTexts.has(normalize(d))) {
+      answers.push({ text: d, isTrue: false, author: '__GAME__' });
+      usedTexts.add(normalize(d));
+      decoysAdded++;
+    }
   }
   // Shuffle
   room.answerList = answers.sort(() => Math.random() - 0.5);

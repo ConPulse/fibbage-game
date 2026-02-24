@@ -237,6 +237,7 @@ function handleMsg(msg) {
           d.className = 'answer-card ' + (r.isTrue ? 'truth' : 'lie');
           let html = `<div style="font-size:1.6rem">${r.text}</div>`;
           if (r.isTrue) html += `<div class="author">✅ THE TRUTH</div>`;
+          else if (r.author === '__GAME__') html += `<div class="author" style="color:#f39c12">🎮 Game Decoy</div>`;
           else if (r.author) html += `<div class="author">Written by ${r.author}</div>`;
           if (r.pickedBy.length > 0) html += `<div class="picked-by">Picked by: ${r.pickedBy.join(', ')}</div>`;
           d.innerHTML = html;

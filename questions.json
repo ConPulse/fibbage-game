@@ -7,6 +7,12 @@
     "alternateAnswers": [
       "gator",
       "an alligator"
+    ],
+    "decoys": [
+      "a lawn flamingo",
+      "a shopping cart",
+      "a toilet seat",
+      "his own shoes"
     ]
   },
   {
@@ -16,6 +22,12 @@
     "answer": "salt",
     "alternateAnswers": [
       "too much salt"
+    ],
+    "decoys": [
+      "a bag of shrimp",
+      "a shopping cart",
+      "his own shoes",
+      "a microwave"
     ]
   },
   {
@@ -26,6 +38,12 @@
     "alternateAnswers": [
       "lawn mower",
       "riding mower"
+    ],
+    "decoys": [
+      "a frozen iguana",
+      "a live snake",
+      "a ceiling fan",
+      "his own shoes"
     ]
   },
   {
@@ -36,6 +54,12 @@
     "alternateAnswers": [
       "their clothes",
       "stolen clothes"
+    ],
+    "decoys": [
+      "his own shoes",
+      "a microwave",
+      "a pool noodle",
+      "a shopping cart"
     ]
   },
   {
@@ -47,6 +71,12 @@
       "weed",
       "pot",
       "cannabis"
+    ],
+    "decoys": [
+      "a live snake",
+      "a lawn flamingo",
+      "a microwave",
+      "a shopping cart"
     ]
   },
   {
@@ -56,6 +86,12 @@
     "answer": "grapes",
     "alternateAnswers": [
       "grape"
+    ],
+    "decoys": [
+      "1,200",
+      "316",
+      "450 pounds",
+      "147"
     ]
   },
   {
@@ -67,6 +103,12 @@
       "hiccups",
       "hiccupping",
       "case of hiccups"
+    ],
+    "decoys": [
+      "6.3 seconds",
+      "891",
+      "58",
+      "23"
     ]
   },
   {
@@ -77,6 +119,12 @@
     "alternateAnswers": [
       "lawnmower",
       "lawn mower"
+    ],
+    "decoys": [
+      "147",
+      "23",
+      "891",
+      "450 pounds"
     ]
   },
   {
@@ -87,6 +135,12 @@
     "alternateAnswers": [
       "nails",
       "finger nails"
+    ],
+    "decoys": [
+      "147",
+      "23",
+      "58",
+      "891"
     ]
   },
   {
@@ -98,6 +152,12 @@
       "smartcar",
       "mini cooper",
       "small car"
+    ],
+    "decoys": [
+      "1,200",
+      "6.3 seconds",
+      "17 hours",
+      "450 pounds"
     ]
   },
   {
@@ -107,6 +167,12 @@
     "answer": "guinea pig",
     "alternateAnswers": [
       "guinea pigs"
+    ],
+    "decoys": [
+      "tying your giraffe to a lamp post",
+      "wearing a hat indoors",
+      "singing off-key",
+      "walking backwards"
     ]
   },
   {
@@ -117,6 +183,12 @@
     "alternateAnswers": [
       "fake moustache",
       "mustache"
+    ],
+    "decoys": [
+      "singing off-key",
+      "sleeping in a bathtub",
+      "carrying an ice cream cone in your pocket",
+      "riding a horse over 10mph"
     ]
   },
   {
@@ -124,7 +196,13 @@
     "category": "Weird Laws",
     "question": "In France, it is illegal to name a pig ____.",
     "answer": "Napoleon",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "wearing a hat indoors",
+      "whistling underwater",
+      "sleeping in a bathtub",
+      "carrying an ice cream cone in your pocket"
+    ]
   },
   {
     "id": 14,
@@ -136,6 +214,12 @@
       "a coin",
       "coins",
       "Thai money"
+    ],
+    "decoys": [
+      "tying your giraffe to a lamp post",
+      "walking backwards",
+      "carrying an ice cream cone in your pocket",
+      "sleeping in a bathtub"
     ]
   },
   {
@@ -146,6 +230,12 @@
     "alternateAnswers": [
       "electrician",
       "an electrician"
+    ],
+    "decoys": [
+      "walking backwards",
+      "carrying an ice cream cone in your pocket",
+      "singing off-key",
+      "sleeping in a bathtub"
     ]
   },
   {
@@ -156,6 +246,12 @@
     "alternateAnswers": [
       "gold",
       "edible gold"
+    ],
+    "decoys": [
+      "chocolate",
+      "spam",
+      "pickle juice",
+      "mayonnaise"
     ]
   },
   {
@@ -166,6 +262,12 @@
     "alternateAnswers": [
       "medication",
       "drug"
+    ],
+    "decoys": [
+      "vanilla",
+      "hot sauce",
+      "chocolate",
+      "mayonnaise"
     ]
   },
   {
@@ -177,6 +279,12 @@
       "spoils",
       "goes bad",
       "rots"
+    ],
+    "decoys": [
+      "ranch dressing",
+      "pickle juice",
+      "vanilla",
+      "hot sauce"
     ]
   },
   {
@@ -188,6 +296,12 @@
       "all the same",
       "identical",
       "one flavor"
+    ],
+    "decoys": [
+      "ketchup",
+      "mayonnaise",
+      "ranch dressing",
+      "peanut butter"
     ]
   },
   {
@@ -197,6 +311,12 @@
     "answer": "titanium dioxide",
     "alternateAnswers": [
       "titanium"
+    ],
+    "decoys": [
+      "mayonnaise",
+      "hot sauce",
+      "ranch dressing",
+      "peanut butter"
     ]
   },
   {
@@ -206,6 +326,12 @@
     "answer": "three",
     "alternateAnswers": [
       "3"
+    ],
+    "decoys": [
+      "static electricity",
+      "calcium",
+      "solar wind",
+      "helium"
     ]
   },
   {
@@ -217,6 +343,12 @@
       "6000000000",
       "six billion",
       "billions"
+    ],
+    "decoys": [
+      "sulfur",
+      "calcium",
+      "hydrogen",
+      "nitrogen"
     ]
   },
   {
@@ -226,6 +358,12 @@
     "answer": "radioactive",
     "alternateAnswers": [
       "radio active"
+    ],
+    "decoys": [
+      "a magnetic field",
+      "nitrogen",
+      "solar wind",
+      "dark matter"
     ]
   },
   {
@@ -238,6 +376,12 @@
       "warning",
       "stress",
       "sos"
+    ],
+    "decoys": [
+      "static electricity",
+      "hydrogen",
+      "nitrogen",
+      "helium"
     ]
   },
   {
@@ -248,6 +392,12 @@
     "alternateAnswers": [
       "quicker",
       "more quickly"
+    ],
+    "decoys": [
+      "a magnetic field",
+      "nitrogen",
+      "mercury",
+      "helium"
     ]
   },
   {
@@ -258,6 +408,12 @@
     "alternateAnswers": [
       "lunar landing",
       "moon landings"
+    ],
+    "decoys": [
+      "a sailor",
+      "a priest",
+      "the Pope",
+      "Napoleon"
     ]
   },
   {
@@ -268,6 +424,12 @@
     "alternateAnswers": [
       "pee",
       "piss"
+    ],
+    "decoys": [
+      "the Pope",
+      "a shepherd",
+      "a priest",
+      "a sailor"
     ]
   },
   {
@@ -279,6 +441,12 @@
       "bunnies",
       "rabbit",
       "bunny"
+    ],
+    "decoys": [
+      "the Pope",
+      "a monk",
+      "Queen Victoria",
+      "a sailor"
     ]
   },
   {
@@ -286,7 +454,13 @@
     "category": "History",
     "question": "The Great Emu War of 1932 was fought in ____ and the emus won.",
     "answer": "Australia",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "Queen Victoria",
+      "a tax collector",
+      "a priest",
+      "a sailor"
+    ]
   },
   {
     "id": 30,
@@ -296,6 +470,12 @@
     "alternateAnswers": [
       "cats",
       "a kitten"
+    ],
+    "decoys": [
+      "a blacksmith",
+      "Queen Victoria",
+      "Napoleon",
+      "a sailor"
     ]
   },
   {
@@ -307,6 +487,12 @@
       "hair dresser",
       "beautician",
       "cosmetologist"
+    ],
+    "decoys": [
+      "Beyoncé",
+      "Keanu Reeves",
+      "Kanye West",
+      "Tom Hanks"
     ]
   },
   {
@@ -318,6 +504,12 @@
       "75 million",
       "millions",
       "75 million dollars"
+    ],
+    "decoys": [
+      "Keanu Reeves",
+      "Oprah",
+      "Tom Hanks",
+      "Lady Gaga"
     ]
   },
   {
@@ -327,6 +519,12 @@
     "answer": "lion tamer",
     "alternateAnswers": [
       "lion-tamer"
+    ],
+    "decoys": [
+      "Beyoncé",
+      "Oprah",
+      "Lady Gaga",
+      "Tom Hanks"
     ]
   },
   {
@@ -337,6 +535,12 @@
     "alternateAnswers": [
       "fire fighter",
       "fireman"
+    ],
+    "decoys": [
+      "Taylor Swift",
+      "Beyoncé",
+      "The Rock",
+      "Kanye West"
     ]
   },
   {
@@ -346,6 +550,12 @@
     "answer": "chemical engineering",
     "alternateAnswers": [
       "chemistry"
+    ],
+    "decoys": [
+      "Elon Musk",
+      "Kanye West",
+      "The Rock",
+      "Keanu Reeves"
     ]
   },
   {
@@ -357,6 +567,12 @@
       "6",
       "seven",
       "7"
+    ],
+    "decoys": [
+      "a hockey puck",
+      "a football",
+      "a bowling ball",
+      "a baseball bat"
     ]
   },
   {
@@ -367,6 +583,12 @@
     "alternateAnswers": [
       "flat",
       "plain"
+    ],
+    "decoys": [
+      "a frisbee",
+      "a hockey puck",
+      "a basketball",
+      "a bowling ball"
     ]
   },
   {
@@ -374,28 +596,52 @@
     "category": "Sports",
     "question": "The Olympic gold medal is actually made mostly of ____.",
     "answer": "silver",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "a golf club",
+      "a baseball bat",
+      "his helmet",
+      "a frisbee"
+    ]
   },
   {
     "id": 39,
     "category": "Sports",
     "question": "In cricket, a score of zero is called a ____.",
     "answer": "duck",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "a bowling ball",
+      "a hockey puck",
+      "a football",
+      "a basketball"
+    ]
   },
   {
     "id": 40,
     "category": "Sports",
     "question": "Tug of war was an Olympic sport until ____.",
     "answer": "1920",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "a football",
+      "a frisbee",
+      "a hockey puck",
+      "a golf club"
+    ]
   },
   {
     "id": 41,
     "category": "Animals",
     "question": "A group of flamingos is called a ____.",
     "answer": "flamboyance",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "a pangolin",
+      "a flamingo",
+      "an octopus",
+      "a penguin"
+    ]
   },
   {
     "id": 42,
@@ -407,6 +653,12 @@
       "anxious",
       "depressed",
       "upset"
+    ],
+    "decoys": [
+      "a narwhal",
+      "a honey badger",
+      "a platypus",
+      "an octopus"
     ]
   },
   {
@@ -414,7 +666,13 @@
     "category": "Animals",
     "question": "A shrimp's heart is located in its ____.",
     "answer": "head",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "a honey badger",
+      "an octopus",
+      "a penguin",
+      "a flamingo"
+    ]
   },
   {
     "id": 44,
@@ -424,6 +682,12 @@
     "alternateAnswers": [
       "paws",
       "each other's hands"
+    ],
+    "decoys": [
+      "a penguin",
+      "a flamingo",
+      "a honey badger",
+      "a narwhal"
     ]
   },
   {
@@ -431,7 +695,13 @@
     "category": "Animals",
     "question": "Dolphins sleep with one ____ open.",
     "answer": "eye",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "a penguin",
+      "a platypus",
+      "a sloth",
+      "a narwhal"
+    ]
   },
   {
     "id": 46,
@@ -441,6 +711,12 @@
     "alternateAnswers": [
       "bug",
       "insect"
+    ],
+    "decoys": [
+      "a cassette tape",
+      "a pager",
+      "a vacuum tube",
+      "a rotary phone"
     ]
   },
   {
@@ -452,6 +728,12 @@
       "moon landing",
       "Apollo missions",
       "Apollo 11"
+    ],
+    "decoys": [
+      "a cassette tape",
+      "a rotary phone",
+      "a toaster",
+      "a pager"
     ]
   },
   {
@@ -461,6 +743,12 @@
     "answer": "zoo",
     "alternateAnswers": [
       "San Diego Zoo"
+    ],
+    "decoys": [
+      "a typewriter",
+      "a calculator",
+      "a floppy disk",
+      "a toaster"
     ]
   },
   {
@@ -472,6 +760,12 @@
       "exclamation point",
       "!",
       "exclamation mark"
+    ],
+    "decoys": [
+      "a vacuum tube",
+      "a toaster",
+      "a calculator",
+      "a telegraph"
     ]
   },
   {
@@ -481,6 +775,12 @@
     "answer": "Cadabra",
     "alternateAnswers": [
       "cadabra.com"
+    ],
+    "decoys": [
+      "a calculator",
+      "a pager",
+      "a vacuum tube",
+      "a toaster"
     ]
   },
   {
@@ -491,6 +791,12 @@
     "alternateAnswers": [
       "dental work",
       "dental"
+    ],
+    "decoys": [
+      "his own shoes",
+      "a microwave",
+      "a ceiling fan",
+      "a pool noodle"
     ]
   },
   {
@@ -500,6 +806,12 @@
     "answer": "chewing gum",
     "alternateAnswers": [
       "gum"
+    ],
+    "decoys": [
+      "tying your giraffe to a lamp post",
+      "wearing a hat indoors",
+      "whistling underwater",
+      "walking backwards"
     ]
   },
   {
@@ -511,6 +823,12 @@
       "stone",
       "rocks",
       "rock"
+    ],
+    "decoys": [
+      "a sailor",
+      "Queen Victoria",
+      "Napoleon",
+      "a merchant"
     ]
   },
   {
@@ -522,6 +840,12 @@
       "cubes",
       "square",
       "box"
+    ],
+    "decoys": [
+      "a sloth",
+      "a flamingo",
+      "a capybara",
+      "a penguin"
     ]
   },
   {
@@ -532,6 +856,12 @@
     "alternateAnswers": [
       "bacterial cells",
       "microbes"
+    ],
+    "decoys": [
+      "dark matter",
+      "mercury",
+      "nitrogen",
+      "static electricity"
     ]
   },
   {
@@ -543,6 +873,12 @@
       "spying",
       "spy missions",
       "reconnaissance"
+    ],
+    "decoys": [
+      "a musket",
+      "gold coins",
+      "tobacco",
+      "cotton"
     ]
   },
   {
@@ -552,6 +888,12 @@
     "answer": "Chief Justice John Marshall",
     "alternateAnswers": [
       "John Marshall"
+    ],
+    "decoys": [
+      "a musket",
+      "a constitutional amendment",
+      "tobacco",
+      "Thomas Jefferson"
     ]
   },
   {
@@ -561,6 +903,12 @@
     "answer": "turkey",
     "alternateAnswers": [
       "wild turkey"
+    ],
+    "decoys": [
+      "a farmer",
+      "a constitutional amendment",
+      "Thomas Jefferson",
+      "a musket"
     ]
   },
   {
@@ -571,6 +919,12 @@
     "alternateAnswers": [
       "alcohol",
       "industrial liquor"
+    ],
+    "decoys": [
+      "a farmer",
+      "tobacco",
+      "a printing press",
+      "a constitutional amendment"
     ]
   },
   {
@@ -580,6 +934,12 @@
     "answer": "four days",
     "alternateAnswers": [
       "4 days"
+    ],
+    "decoys": [
+      "a printing press",
+      "the British Navy",
+      "a musket",
+      "a peace treaty"
     ]
   },
   {
@@ -589,6 +949,12 @@
     "answer": "Regulars",
     "alternateAnswers": [
       "the regulars"
+    ],
+    "decoys": [
+      "a peace treaty",
+      "a printing press",
+      "the British Navy",
+      "a constitutional amendment"
     ]
   },
   {
@@ -599,6 +965,12 @@
     "alternateAnswers": [
       "2 cents",
       "about 2 cents"
+    ],
+    "decoys": [
+      "cotton",
+      "a musket",
+      "tobacco",
+      "a farmer"
     ]
   },
   {
@@ -609,6 +981,12 @@
     "alternateAnswers": [
       "Youth's Companion",
       "a magazine"
+    ],
+    "decoys": [
+      "a printing press",
+      "Thomas Jefferson",
+      "cotton",
+      "gold coins"
     ]
   },
   {
@@ -618,6 +996,12 @@
     "answer": "Ghost Army",
     "alternateAnswers": [
       "the Ghost Army"
+    ],
+    "decoys": [
+      "tobacco",
+      "a musket",
+      "a peace treaty",
+      "a farmer"
     ]
   },
   {
@@ -628,6 +1012,12 @@
     "alternateAnswers": [
       "Sutter's mill",
       "Sutters Mill"
+    ],
+    "decoys": [
+      "a musket",
+      "a constitutional amendment",
+      "the British Navy",
+      "tobacco"
     ]
   },
   {
@@ -638,6 +1028,12 @@
     "alternateAnswers": [
       "President's Palace",
       "Executive Mansion"
+    ],
+    "decoys": [
+      "a printing press",
+      "a constitutional amendment",
+      "a peace treaty",
+      "a musket"
     ]
   },
   {
@@ -649,6 +1045,12 @@
       "Native Americans",
       "Mohawks",
       "Indians"
+    ],
+    "decoys": [
+      "the British Navy",
+      "a farmer",
+      "tobacco",
+      "a peace treaty"
     ]
   },
   {
@@ -659,6 +1061,12 @@
     "alternateAnswers": [
       "a molasses flood",
       "hot molasses"
+    ],
+    "decoys": [
+      "cotton",
+      "a farmer",
+      "Thomas Jefferson",
+      "a musket"
     ]
   },
   {
@@ -669,6 +1077,12 @@
     "alternateAnswers": [
       "nineteen months",
       "about 18 months"
+    ],
+    "decoys": [
+      "gold coins",
+      "Thomas Jefferson",
+      "a farmer",
+      "the British Navy"
     ]
   },
   {
@@ -678,6 +1092,12 @@
     "answer": "Patent Office",
     "alternateAnswers": [
       "U.S. Patent Office"
+    ],
+    "decoys": [
+      "a constitutional amendment",
+      "the British Navy",
+      "a peace treaty",
+      "tobacco"
     ]
   },
   {
@@ -685,7 +1105,13 @@
     "category": "US History",
     "question": "The original 13 colonies were founded between 1607 and 1733, with ____ being the last.",
     "answer": "Georgia",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "a peace treaty",
+      "Thomas Jefferson",
+      "a farmer",
+      "cotton"
+    ]
   },
   {
     "id": 72,
@@ -696,6 +1122,12 @@
       "copper",
       "brown",
       "reddish brown"
+    ],
+    "decoys": [
+      "Thomas Jefferson",
+      "a printing press",
+      "a constitutional amendment",
+      "a farmer"
     ]
   },
   {
@@ -707,6 +1139,12 @@
       "high school student",
       "a teenager",
       "a student"
+    ],
+    "decoys": [
+      "a musket",
+      "a constitutional amendment",
+      "Thomas Jefferson",
+      "tobacco"
     ]
   },
   {
@@ -718,6 +1156,12 @@
       "race",
       "Virginia's racial",
       "Virginia segregation"
+    ],
+    "decoys": [
+      "gold coins",
+      "Thomas Jefferson",
+      "a printing press",
+      "tobacco"
     ]
   },
   {
@@ -728,6 +1172,12 @@
     "alternateAnswers": [
       "New York",
       "NYC"
+    ],
+    "decoys": [
+      "cotton",
+      "a peace treaty",
+      "a constitutional amendment",
+      "Thomas Jefferson"
     ]
   },
   {
@@ -737,6 +1187,12 @@
     "answer": "black blizzards",
     "alternateAnswers": [
       "black rollers"
+    ],
+    "decoys": [
+      "Thomas Jefferson",
+      "cotton",
+      "a musket",
+      "a farmer"
     ]
   },
   {
@@ -746,6 +1202,12 @@
     "answer": "Hudson River",
     "alternateAnswers": [
       "Atlantic Ocean via the Hudson River"
+    ],
+    "decoys": [
+      "Thomas Jefferson",
+      "cotton",
+      "a constitutional amendment",
+      "gold coins"
     ]
   },
   {
@@ -756,6 +1218,12 @@
     "alternateAnswers": [
       "scout",
       "spy and scout"
+    ],
+    "decoys": [
+      "cotton",
+      "gold coins",
+      "a peace treaty",
+      "a musket"
     ]
   },
   {
@@ -763,7 +1231,13 @@
     "category": "US History",
     "question": "The last state to join the Union was ____ in 1959.",
     "answer": "Hawaii",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "Thomas Jefferson",
+      "a farmer",
+      "a musket",
+      "gold coins"
+    ]
   },
   {
     "id": 80,
@@ -774,6 +1248,12 @@
       "nothing",
       "sh",
       "zero dollars"
+    ],
+    "decoys": [
+      "gold coins",
+      "the British Navy",
+      "cotton",
+      "tobacco"
     ]
   },
   {
@@ -784,6 +1264,12 @@
     "alternateAnswers": [
       "Promontory Point",
       "Promontory"
+    ],
+    "decoys": [
+      "a printing press",
+      "Thomas Jefferson",
+      "gold coins",
+      "a constitutional amendment"
     ]
   },
   {
@@ -793,6 +1279,12 @@
     "answer": "tea",
     "alternateAnswers": [
       "British tea"
+    ],
+    "decoys": [
+      "a peace treaty",
+      "Thomas Jefferson",
+      "a farmer",
+      "the British Navy"
     ]
   },
   {
@@ -805,6 +1297,12 @@
       "grease",
       "fat",
       "cooking fat"
+    ],
+    "decoys": [
+      "a printing press",
+      "cotton",
+      "gold coins",
+      "a constitutional amendment"
     ]
   },
   {
@@ -816,6 +1314,12 @@
       "2",
       "2 days",
       "two days"
+    ],
+    "decoys": [
+      "Thomas Jefferson",
+      "a constitutional amendment",
+      "tobacco",
+      "a printing press"
     ]
   },
   {
@@ -826,6 +1330,12 @@
     "alternateAnswers": [
       "twenty",
       "20 people"
+    ],
+    "decoys": [
+      "a musket",
+      "a farmer",
+      "Thomas Jefferson",
+      "the British Navy"
     ]
   },
   {
@@ -837,6 +1347,12 @@
       "mission",
       "church",
       "a mission"
+    ],
+    "decoys": [
+      "Thomas Jefferson",
+      "a printing press",
+      "gold coins",
+      "a constitutional amendment"
     ]
   },
   {
@@ -847,6 +1363,12 @@
     "alternateAnswers": [
       "dog",
       "a dog named Seaman"
+    ],
+    "decoys": [
+      "a peace treaty",
+      "Thomas Jefferson",
+      "tobacco",
+      "a musket"
     ]
   },
   {
@@ -858,6 +1380,12 @@
       "3",
       "3 days",
       "three days"
+    ],
+    "decoys": [
+      "gold coins",
+      "the British Navy",
+      "cotton",
+      "tobacco"
     ]
   },
   {
@@ -868,6 +1396,12 @@
     "alternateAnswers": [
       "August 2",
       "August second"
+    ],
+    "decoys": [
+      "gold coins",
+      "Thomas Jefferson",
+      "a constitutional amendment",
+      "tobacco"
     ]
   },
   {
@@ -875,7 +1409,13 @@
     "category": "US History",
     "question": "In 1929, the stock market crash that started the Great Depression happened on a day nicknamed ____.",
     "answer": "Black Tuesday",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "a farmer",
+      "a musket",
+      "a constitutional amendment",
+      "gold coins"
+    ]
   },
   {
     "id": 91,
@@ -885,6 +1425,12 @@
     "alternateAnswers": [
       "secret routes and safe houses",
       "hidden routes"
+    ],
+    "decoys": [
+      "Thomas Jefferson",
+      "a farmer",
+      "a musket",
+      "tobacco"
     ]
   },
   {
@@ -892,7 +1438,13 @@
     "category": "US History",
     "question": "During the Revolutionary War, George Washington famously crossed the ____ River on Christmas night 1776.",
     "answer": "Delaware",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "Thomas Jefferson",
+      "gold coins",
+      "a musket",
+      "the British Navy"
+    ]
   },
   {
     "id": 93,
@@ -901,6 +1453,12 @@
     "answer": "Victoria Woodhull",
     "alternateAnswers": [
       "Woodhull"
+    ],
+    "decoys": [
+      "cotton",
+      "a printing press",
+      "a constitutional amendment",
+      "a farmer"
     ]
   },
   {
@@ -910,6 +1468,12 @@
     "answer": "Mother Road",
     "alternateAnswers": [
       "Main Street of America"
+    ],
+    "decoys": [
+      "tobacco",
+      "a constitutional amendment",
+      "a printing press",
+      "the British Navy"
     ]
   },
   {
@@ -920,6 +1484,12 @@
     "alternateAnswers": [
       "saucers",
       "flying discs"
+    ],
+    "decoys": [
+      "Thomas Jefferson",
+      "gold coins",
+      "a musket",
+      "a farmer"
     ]
   },
   {
@@ -931,6 +1501,12 @@
       "rebel states",
       "states in rebellion",
       "the South"
+    ],
+    "decoys": [
+      "gold coins",
+      "a musket",
+      "cotton",
+      "a constitutional amendment"
     ]
   },
   {
@@ -941,6 +1517,12 @@
     "alternateAnswers": [
       "Hail Columbia",
       "America"
+    ],
+    "decoys": [
+      "cotton",
+      "a constitutional amendment",
+      "the British Navy",
+      "gold coins"
     ]
   },
   {
@@ -951,6 +1533,12 @@
     "alternateAnswers": [
       "buses",
       "Greyhound buses"
+    ],
+    "decoys": [
+      "a printing press",
+      "cotton",
+      "a peace treaty",
+      "the British Navy"
     ]
   },
   {
@@ -961,6 +1549,12 @@
     "alternateAnswers": [
       "3 cents",
       "4 cents"
+    ],
+    "decoys": [
+      "a farmer",
+      "tobacco",
+      "a printing press",
+      "a constitutional amendment"
     ]
   },
   {
@@ -970,6 +1564,12 @@
     "answer": "Antietam",
     "alternateAnswers": [
       "Sharpsburg"
+    ],
+    "decoys": [
+      "a farmer",
+      "Thomas Jefferson",
+      "the British Navy",
+      "a musket"
     ]
   },
   {
@@ -977,7 +1577,13 @@
     "category": "US History",
     "question": "The 19th Amendment, giving women the right to vote, wasn't ratified until ____.",
     "answer": "1920",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "gold coins",
+      "a peace treaty",
+      "Thomas Jefferson",
+      "a musket"
+    ]
   },
   {
     "id": 102,
@@ -986,6 +1592,12 @@
     "answer": "duck and cover",
     "alternateAnswers": [
       "duck-and-cover"
+    ],
+    "decoys": [
+      "a printing press",
+      "the British Navy",
+      "a farmer",
+      "gold coins"
     ]
   },
   {
@@ -996,6 +1608,12 @@
     "alternateAnswers": [
       "Weehawken",
       "New Jersey"
+    ],
+    "decoys": [
+      "Thomas Jefferson",
+      "a farmer",
+      "the British Navy",
+      "a constitutional amendment"
     ]
   },
   {
@@ -1007,6 +1625,12 @@
       "ship",
       "ship captain",
       "sea captain"
+    ],
+    "decoys": [
+      "a printing press",
+      "gold coins",
+      "cotton",
+      "the British Navy"
     ]
   },
   {
@@ -1018,6 +1642,12 @@
       "1.7 million dollars",
       "about 1.7 million",
       "over a million dollars"
+    ],
+    "decoys": [
+      "Thomas Jefferson",
+      "gold coins",
+      "a constitutional amendment",
+      "a musket"
     ]
   },
   {
@@ -1027,6 +1657,12 @@
     "answer": "bartender",
     "alternateAnswers": [
       "bar keeper"
+    ],
+    "decoys": [
+      "a golden pocket watch",
+      "chess",
+      "a top hat",
+      "a rocking chair"
     ]
   },
   {
@@ -1036,6 +1672,12 @@
     "answer": "bathtub",
     "alternateAnswers": [
       "White House bathtub"
+    ],
+    "decoys": [
+      "chess",
+      "poker",
+      "a sword",
+      "a top hat"
     ]
   },
   {
@@ -1045,6 +1687,12 @@
     "answer": "alligator",
     "alternateAnswers": [
       "gator"
+    ],
+    "decoys": [
+      "a bottle of whiskey",
+      "gardening",
+      "a sword",
+      "a rocking chair"
     ]
   },
   {
@@ -1052,7 +1700,13 @@
     "category": "US Presidents",
     "question": "Calvin Coolidge's nickname was \"____\" because he rarely spoke.",
     "answer": "Silent Cal",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "poker",
+      "gardening",
+      "chess",
+      "horseback riding"
+    ]
   },
   {
     "id": 110,
@@ -1063,6 +1717,12 @@
       "gave the speech",
       "finished the speech",
       "kept speaking"
+    ],
+    "decoys": [
+      "a sword",
+      "a pet eagle",
+      "a bottle of whiskey",
+      "gardening"
     ]
   },
   {
@@ -1073,6 +1733,12 @@
     "alternateAnswers": [
       "got married",
       "had a wife"
+    ],
+    "decoys": [
+      "a pet eagle",
+      "a bottle of whiskey",
+      "horseback riding",
+      "chess"
     ]
   },
   {
@@ -1083,6 +1749,12 @@
     "alternateAnswers": [
       "store clerk",
       "clerk"
+    ],
+    "decoys": [
+      "a bottle of whiskey",
+      "a top hat",
+      "gardening",
+      "poker"
     ]
   },
   {
@@ -1094,6 +1766,12 @@
       "cursing",
       "cussing",
       "using profanity"
+    ],
+    "decoys": [
+      "poker",
+      "a top hat",
+      "chess",
+      "a sword"
     ]
   },
   {
@@ -1105,6 +1783,12 @@
       "hippopotamus ivory",
       "ivory",
       "hippo tusks"
+    ],
+    "decoys": [
+      "a pet eagle",
+      "a sword",
+      "poker",
+      "horseback riding"
     ]
   },
   {
@@ -1112,7 +1796,13 @@
     "category": "US Presidents",
     "question": "Jimmy Carter was the first president born in a ____.",
     "answer": "hospital",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "a bottle of whiskey",
+      "a top hat",
+      "poker",
+      "a pet eagle"
+    ]
   },
   {
     "id": 116,
@@ -1122,6 +1812,12 @@
     "alternateAnswers": [
       "a lake",
       "the lake"
+    ],
+    "decoys": [
+      "a top hat",
+      "a golden pocket watch",
+      "gardening",
+      "a pet eagle"
     ]
   },
   {
@@ -1132,6 +1828,12 @@
     "alternateAnswers": [
       "thirty-one",
       "32"
+    ],
+    "decoys": [
+      "chess",
+      "a sword",
+      "horseback riding",
+      "a bottle of whiskey"
     ]
   },
   {
@@ -1139,7 +1841,13 @@
     "category": "US Presidents",
     "question": "Barack Obama's favorite TV show was reportedly ____.",
     "answer": "The Wire",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "poker",
+      "a rocking chair",
+      "horseback riding",
+      "chess"
+    ]
   },
   {
     "id": 119,
@@ -1148,6 +1856,12 @@
     "answer": "pianist",
     "alternateAnswers": [
       "piano player"
+    ],
+    "decoys": [
+      "poker",
+      "a golden pocket watch",
+      "horseback riding",
+      "chess"
     ]
   },
   {
@@ -1158,6 +1872,12 @@
     "alternateAnswers": [
       "July 4, 1826",
       "the 4th of July 1826"
+    ],
+    "decoys": [
+      "a pet eagle",
+      "a top hat",
+      "a golden pocket watch",
+      "a bottle of whiskey"
     ]
   },
   {
@@ -1168,6 +1888,12 @@
     "alternateAnswers": [
       "nothing",
       "no name"
+    ],
+    "decoys": [
+      "a top hat",
+      "horseback riding",
+      "gardening",
+      "a pet eagle"
     ]
   },
   {
@@ -1175,7 +1901,13 @@
     "category": "US Presidents",
     "question": "President James Garfield could simultaneously write in ____ with one hand and Greek with the other.",
     "answer": "Latin",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "poker",
+      "a rocking chair",
+      "a top hat",
+      "chess"
+    ]
   },
   {
     "id": 123,
@@ -1185,6 +1917,12 @@
     "alternateAnswers": [
       "voted in",
       "elected by voters"
+    ],
+    "decoys": [
+      "gardening",
+      "poker",
+      "a pet eagle",
+      "a top hat"
     ]
   },
   {
@@ -1194,6 +1932,12 @@
     "answer": "two",
     "alternateAnswers": [
       "2"
+    ],
+    "decoys": [
+      "chess",
+      "poker",
+      "a sword",
+      "a pet eagle"
     ]
   },
   {
@@ -1204,6 +1948,12 @@
     "alternateAnswers": [
       "actors union",
       "SAG"
+    ],
+    "decoys": [
+      "a pet eagle",
+      "a sword",
+      "a bottle of whiskey",
+      "chess"
     ]
   },
   {
@@ -1214,6 +1964,12 @@
     "alternateAnswers": [
       "Chinese",
       "Mandarin"
+    ],
+    "decoys": [
+      "a pet eagle",
+      "poker",
+      "chess",
+      "a sword"
     ]
   },
   {
@@ -1224,6 +1980,12 @@
     "alternateAnswers": [
       "jumping out of a plane",
       "parachuting"
+    ],
+    "decoys": [
+      "a golden pocket watch",
+      "a rocking chair",
+      "a bottle of whiskey",
+      "a sword"
     ]
   },
   {
@@ -1234,6 +1996,12 @@
     "alternateAnswers": [
       "artist",
       "oil painter"
+    ],
+    "decoys": [
+      "chess",
+      "poker",
+      "a pet eagle",
+      "a sword"
     ]
   },
   {
@@ -1243,6 +2011,12 @@
     "answer": "Wrestling",
     "alternateAnswers": [
       "National Wrestling"
+    ],
+    "decoys": [
+      "poker",
+      "a top hat",
+      "a bottle of whiskey",
+      "a sword"
     ]
   },
   {
@@ -1252,6 +2026,12 @@
     "answer": "grandchildren",
     "alternateAnswers": [
       "grandsons"
+    ],
+    "decoys": [
+      "a rocking chair",
+      "a bottle of whiskey",
+      "a golden pocket watch",
+      "a pet eagle"
     ]
   },
   {
@@ -1262,6 +2042,12 @@
     "alternateAnswers": [
       "doctorate",
       "doctoral degree"
+    ],
+    "decoys": [
+      "poker",
+      "a pet eagle",
+      "gardening",
+      "chess"
     ]
   },
   {
@@ -1271,6 +2057,12 @@
     "answer": "horse",
     "alternateAnswers": [
       "horse and carriage"
+    ],
+    "decoys": [
+      "a pet eagle",
+      "poker",
+      "a sword",
+      "chess"
     ]
   },
   {
@@ -1282,6 +2074,12 @@
       "5'4\"",
       "five foot four",
       "5 feet 4 inches"
+    ],
+    "decoys": [
+      "a bottle of whiskey",
+      "chess",
+      "a rocking chair",
+      "a golden pocket watch"
     ]
   },
   {
@@ -1289,7 +2087,13 @@
     "category": "US Presidents",
     "question": "President Chester Arthur was accused of being born in ____ and not being a natural-born citizen.",
     "answer": "Canada",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "a top hat",
+      "a pet eagle",
+      "poker",
+      "horseback riding"
+    ]
   },
   {
     "id": 135,
@@ -1298,6 +2102,12 @@
     "answer": "bear",
     "alternateAnswers": [
       "teddy bear"
+    ],
+    "decoys": [
+      "a top hat",
+      "a sword",
+      "gardening",
+      "a rocking chair"
     ]
   },
   {
@@ -1307,6 +2117,12 @@
     "answer": "McDonald's",
     "alternateAnswers": [
       "McDonalds"
+    ],
+    "decoys": [
+      "a top hat",
+      "a rocking chair",
+      "a golden pocket watch",
+      "a sword"
     ]
   },
   {
@@ -1318,6 +2134,12 @@
       "America",
       "the USA",
       "the US"
+    ],
+    "decoys": [
+      "a pet eagle",
+      "a rocking chair",
+      "chess",
+      "a golden pocket watch"
     ]
   },
   {
@@ -1328,6 +2150,12 @@
     "alternateAnswers": [
       "cherries",
       "raw cherries"
+    ],
+    "decoys": [
+      "a rocking chair",
+      "a top hat",
+      "horseback riding",
+      "a golden pocket watch"
     ]
   },
   {
@@ -1339,6 +2167,12 @@
       "TV",
       "live TV",
       "television"
+    ],
+    "decoys": [
+      "a golden pocket watch",
+      "chess",
+      "a bottle of whiskey",
+      "gardening"
     ]
   },
   {
@@ -1349,6 +2183,12 @@
     "alternateAnswers": [
       "electric lights",
       "electric lighting"
+    ],
+    "decoys": [
+      "a top hat",
+      "a rocking chair",
+      "horseback riding",
+      "gardening"
     ]
   },
   {
@@ -1359,6 +2199,12 @@
     "alternateAnswers": [
       "2%",
       "two percent"
+    ],
+    "decoys": [
+      "a pet eagle",
+      "poker",
+      "a golden pocket watch",
+      "a rocking chair"
     ]
   },
   {
@@ -1369,6 +2215,12 @@
     "alternateAnswers": [
       "china set",
       "presidential china"
+    ],
+    "decoys": [
+      "poker",
+      "a top hat",
+      "a rocking chair",
+      "horseback riding"
     ]
   },
   {
@@ -1378,6 +2230,12 @@
     "answer": "bathtub",
     "alternateAnswers": [
       "permanent bathtub"
+    ],
+    "decoys": [
+      "gardening",
+      "a rocking chair",
+      "a bottle of whiskey",
+      "a pet eagle"
     ]
   },
   {
@@ -1388,6 +2246,12 @@
     "alternateAnswers": [
       "formal school",
       "formal education"
+    ],
+    "decoys": [
+      "a top hat",
+      "a rocking chair",
+      "gardening",
+      "poker"
     ]
   },
   {
@@ -1397,6 +2261,12 @@
     "answer": "four",
     "alternateAnswers": [
       "4"
+    ],
+    "decoys": [
+      "a top hat",
+      "a pet eagle",
+      "poker",
+      "horseback riding"
     ]
   },
   {
@@ -1408,6 +2278,12 @@
       "campaign promise",
       "objective",
       "pledge"
+    ],
+    "decoys": [
+      "chess",
+      "poker",
+      "a golden pocket watch",
+      "a sword"
     ]
   },
   {
@@ -1418,6 +2294,12 @@
     "alternateAnswers": [
       "paycheck",
       "pay"
+    ],
+    "decoys": [
+      "a sword",
+      "a pet eagle",
+      "a bottle of whiskey",
+      "a rocking chair"
     ]
   },
   {
@@ -1428,6 +2310,12 @@
     "alternateAnswers": [
       "Easter egg roll",
       "egg roll"
+    ],
+    "decoys": [
+      "a pet eagle",
+      "chess",
+      "a bottle of whiskey",
+      "horseback riding"
     ]
   },
   {
@@ -1438,6 +2326,12 @@
     "alternateAnswers": [
       "two",
       "both major"
+    ],
+    "decoys": [
+      "a bottle of whiskey",
+      "a golden pocket watch",
+      "a pet eagle",
+      "chess"
     ]
   },
   {
@@ -1448,6 +2342,12 @@
     "alternateAnswers": [
       "orange juice",
       "OJ"
+    ],
+    "decoys": [
+      "a golden pocket watch",
+      "gardening",
+      "a sword",
+      "a pet eagle"
     ]
   },
   {
@@ -1457,6 +2357,12 @@
     "answer": "eye",
     "alternateAnswers": [
       "his left eye"
+    ],
+    "decoys": [
+      "poker",
+      "chess",
+      "a sword",
+      "horseback riding"
     ]
   },
   {
@@ -1466,6 +2372,12 @@
     "answer": "gray",
     "alternateAnswers": [
       "grey"
+    ],
+    "decoys": [
+      "a golden pocket watch",
+      "a sword",
+      "poker",
+      "a pet eagle"
     ]
   },
   {
@@ -1476,6 +2388,12 @@
     "alternateAnswers": [
       "hat",
       "stovepipe hat"
+    ],
+    "decoys": [
+      "chess",
+      "a pet eagle",
+      "a bottle of whiskey",
+      "a sword"
     ]
   },
   {
@@ -1483,7 +2401,13 @@
     "category": "US Presidents",
     "question": "George Washington's favorite food was reportedly ____.",
     "answer": "ice cream",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "a golden pocket watch",
+      "a sword",
+      "poker",
+      "a bottle of whiskey"
+    ]
   },
   {
     "id": 155,
@@ -1493,6 +2417,12 @@
     "alternateAnswers": [
       "the White House",
       "President's House"
+    ],
+    "decoys": [
+      "a sword",
+      "gardening",
+      "chess",
+      "a rocking chair"
     ]
   },
   {
@@ -1502,6 +2432,12 @@
     "answer": "Home Alone 2",
     "alternateAnswers": [
       "Home Alone 2: Lost in New York"
+    ],
+    "decoys": [
+      "a beauty pageant",
+      "a penthouse",
+      "a golf course",
+      "a helicopter"
     ]
   },
   {
@@ -1512,6 +2448,12 @@
     "alternateAnswers": [
       "filmmaker",
       "Hollywood producer"
+    ],
+    "decoys": [
+      "a beauty pageant",
+      "a helicopter",
+      "his limousine",
+      "a steak dinner"
     ]
   },
   {
@@ -1522,6 +2464,12 @@
     "alternateAnswers": [
       "medical",
       "bone spur"
+    ],
+    "decoys": [
+      "a reality show",
+      "a gold toilet",
+      "a helicopter",
+      "a steak dinner"
     ]
   },
   {
@@ -1531,6 +2479,12 @@
     "answer": "58",
     "alternateAnswers": [
       "fifty-eight"
+    ],
+    "decoys": [
+      "Mar-a-Lago",
+      "a red tie",
+      "a reality show",
+      "his limousine"
     ]
   },
   {
@@ -1540,6 +2494,12 @@
     "answer": "Miss Universe",
     "alternateAnswers": [
       "Miss Universe Organization"
+    ],
+    "decoys": [
+      "a red tie",
+      "his limousine",
+      "a golf course",
+      "a penthouse"
     ]
   },
   {
@@ -1550,6 +2510,12 @@
     "alternateAnswers": [
       "ski racer",
       "alpine skier"
+    ],
+    "decoys": [
+      "a red tie",
+      "his limousine",
+      "a golf course",
+      "a steak dinner"
     ]
   },
   {
@@ -1560,6 +2526,12 @@
     "alternateAnswers": [
       "TV",
       "The Apprentice"
+    ],
+    "decoys": [
+      "his limousine",
+      "a helicopter",
+      "a penthouse",
+      "a gold toilet"
     ]
   },
   {
@@ -1569,6 +2541,12 @@
     "answer": "Tony Schwartz",
     "alternateAnswers": [
       "Schwartz"
+    ],
+    "decoys": [
+      "a reality show",
+      "a helicopter",
+      "a beauty pageant",
+      "a golf course"
     ]
   },
   {
@@ -1578,6 +2556,12 @@
     "answer": "shaved",
     "alternateAnswers": [
       "shaved off the hair of"
+    ],
+    "decoys": [
+      "a helicopter",
+      "a beauty pageant",
+      "a penthouse",
+      "Mar-a-Lago"
     ]
   },
   {
@@ -1588,6 +2572,12 @@
     "alternateAnswers": [
       "Clemson",
       "Clemson University"
+    ],
+    "decoys": [
+      "a helicopter",
+      "a red tie",
+      "a beauty pageant",
+      "a reality show"
     ]
   },
   {
@@ -1598,6 +2588,12 @@
     "alternateAnswers": [
       "Filet-O-Fish",
       "Big Macs"
+    ],
+    "decoys": [
+      "a gold toilet",
+      "a penthouse",
+      "a reality show",
+      "his limousine"
     ]
   },
   {
@@ -1608,6 +2604,12 @@
     "alternateAnswers": [
       "his own Comedy Central roast",
       "the Donald Trump roast"
+    ],
+    "decoys": [
+      "a helicopter",
+      "a red tie",
+      "a gold toilet",
+      "a reality show"
     ]
   },
   {
@@ -1618,6 +2620,12 @@
     "alternateAnswers": [
       "Marjorie Post",
       "Post"
+    ],
+    "decoys": [
+      "Mar-a-Lago",
+      "his limousine",
+      "a golf course",
+      "a beauty pageant"
     ]
   },
   {
@@ -1625,7 +2633,13 @@
     "category": "President Trump",
     "question": "During the 2016 campaign, Trump famously descended a golden ____ to announce his candidacy.",
     "answer": "escalator",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "a penthouse",
+      "his limousine",
+      "Mar-a-Lago",
+      "a golf course"
+    ]
   },
   {
     "id": 170,
@@ -1635,6 +2649,12 @@
     "alternateAnswers": [
       "tweets",
       "social media"
+    ],
+    "decoys": [
+      "his limousine",
+      "Mar-a-Lago",
+      "a beauty pageant",
+      "a steak dinner"
     ]
   },
   {
@@ -1645,6 +2665,12 @@
     "alternateAnswers": [
       "USFL football",
       "USFL"
+    ],
+    "decoys": [
+      "his limousine",
+      "a red tie",
+      "a reality show",
+      "a beauty pageant"
     ]
   },
   {
@@ -1652,7 +2678,13 @@
     "category": "President Trump",
     "question": "Trump's Secret Service code name was ____.",
     "answer": "Mogul",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "a penthouse",
+      "a golf course",
+      "a gold toilet",
+      "a helicopter"
+    ]
   },
   {
     "id": 173,
@@ -1662,6 +2694,12 @@
     "alternateAnswers": [
       "Trump Steaks",
       "steak"
+    ],
+    "decoys": [
+      "a reality show",
+      "a steak dinner",
+      "a gold toilet",
+      "his limousine"
     ]
   },
   {
@@ -1671,6 +2709,12 @@
     "answer": "New York Military Academy",
     "alternateAnswers": [
       "NYMA"
+    ],
+    "decoys": [
+      "his limousine",
+      "a helicopter",
+      "a gold toilet",
+      "a golf course"
     ]
   },
   {
@@ -1682,6 +2726,12 @@
       "housing",
       "apartments",
       "middle-class housing"
+    ],
+    "decoys": [
+      "a gold toilet",
+      "his limousine",
+      "a golf course",
+      "a reality show"
     ]
   },
   {
@@ -1691,6 +2741,12 @@
     "answer": "Taj Mahal",
     "alternateAnswers": [
       "Trump Taj Mahal"
+    ],
+    "decoys": [
+      "a steak dinner",
+      "his limousine",
+      "a reality show",
+      "Mar-a-Lago"
     ]
   },
   {
@@ -1700,6 +2756,12 @@
     "answer": "Trump",
     "alternateAnswers": [
       "Trump University"
+    ],
+    "decoys": [
+      "a gold toilet",
+      "a beauty pageant",
+      "a golf course",
+      "a reality show"
     ]
   },
   {
@@ -1707,7 +2769,13 @@
     "category": "President Trump",
     "question": "Trump's catchphrase on The Apprentice was \"You're ____!\"",
     "answer": "fired",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "a beauty pageant",
+      "a helicopter",
+      "Mar-a-Lago",
+      "a gold toilet"
+    ]
   },
   {
     "id": 179,
@@ -1717,6 +2785,12 @@
     "alternateAnswers": [
       "2",
       "two scoops"
+    ],
+    "decoys": [
+      "a gold toilet",
+      "his limousine",
+      "a helicopter",
+      "a red tie"
     ]
   },
   {
@@ -1727,6 +2801,12 @@
     "alternateAnswers": [
       "demilitarized zone",
       "Korean DMZ"
+    ],
+    "decoys": [
+      "his limousine",
+      "a penthouse",
+      "a red tie",
+      "a steak dinner"
     ]
   },
   {
@@ -1736,6 +2816,12 @@
     "answer": "Slovenia",
     "alternateAnswers": [
       "the Republic of Slovenia"
+    ],
+    "decoys": [
+      "a penthouse",
+      "a beauty pageant",
+      "a reality show",
+      "a helicopter"
     ]
   },
   {
@@ -1746,6 +2832,12 @@
     "alternateAnswers": [
       "twelve",
       "a dozen"
+    ],
+    "decoys": [
+      "his limousine",
+      "a helicopter",
+      "a golf course",
+      "a reality show"
     ]
   },
   {
@@ -1755,6 +2847,12 @@
     "answer": "paper towels",
     "alternateAnswers": [
       "paper towel"
+    ],
+    "decoys": [
+      "a reality show",
+      "his limousine",
+      "a steak dinner",
+      "a golf course"
     ]
   },
   {
@@ -1765,6 +2863,12 @@
     "alternateAnswers": [
       "cement",
       "concrete business"
+    ],
+    "decoys": [
+      "a red tie",
+      "a beauty pageant",
+      "Mar-a-Lago",
+      "a helicopter"
     ]
   },
   {
@@ -1776,6 +2880,12 @@
       "a billion dollars",
       "1 billion",
       "a billion"
+    ],
+    "decoys": [
+      "his limousine",
+      "a reality show",
+      "a helicopter",
+      "a red tie"
     ]
   },
   {
@@ -1785,6 +2895,12 @@
     "answer": "The Fresh Prince of Bel-Air",
     "alternateAnswers": [
       "Fresh Prince"
+    ],
+    "decoys": [
+      "a gold toilet",
+      "Mar-a-Lago",
+      "a helicopter",
+      "a steak dinner"
     ]
   },
   {
@@ -1795,6 +2911,12 @@
     "alternateAnswers": [
       "Miss Universe",
       "Miss USA pageant"
+    ],
+    "decoys": [
+      "a reality show",
+      "a helicopter",
+      "a gold toilet",
+      "a red tie"
     ]
   },
   {
@@ -1805,7 +2927,8 @@
     "alternateAnswers": [
       "725 dollars",
       "seven hundred dollars"
-    ]
+    ],
+    "decoys": []
   },
   {
     "id": 189,
@@ -1814,6 +2937,12 @@
     "answer": "golf",
     "alternateAnswers": [
       "golf simulator"
+    ],
+    "decoys": [
+      "a penthouse",
+      "a beauty pageant",
+      "a reality show",
+      "his limousine"
     ]
   },
   {
@@ -1823,6 +2952,12 @@
     "answer": "Time",
     "alternateAnswers": [
       "TIME magazine"
+    ],
+    "decoys": [
+      "a steak dinner",
+      "a penthouse",
+      "a golf course",
+      "his limousine"
     ]
   },
   {
@@ -1833,6 +2968,12 @@
     "alternateAnswers": [
       "Trump Shuttle",
       "Eastern"
+    ],
+    "decoys": [
+      "a gold toilet",
+      "Mar-a-Lago",
+      "a penthouse",
+      "a helicopter"
     ]
   },
   {
@@ -1844,6 +2985,12 @@
       "largest",
       "biggest ever",
       "largest crowd"
+    ],
+    "decoys": [
+      "his limousine",
+      "a reality show",
+      "a steak dinner",
+      "a penthouse"
     ]
   },
   {
@@ -1853,6 +3000,12 @@
     "answer": "Y.M.C.A.",
     "alternateAnswers": [
       "YMCA"
+    ],
+    "decoys": [
+      "a helicopter",
+      "a gold toilet",
+      "a steak dinner",
+      "his limousine"
     ]
   },
   {
@@ -1860,14 +3013,26 @@
     "category": "President Trump",
     "question": "Trump reportedly asked about buying the country of ____ from Denmark.",
     "answer": "Greenland",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "a steak dinner",
+      "his limousine",
+      "a beauty pageant",
+      "a red tie"
+    ]
   },
   {
     "id": 195,
     "category": "President Trump",
     "question": "Before running for president in 2016, Trump previously explored running in the year ____ under the Reform Party.",
     "answer": "2000",
-    "alternateAnswers": []
+    "alternateAnswers": [],
+    "decoys": [
+      "Mar-a-Lago",
+      "a beauty pageant",
+      "a helicopter",
+      "a gold toilet"
+    ]
   },
   {
     "id": 196,
@@ -1876,6 +3041,12 @@
     "answer": "Trump International Tower",
     "alternateAnswers": [
       "Trump Tower"
+    ],
+    "decoys": [
+      "his limousine",
+      "Mar-a-Lago",
+      "a steak dinner",
+      "a gold toilet"
     ]
   },
   {
@@ -1886,6 +3057,12 @@
     "alternateAnswers": [
       "bleach",
       "disinfectants"
+    ],
+    "decoys": [
+      "a red tie",
+      "a helicopter",
+      "a golf course",
+      "a gold toilet"
     ]
   },
   {
@@ -1897,6 +3074,12 @@
       "6'7\"",
       "six foot seven",
       "6 foot 9"
+    ],
+    "decoys": [
+      "a helicopter",
+      "a golf course",
+      "a beauty pageant",
+      "a red tie"
     ]
   },
   {
@@ -1906,6 +3089,12 @@
     "answer": "Western Wall",
     "alternateAnswers": [
       "Wailing Wall"
+    ],
+    "decoys": [
+      "Mar-a-Lago",
+      "a penthouse",
+      "a reality show",
+      "a red tie"
     ]
   },
   {
@@ -1917,6 +3106,12 @@
       "fragrance",
       "perfume",
       "fragrances"
+    ],
+    "decoys": [
+      "a penthouse",
+      "Mar-a-Lago",
+      "his limousine",
+      "a golf course"
     ]
   },
   {
@@ -1927,6 +3122,12 @@
     "alternateAnswers": [
       "Grand Hyatt",
       "Hyatt Hotel"
+    ],
+    "decoys": [
+      "a helicopter",
+      "a penthouse",
+      "Mar-a-Lago",
+      "a golf course"
     ]
   },
   {
@@ -1938,6 +3139,12 @@
       "one hour",
       "1 hour",
       "60 minutes"
+    ],
+    "decoys": [
+      "his limousine",
+      "a helicopter",
+      "a steak dinner",
+      "a reality show"
     ]
   },
   {
@@ -1949,6 +3156,12 @@
       "two",
       "2",
       "two times"
+    ],
+    "decoys": [
+      "a gold toilet",
+      "a helicopter",
+      "his limousine",
+      "a golf course"
     ]
   },
   {
@@ -1958,6 +3171,12 @@
     "answer": "Daytona",
     "alternateAnswers": [
       "Daytona 500"
+    ],
+    "decoys": [
+      "a steak dinner",
+      "a reality show",
+      "a gold toilet",
+      "Mar-a-Lago"
     ]
   },
   {
@@ -1968,6 +3187,12 @@
     "alternateAnswers": [
       "business",
       "finance"
+    ],
+    "decoys": [
+      "a red tie",
+      "his limousine",
+      "Mar-a-Lago",
+      "a helicopter"
     ]
   }
 ]
