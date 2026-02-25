@@ -236,8 +236,9 @@ function checkAllLiesIn(room) {
   const allIn = activePlayers.every(p => room.lies[p.name]);
   if (allIn && activePlayers.length > 0) {
     clearTimer(room);
-    // Small delay so last player sees confirmation
-    room.timer = setTimeout(() => startVoting(room), 1500);
+    // Show "All lies in!" transition before revealing answers
+    broadcast(room, { type: 'all-lies-in' });
+    room.timer = setTimeout(() => startVoting(room), 3000);
   }
 }
 

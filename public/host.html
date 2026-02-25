@@ -300,8 +300,16 @@ function handleMsg(msg) {
       startTimer(msg.timeMs);
       startTickTimer(msg.timeMs);
       break;
+    case 'all-lies-in':
+      stopTickTimer();
+      document.getElementById('lieCount').textContent = '✅ All lies are in! Get ready to pick...';
+      document.getElementById('lieCount').style.fontSize = '1.8rem';
+      document.getElementById('lieCount').style.color = '#4ecdc4';
+      break;
     case 'lie-count':
       document.getElementById('lieCount').textContent = `${msg.count}/${msg.total} lies submitted`;
+      document.getElementById('lieCount').style.fontSize = '';
+      document.getElementById('lieCount').style.color = '';
       break;
     case 'vote-phase':
       showScreen('voteScreen');
