@@ -8,11 +8,15 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
+app.use(express.json({ limit: '2mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/health', (req, res) => res.send('ok'));
 
 const questions = JSON.parse(fs.readFileSync(path.join(__dirname, 'questions.json'), 'utf8'));
 const rooms = new Map();
+
+const PLAYER_COLORS = ['#e94560','#4ecdc4','#f39c12','#9b59b6','#2ecc71','#e67e22','#3498db','#1abc9c'];
+const PLAYER_EMOJIS = ['🦊','🐙','🦁','🐸','🦄','🐯','🦇','🐲'];
 
 // Auto-cleanup abandoned rooms every 5 minutes
 setInterval(() => {
@@ -77,19 +81,31 @@ function sendTo(ws, msg) { if (ws && ws.readyState === 1) ws.send(JSON.stringify
 
 function playerList(room) {
   return Object.values(room.players).map(p => ({
-    name: p.name, score: p.score, connected: !!p.ws
+    name: p.name, score: p.score, connected: !!p.ws, color: p.color, emoji: p.emoji
   }));
 }
 
 function pickQuestions(room) {
-  const categoriesAvail = [...new Set(questions.map(q=>q.category))];
-  // Pick 7 questions total, try diverse categories
+  let sourceQuestions = questions;
+  if (room.customQuestions && Array.isArray(room.customQuestions) && room.customQuestions.length > 0) {
+    // Merge custom questions with default ones (custom first, then fill with defaults)
+    const custom = room.customQuestions.map((q, i) => ({
+      id: 'custom_' + i,
+      category: q.category || 'Custom',
+      question: q.question,
+      answer: q.answer,
+      alternateAnswers: q.alternateAnswers || [],
+      decoys: q.decoys || []
+    }));
+    sourceQuestions = [...custom, ...questions];
+  }
   const used = new Set();
   const picked = [];
-  const shuffled = [...questions].sort(()=>Math.random()-0.5);
+  const shuffled = [...sourceQuestions].sort(()=>Math.random()-0.5);
   for (const q of shuffled) {
     if (picked.length >= 20) break;
-    if (!used.has(q.id)) { picked.push(q); used.add(q.id); }
+    const qid = q.id || q.question;
+    if (!used.has(qid)) { picked.push(q); used.add(qid); }
   }
   room.questionPool = picked;
 }
@@ -354,28 +370,63 @@ function doReveal(room) {
   }
 
   // Build reveal data
-  const revealData = room.answerList.map((a, i) => ({
-    id: i,
-    text: a.text,
-    isTrue: a.isTrue,
-    author: a.author,
-    pickedBy: picks[i] || []
-  }));
+  const revealData = room.answerList.map((a, i) => {
+    const authorPlayer = a.author && a.author !== '__GAME__' ? room.players[a.author] : null;
+    const pickedByData = (picks[i] || []).map(pName => {
+      const pp = room.players[pName];
+      return { name: pName, emoji: pp ? pp.emoji : '', color: pp ? pp.color : '' };
+    });
+    return {
+      id: i, text: a.text, isTrue: a.isTrue, author: a.author,
+      authorEmoji: authorPlayer ? authorPlayer.emoji : '',
+      authorColor: authorPlayer ? authorPlayer.color : '',
+      pickedBy: picks[i] || [],
+      pickedByDetails: pickedByData
+    };
+  });
+
+  // Determine Fool of the Round: which player's lie fooled the most people
+  let foolData = null;
+  let maxFooled = 0;
+  const foolCandidates = [];
+  for (const [answerId, voters] of Object.entries(picks)) {
+    const answer = room.answerList[parseInt(answerId)];
+    if (!answer || answer.isTrue || answer.author === '__GAME__' || !answer.author) continue;
+    if (voters.length > maxFooled) {
+      maxFooled = voters.length;
+      foolCandidates.length = 0;
+      foolCandidates.push({ name: answer.author, count: voters.length, text: answer.text });
+    } else if (voters.length === maxFooled && voters.length > 0) {
+      foolCandidates.push({ name: answer.author, count: voters.length, text: answer.text });
+    }
+  }
+  if (foolCandidates.length > 0 && maxFooled > 0) {
+    const pick = foolCandidates[Math.floor(Math.random() * foolCandidates.length)];
+    const fp = room.players[pick.name];
+    foolData = { name: pick.name, count: pick.count, text: pick.text, emoji: fp ? fp.emoji : '', color: fp ? fp.color : '' };
+  }
 
   broadcast(room, {
     type: 'reveal',
     reveals: revealData,
     truth: truth,
     scoreChanges,
-    players: playerList(room)
+    players: playerList(room),
+    foolOfRound: foolData
   });
 
-  // After reveal, show scoreboard then next question
+  // After reveal, show fool of round (if any) then scoreboard then next question
   const revealTime = Math.max(3000, revealData.length * 3000);
+  const foolDelay = foolData ? 4000 : 0;
   room.timer = setTimeout(() => {
-    room.phase = 'scoreboard';
-    broadcast(room, { type: 'scoreboard', players: playerList(room), round: room.round });
-    room.timer = setTimeout(() => nextQuestion(room), 5000);
+    if (foolData) {
+      broadcast(room, { type: 'fool-of-round', fool: foolData });
+    }
+    room.timer = setTimeout(() => {
+      room.phase = 'scoreboard';
+      broadcast(room, { type: 'scoreboard', players: playerList(room), round: room.round });
+      room.timer = setTimeout(() => nextQuestion(room), 5000);
+    }, foolDelay);
   }, revealTime);
 }
 
@@ -403,7 +454,7 @@ wss.on('connection', (ws) => {
           code, hostWs: ws, players: {}, state: 'lobby', phase: 'lobby',
           round: 0, questionNum: 0, timer: null, questionPool: [],
           currentQuestion: null, lies: {}, votes: {}, answerList: [],
-          categories: [], categoryVotes: {}
+          categories: [], categoryVotes: {}, customQuestions: msg.customQuestions || null
         };
         rooms.set(code, room);
         myRoom = code;
@@ -431,11 +482,12 @@ wss.on('connection', (ws) => {
         if (room.players[name]) {
           room.players[name].ws = ws;
         } else {
-          room.players[name] = { name, score: 0, ws };
+          const idx = Object.keys(room.players).length;
+          room.players[name] = { name, score: 0, ws, color: PLAYER_COLORS[idx % 8], emoji: PLAYER_EMOJIS[idx % 8] };
         }
         myRoom = code;
         myName = name;
-        sendTo(ws, { type: 'joined', code, name, score: room.players[name].score, phase: room.phase });
+        sendTo(ws, { type: 'joined', code, name, score: room.players[name].score, phase: room.phase, color: room.players[name].color, emoji: room.players[name].emoji });
         broadcast(room, { type: 'player-list', players: playerList(room) });
         // Sync rejoining player to current game state
         if (room.state === 'playing') {

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sounds Legit - Create Questions</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a2e;color:#fff;font-family:'Segoe UI',sans-serif;min-height:100vh;padding:2rem}
+.container{max-width:600px;margin:0 auto}
+h1{font-size:2.5rem;color:#e94560;margin-bottom:.5rem;text-align:center}
+.sub{color:#4ecdc4;text-align:center;margin-bottom:2rem}
+.card{background:rgba(255,255,255,.06);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;border:1px solid rgba(255,255,255,.08)}
+label{display:block;color:#4ecdc4;font-size:.9rem;margin-bottom:4px;margin-top:12px}
+input,textarea{width:100%;padding:12px;border:2px solid rgba(255,255,255,.15);border-radius:10px;background:rgba(255,255,255,.08);color:#fff;font-size:1rem;outline:none}
+input:focus,textarea:focus{border-color:#4ecdc4}
+textarea{resize:vertical;min-height:60px}
+.btn{padding:14px 28px;border:none;border-radius:10px;font-size:1.1rem;font-weight:700;cursor:pointer;margin:6px 4px}
+.btn-red{background:linear-gradient(135deg,#e94560,#c23152);color:#fff}
+.btn-teal{background:linear-gradient(135deg,#4ecdc4,#2ca89e);color:#fff}
+.btn-outline{background:transparent;border:2px solid #4ecdc4;color:#4ecdc4}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:1rem}
+.q-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px;margin:8px 0;position:relative}
+.q-item .del{position:absolute;top:8px;right:10px;cursor:pointer;color:#e94560;font-size:1.2rem}
+.q-cat{color:#f39c12;font-size:.85rem}
+.q-text{margin:4px 0}
+.q-answer{color:#2ecc71;font-size:.9rem}
+.count{color:rgba(255,255,255,.4);font-size:.9rem;margin-bottom:8px}
+a{color:#4ecdc4}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>✏️ Create Questions</h1>
+<p class="sub">Build a custom question pack for Sounds Legit</p>
+
+<div class="card">
+<label>Category</label>
+<input type="text" id="category" placeholder="e.g. Science, History, Pop Culture">
+
+<label>Question (use ____ for the blank)</label>
+<textarea id="question" placeholder="The first animal sent to space was a ____."></textarea>
+
+<label>Correct Answer</label>
+<input type="text" id="answer" placeholder="dog">
+
+<label>Alternate Answers (comma separated, optional)</label>
+<input type="text" id="altAnswers" placeholder="canine, puppy">
+
+<label>Decoy 1</label>
+<input type="text" id="decoy1" placeholder="cat">
+<label>Decoy 2</label>
+<input type="text" id="decoy2" placeholder="monkey">
+<label>Decoy 3</label>
+<input type="text" id="decoy3" placeholder="hamster">
+<label>Decoy 4</label>
+<input type="text" id="decoy4" placeholder="goldfish">
+
+<div class="actions">
+<button class="btn btn-red" id="addBtn">Add Question</button>
+</div>
+</div>
+
+<div class="card">
+<p class="count" id="qCount">0 questions</p>
+<div id="qList"></div>
+<div class="actions">
+<button class="btn btn-teal" id="downloadBtn" disabled>Download Pack</button>
+<button class="btn btn-outline" onclick="location.href='/'">← Back to Game</button>
+</div>
+</div>
+</div>
+
+<script>
+let questions = [];
+
+function render() {
+  document.getElementById('qCount').textContent = questions.length + ' question' + (questions.length !== 1 ? 's' : '');
+  document.getElementById('downloadBtn').disabled = questions.length === 0;
+  const list = document.getElementById('qList');
+  list.innerHTML = '';
+  questions.forEach((q, i) => {
+    const d = document.createElement('div');
+    d.className = 'q-item';
+    d.innerHTML = `<span class="del" data-i="${i}">✕</span>
+      <div class="q-cat">${q.category}</div>
+      <div class="q-text">${q.question}</div>
+      <div class="q-answer">Answer: ${q.answer}</div>`;
+    list.appendChild(d);
+  });
+  list.querySelectorAll('.del').forEach(el => {
+    el.onclick = () => { questions.splice(parseInt(el.dataset.i), 1); render(); };
+  });
+}
+
+document.getElementById('addBtn').onclick = () => {
+  const cat = document.getElementById('category').value.trim();
+  const question = document.getElementById('question').value.trim();
+  const answer = document.getElementById('answer').value.trim();
+  const alt = document.getElementById('altAnswers').value.trim();
+  const decoys = [1,2,3,4].map(n => document.getElementById('decoy'+n).value.trim()).filter(Boolean);
+  if (!cat || !question || !answer) { alert('Category, question, and answer are required'); return; }
+  questions.push({
+    category: cat, question, answer,
+    alternateAnswers: alt ? alt.split(',').map(s=>s.trim()).filter(Boolean) : [],
+    decoys
+  });
+  // Clear inputs except category
+  document.getElementById('question').value = '';
+  document.getElementById('answer').value = '';
+  document.getElementById('altAnswers').value = '';
+  [1,2,3,4].forEach(n => document.getElementById('decoy'+n).value = '');
+  render();
+};
+
+document.getElementById('downloadBtn').onclick = () => {
+  const blob = new Blob([JSON.stringify(questions, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'sounds-legit-pack.json';
+  a.click();
+};
+
+render();
+</script>
+</body>
+</html>

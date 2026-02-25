@@ -29,7 +29,15 @@ input::placeholder{color:rgba(255,255,255,.4)}
 <p class="subtitle">One truth. All lies. Good luck.</p>
 <div class="card">
 <h2>Host a Game</h2>
+<div style="margin-bottom:.8rem">
+<label style="cursor:pointer;color:#4ecdc4;font-size:.95rem">
+📦 Upload Custom Question Pack
+<input type="file" id="packFile" accept=".json" style="display:none">
+</label>
+<span id="packStatus" style="color:#2ecc71;font-size:.85rem;margin-left:8px"></span>
+</div>
 <button class="btn btn-primary" id="createBtn">Create Game</button>
+<p style="margin-top:.8rem"><a href="/custom.html" style="color:#4ecdc4;font-size:.95rem">✏️ Create Questions</a></p>
 </div>
 <div class="or">— or join a game —</div>
 <div class="card">
@@ -41,9 +49,23 @@ input::placeholder{color:rgba(255,255,255,.4)}
 </div>
 </div>
 <script>
+let customQuestions = null;
+document.getElementById('packFile').onchange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      customQuestions = Array.isArray(data) ? data : data.questions || [];
+      document.getElementById('packStatus').textContent = `✅ ${customQuestions.length} questions loaded`;
+    } catch { document.getElementById('packStatus').textContent = '❌ Invalid JSON'; customQuestions = null; }
+  };
+  reader.readAsText(file);
+};
 document.getElementById('createBtn').onclick = () => {
   const ws = new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}`);
-  ws.onopen = () => ws.send(JSON.stringify({type:'create-room'}));
+  ws.onopen = () => ws.send(JSON.stringify({type:'create-room', customQuestions}));
   ws.onmessage = e => {
     const msg = JSON.parse(e.data);
     if (msg.type==='room-created') { ws.close(); location.href=`/host.html?code=${msg.code}`; }

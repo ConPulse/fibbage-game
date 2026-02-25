@@ -131,6 +131,7 @@ const name = params.get('name');
 if (!code || !name) location.href = '/';
 document.getElementById('playerName').textContent = name;
 let myScore = 0;
+let myEmoji = '';
 let ws;
 
 function vib(ms) { try { navigator.vibrate(ms); } catch{} }
@@ -171,8 +172,9 @@ function handleMsg(msg) {
       break;
     case 'joined':
       updateScore(msg.score);
+      if (msg.emoji) { myEmoji = msg.emoji; document.getElementById('playerName').textContent = msg.emoji + ' ' + name; }
       if (msg.phase === 'lobby') showScreen('lobbyScreen');
-      else showScreen('lobbyScreen'); // rejoin — will get next phase msg
+      else showScreen('lobbyScreen');
       break;
     case 'player-list':
       break;

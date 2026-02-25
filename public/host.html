@@ -48,6 +48,11 @@ body{background:#1a1a2e;color:#fff;font-family:'Segoe UI',sans-serif;overflow:hi
 .crown{font-size:5rem}
 .lie-count{font-size:1.2rem;color:rgba(255,255,255,.5);margin-top:1rem}
 .info-text{font-size:1.3rem;color:rgba(255,255,255,.5);margin-top:1rem}
+/* Fool of the Round */
+.fool-banner{background:linear-gradient(135deg,rgba(243,156,18,.2),rgba(233,69,96,.2));border:2px solid #f39c12;border-radius:16px;padding:2rem 3rem;font-size:1.6rem;max-width:800px;animation:foolPop .5s ease;text-align:center}
+@keyframes foolPop{0%{transform:scale(0.5);opacity:0}70%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+.fool-title{font-size:2rem;color:#f39c12;margin-bottom:.5rem}
+.fool-detail{color:rgba(255,255,255,.8);font-size:1.3rem}
 </style>
 </head>
 <body>
@@ -88,6 +93,14 @@ body{background:#1a1a2e;color:#fff;font-family:'Segoe UI',sans-serif;overflow:hi
 <div class="screen" id="revealScreen">
 <p class="question-text" id="revealQuestion" style="font-size:1.6rem;margin-bottom:1.5rem"></p>
 <div class="answer-grid" id="revealGrid"></div>
+</div>
+
+<!-- Fool of the Round -->
+<div class="screen" id="foolScreen">
+<div class="fool-banner">
+<div class="fool-title">🎭 Fool of the Round</div>
+<div class="fool-detail" id="foolDetail"></div>
+</div>
 </div>
 
 <!-- Scoreboard -->
@@ -180,6 +193,75 @@ function playGameStart() {
   });
 }
 
+// === BACKGROUND MUSIC (Lo-fi ambient with Web Audio API) ===
+let bgMusic = null;
+function startBgMusic() {
+  if (bgMusic) return;
+  const ctx = ensureAudio();
+  const master = ctx.createGain();
+  master.gain.value = 0.06;
+  master.connect(ctx.destination);
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.value = 400;
+  filter.Q.value = 1;
+  filter.connect(master);
+  // Chord progression: Cmaj7 -> Am7 -> Fmaj7 -> G7 (lo-fi style)
+  const chords = [
+    [130.81, 164.81, 196.00, 246.94], // C E G B
+    [110.00, 130.81, 164.81, 196.00], // A C E G
+    [87.31, 110.00, 130.81, 164.81],  // F A C E
+    [98.00, 123.47, 146.83, 174.61],  // G B D F
+  ];
+  let chordIdx = 0;
+  const oscs = [];
+  const gains = [];
+  for (let i = 0; i < 4; i++) {
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = chords[0][i];
+    g.gain.value = 0.25;
+    osc.connect(g);
+    g.connect(filter);
+    osc.start();
+    oscs.push(osc);
+    gains.push(g);
+  }
+  // Slowly cycle through chords
+  const interval = setInterval(() => {
+    chordIdx = (chordIdx + 1) % chords.length;
+    const t = ctx.currentTime;
+    for (let i = 0; i < 4; i++) {
+      oscs[i].frequency.linearRampToValueAtTime(chords[chordIdx][i], t + 2);
+    }
+  }, 4000);
+  bgMusic = { oscs, gains, master, filter, interval, ctx };
+}
+function stopBgMusic() {
+  if (!bgMusic) return;
+  clearInterval(bgMusic.interval);
+  bgMusic.oscs.forEach(o => { try { o.stop(); } catch{} });
+  bgMusic = null;
+}
+function pauseBgMusic() { if (bgMusic) bgMusic.master.gain.linearRampToValueAtTime(0.001, bgMusic.ctx.currentTime + 0.5); }
+function resumeBgMusic() { if (bgMusic) bgMusic.master.gain.linearRampToValueAtTime(0.06, bgMusic.ctx.currentTime + 0.5); }
+
+function playFoolSound() {
+  const ctx = ensureAudio();
+  [392, 523, 659, 784, 659, 784].forEach((freq, i) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.frequency.value = freq;
+    osc.type = i % 2 === 0 ? 'sine' : 'triangle';
+    gain.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.1);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.1 + 0.15);
+    osc.start(ctx.currentTime + i * 0.1);
+    osc.stop(ctx.currentTime + i * 0.1 + 0.15);
+  });
+}
+
 let tickInterval, tickTimeout;
 function startTickTimer(ms) {
   stopTickTimer();
@@ -238,7 +320,8 @@ function renderPlayers(players, containerId) {
   players.forEach(p => {
     const d = document.createElement('div');
     d.className = 'player-chip' + (p.connected?'':' disconnected');
-    d.textContent = p.name;
+    if (p.color) d.style.borderColor = p.color;
+    d.innerHTML = `${p.emoji||''} <span style="color:${p.color||'#fff'}">${p.name}</span>`;
     c.appendChild(d);
   });
 }
@@ -257,7 +340,7 @@ function renderScores(players, containerId, changes) {
       const color = val > 0 ? '#2ecc71' : '#e94560';
       changeHtml = `<span class="score-change" style="color:${color}">${sign}${val}</span>`;
     }
-    li.innerHTML = `<span>${p.name}</span><span><span class="score-val">${p.score}</span>${changeHtml}</span>`;
+    li.innerHTML = `<span>${p.emoji||''} ${p.name}</span><span><span class="score-val">${p.score}</span>${changeHtml}</span>`;
     c.appendChild(li);
   });
 }
@@ -276,6 +359,7 @@ function handleMsg(msg) {
       break;
     case 'game-start':
       playGameStart();
+      startBgMusic();
       break;
     case 'new-round':
       break;
@@ -356,8 +440,8 @@ function handleMsg(msg) {
       break;
     case 'reveal':
       stopTickTimer();
+      pauseBgMusic();
       showScreen('revealScreen');
-      document.getElementById('revealQuestion').innerHTML = formatQ(msg.reveals.length > 0 ? '' : '');
       document.getElementById('revealQuestion').innerHTML = document.getElementById('voteQuestion').innerHTML;
       const rg = document.getElementById('revealGrid');
       rg.innerHTML = '';
@@ -368,24 +452,36 @@ function handleMsg(msg) {
           let html = `<div style="font-size:1.6rem">${r.text}</div>`;
           if (r.isTrue) html += `<div class="author">✅ THE TRUTH</div>`;
           else if (r.author === '__GAME__') html += `<div class="author" style="color:#f39c12">🎮 Game Decoy</div>`;
-          else if (r.author) html += `<div class="author">Written by ${r.author}</div>`;
-          if (r.pickedBy.length > 0) html += `<div class="picked-by">Picked by: ${r.pickedBy.join(', ')}</div>`;
+          else if (r.author) html += `<div class="author">Written by ${r.authorEmoji||''} <span style="color:${r.authorColor||'#4ecdc4'}">${r.author}</span></div>`;
+          if (r.pickedBy.length > 0) {
+            const names = (r.pickedByDetails||[]).map(p => `${p.emoji||''} <span style="color:${p.color||'#f39c12'}">${p.name}</span>`).join(', ');
+            html += `<div class="picked-by">Picked by: ${names || r.pickedBy.join(', ')}</div>`;
+          }
           d.innerHTML = html;
           rg.appendChild(d);
           playReveal(r.isTrue);
         }, i * 2500);
       });
       break;
+    case 'fool-of-round':
+      showScreen('foolScreen');
+      playFoolSound();
+      const f = msg.fool;
+      document.getElementById('foolDetail').innerHTML = `${f.emoji} <span style="color:${f.color}">${f.name}</span> — fooled ${f.count} player${f.count>1?'s':''} with "<em>${f.text}</em>"`;
+      break;
     case 'scoreboard':
       showScreen('scoreScreen');
       renderScores(msg.players, 'scoreList');
+      resumeBgMusic();
       break;
     case 'game-over':
+      stopBgMusic();
       showScreen('gameOverScreen');
-      document.getElementById('winnerName').textContent = msg.players[0]?.name || 'Nobody';
+      document.getElementById('winnerName').textContent = (msg.players[0]?.emoji||'') + ' ' + (msg.players[0]?.name || 'Nobody');
       renderScores(msg.players, 'finalScores');
       break;
     case 'back-to-lobby':
+      stopBgMusic();
       showScreen('lobby');
       renderPlayers(msg.players, 'lobbyPlayers');
       break;
