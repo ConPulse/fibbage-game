@@ -14,6 +14,20 @@ app.get('/health', (req, res) => res.send('ok'));
 const questions = JSON.parse(fs.readFileSync(path.join(__dirname, 'questions.json'), 'utf8'));
 const rooms = new Map();
 
+// Auto-cleanup abandoned rooms every 5 minutes
+setInterval(() => {
+  const now = Date.now();
+  for (const [code, room] of rooms) {
+    const allDisconnected = Object.values(room.players).every(p => !p.ws);
+    const hostGone = !room.hostWs || room.hostWs.readyState !== 1;
+    if (allDisconnected && hostGone) {
+      clearTimer(room);
+      rooms.delete(code);
+      console.log(`Cleaned up room ${code}`);
+    }
+  }
+}, 5 * 60 * 1000);
+
 function genCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
   let code;
@@ -74,7 +88,7 @@ function pickQuestions(room) {
   const picked = [];
   const shuffled = [...questions].sort(()=>Math.random()-0.5);
   for (const q of shuffled) {
-    if (picked.length >= 10) break;
+    if (picked.length >= 20) break;
     if (!used.has(q.id)) { picked.push(q); used.add(q.id); }
   }
   room.questionPool = picked;
@@ -409,6 +423,10 @@ wss.on('connection', (ws) => {
           sendTo(ws, { type: 'error', message: 'Room is full (max 8)' }); return;
         }
         if (!name) { sendTo(ws, { type: 'error', message: 'Name required' }); return; }
+        // Check for duplicate name with active connection (not a rejoin)
+        if (room.players[name] && room.players[name].ws && room.players[name].ws.readyState === 1 && room.players[name].ws !== ws) {
+          sendTo(ws, { type: 'error', message: 'Name already taken! Pick another.' }); return;
+        }
         // Rejoin or new join
         if (room.players[name]) {
           room.players[name].ws = ws;

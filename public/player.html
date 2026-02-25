@@ -158,16 +158,7 @@ function connect() {
   ws.onmessage = e => handleMsg(JSON.parse(e.data));
   ws.onclose = () => {
     console.log('Disconnected, reconnecting in 2s...');
-    setTimeout(() => {
-      connect();
-      // Auto-rejoin after reconnect
-      const checkJoin = setInterval(() => {
-        if (ws && ws.readyState === 1) {
-          ws.send(JSON.stringify({type:'join-room', code: code, name: name}));
-          clearInterval(checkJoin);
-        }
-      }, 500);
-    }, 2000);
+    setTimeout(connect, 2000);
   };
 }
 connect();
@@ -300,6 +291,11 @@ function handleMsg(msg) {
         d.innerHTML = `<strong>${i+1}. ${p.name}</strong> — <span style="color:#4ecdc4">${p.score} pts</span>`;
         gi.appendChild(d);
       });
+      const waitMsg = document.createElement('p');
+      waitMsg.className = 'sub';
+      waitMsg.style.marginTop = '1rem';
+      waitMsg.textContent = 'Waiting for host to start a new game...';
+      gi.appendChild(waitMsg);
       break;
     case 'back-to-lobby':
       showScreen('lobbyScreen');

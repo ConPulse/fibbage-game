@@ -251,7 +251,12 @@ function renderScores(players, containerId, changes) {
     const li = document.createElement('li');
     li.className = 'score-item';
     let changeHtml = '';
-    if (changes && changes[p.name]) changeHtml = `<span class="score-change">+${changes[p.name]}</span>`;
+    if (changes && changes[p.name] && changes[p.name] !== 0) {
+      const val = changes[p.name];
+      const sign = val > 0 ? '+' : '';
+      const color = val > 0 ? '#2ecc71' : '#e94560';
+      changeHtml = `<span class="score-change" style="color:${color}">${sign}${val}</span>`;
+    }
     li.innerHTML = `<span>${p.name}</span><span><span class="score-val">${p.score}</span>${changeHtml}</span>`;
     c.appendChild(li);
   });
