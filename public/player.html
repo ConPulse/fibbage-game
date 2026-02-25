@@ -156,7 +156,19 @@ function connect() {
     ws.send(JSON.stringify({type:'join-room', code, name}));
   };
   ws.onmessage = e => handleMsg(JSON.parse(e.data));
-  ws.onclose = () => { showScreen('connectScreen'); setTimeout(connect, 2000); };
+  ws.onclose = () => {
+    console.log('Disconnected, reconnecting in 2s...');
+    setTimeout(() => {
+      connect();
+      // Auto-rejoin after reconnect
+      const checkJoin = setInterval(() => {
+        if (ws && ws.readyState === 1) {
+          ws.send(JSON.stringify({type:'join-room', code: code, name: name}));
+          clearInterval(checkJoin);
+        }
+      }, 500);
+    }, 2000);
+  };
 }
 connect();
 

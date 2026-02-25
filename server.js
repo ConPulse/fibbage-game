@@ -114,6 +114,47 @@ function clearTimer(room) {
   if (room.timer) { clearTimeout(room.timer); room.timer = null; }
 }
 
+function syncPlayerToCurrentPhase(room, name) {
+  const p = room.players[name];
+  if (!p || !p.ws) return;
+  const ws = p.ws;
+  
+  switch (room.phase) {
+    case 'category-select':
+      sendTo(ws, {
+        type: 'category-select',
+        categories: room.categories,
+        round: room.round,
+        questionNum: room.questionNum,
+        totalQuestions: questionsInRound(room.round),
+        timeMs: 5000 // shortened since timer already running
+      });
+      break;
+    case 'show-question':
+    case 'lie':
+      sendTo(ws, {
+        type: 'lie-phase',
+        question: room.currentQuestion.question,
+        timeMs: 15000 // give them some time even if phase started earlier
+      });
+      break;
+    case 'vote':
+      const displayAnswers = room.answerList.map((a,i) => ({ id: i, text: a.text }));
+      const myAnswers = displayAnswers.filter(a => {
+        const entry = room.answerList[a.id];
+        return entry.author !== name;
+      });
+      sendTo(ws, { type: 'your-choices', answers: myAnswers });
+      break;
+    case 'reveal':
+      sendTo(ws, { type: 'wait', message: 'Revealing answers...' });
+      break;
+    case 'scoreboard':
+      sendTo(ws, { type: 'scoreboard', players: playerList(room) });
+      break;
+  }
+}
+
 function startGame(room) {
   room.state = 'playing';
   room.round = 1;
@@ -147,10 +188,10 @@ function nextQuestion(room) {
     round: room.round,
     questionNum: room.questionNum,
     totalQuestions: questionsInRound(room.round),
-    timeMs: 8000
+    timeMs: 15000
   });
   clearTimer(room);
-  room.timer = setTimeout(() => selectCategory(room), 8000);
+  room.timer = setTimeout(() => selectCategory(room), 15000);
 }
 
 function selectCategory(room) {
@@ -377,6 +418,10 @@ wss.on('connection', (ws) => {
         myName = name;
         sendTo(ws, { type: 'joined', code, name, score: room.players[name].score, phase: room.phase });
         broadcast(room, { type: 'player-list', players: playerList(room) });
+        // Sync rejoining player to current game state
+        if (room.state === 'playing') {
+          syncPlayerToCurrentPhase(room, name);
+        }
         break;
       }
       case 'host-join': {
@@ -405,6 +450,13 @@ wss.on('connection', (ws) => {
         if (!room || room.phase !== 'category-select') return;
         if (room.categories.includes(msg.category)) {
           room.categoryVotes[myName] = msg.category;
+          // Auto-advance when all players have voted
+          const activePlayers = Object.values(room.players).filter(p => p.ws);
+          const allVoted = activePlayers.every(p => room.categoryVotes[p.name]);
+          if (allVoted && activePlayers.length > 0) {
+            clearTimer(room);
+            room.timer = setTimeout(() => selectCategory(room), 1000);
+          }
         }
         break;
       }
