@@ -230,7 +230,9 @@ function handleMsg(msg) {
       vib(100);
       break;
     case 'vote-phase':
-      // Wait for your-choices
+      // If player didn't submit lie, move them off lie screen
+      showScreen('lieWaitScreen');
+      document.querySelector('#lieWaitScreen p').textContent = 'Get ready to vote...';
       break;
     case 'your-choices':
       showScreen('voteScreen');

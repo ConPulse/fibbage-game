@@ -201,8 +201,10 @@ function stopTickTimer() {
   tickInterval = null; tickTimeout = null;
 }
 
-// Init audio on first user click (browser autoplay policy)
-document.addEventListener('click', () => ensureAudio(), { once: true });
+// Init audio on ANY user interaction (browser autoplay policy)
+['click','touchstart','keydown'].forEach(evt => {
+  document.addEventListener(evt, () => ensureAudio(), { once: true });
+});
 
 let ws, timerInterval;
 function connect() {
@@ -316,14 +318,33 @@ function handleMsg(msg) {
       document.getElementById('voteQuestion').innerHTML = formatQ(msg.question);
       const ag = document.getElementById('answerGrid');
       ag.innerHTML = '';
+      // Build cards hidden first
       msg.answers.forEach(a => {
         const d = document.createElement('div');
-        d.className = 'answer-card'; d.textContent = a.text; d.dataset.id = a.id;
+        d.className = 'answer-card';
+        d.style.opacity = '0';
+        d.style.transform = 'scale(0.8)';
+        d.textContent = a.text;
+        d.dataset.id = a.id;
         ag.appendChild(d);
       });
-      document.getElementById('voteCount').textContent = 'Voting...';
-      startTimer(msg.timeMs);
-      startTickTimer(msg.timeMs);
+      document.getElementById('voteCount').textContent = 'Pick the truth!';
+      // Reveal answers one by one with dramatic effect
+      const cards = ag.querySelectorAll('.answer-card');
+      cards.forEach((card, i) => {
+        setTimeout(() => {
+          card.style.transition = 'all 0.4s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'scale(1)';
+          playTick(false);
+        }, 800 + i * 400);
+      });
+      // Start timer and ticking after all answers revealed
+      const revealDelay = 800 + cards.length * 400 + 500;
+      setTimeout(() => {
+        startTimer(msg.timeMs);
+        startTickTimer(msg.timeMs);
+      }, revealDelay);
       break;
     case 'vote-count':
       document.getElementById('voteCount').textContent = `${msg.count}/${msg.total} votes in`;
