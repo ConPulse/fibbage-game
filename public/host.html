@@ -112,6 +112,98 @@ if (!code) { location.href='/'; }
 document.getElementById('roomCode').textContent = code;
 document.getElementById('joinUrl').textContent = location.host;
 
+// === SOUND SYSTEM (Web Audio API - no files needed) ===
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+function ensureAudio() { if (!audioCtx) audioCtx = new AudioCtx(); return audioCtx; }
+
+function playTick(urgent) {
+  const ctx = ensureAudio();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.frequency.value = urgent ? 900 : 600;
+  osc.type = 'sine';
+  gain.gain.setValueAtTime(urgent ? 0.3 : 0.15, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+  osc.start(ctx.currentTime);
+  osc.stop(ctx.currentTime + 0.1);
+}
+
+function playBuzzer() {
+  const ctx = ensureAudio();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.frequency.value = 200;
+  osc.type = 'square';
+  gain.gain.setValueAtTime(0.3, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+  osc.start(ctx.currentTime);
+  osc.stop(ctx.currentTime + 0.5);
+}
+
+function playReveal(correct) {
+  const ctx = ensureAudio();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.type = 'sine';
+  if (correct) {
+    osc.frequency.setValueAtTime(523, ctx.currentTime);
+    osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+    osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
+    gain.gain.setValueAtTime(0.25, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.4);
+  } else {
+    osc.frequency.setValueAtTime(400, ctx.currentTime);
+    osc.frequency.setValueAtTime(350, ctx.currentTime + 0.15);
+    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.3);
+  }
+}
+
+function playGameStart() {
+  const ctx = ensureAudio();
+  [523, 659, 784, 1047].forEach((freq, i) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.frequency.value = freq;
+    osc.type = 'sine';
+    gain.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.12);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 0.2);
+    osc.start(ctx.currentTime + i * 0.12);
+    osc.stop(ctx.currentTime + i * 0.12 + 0.2);
+  });
+}
+
+let tickInterval, tickTimeout;
+function startTickTimer(ms) {
+  stopTickTimer();
+  const normalEnd = ms - 10000; // last 10 seconds = urgent
+  if (normalEnd > 0) {
+    tickInterval = setInterval(() => playTick(false), 1000);
+    tickTimeout = setTimeout(() => {
+      clearInterval(tickInterval);
+      tickInterval = setInterval(() => playTick(true), 500); // faster urgent ticks
+    }, normalEnd);
+  } else {
+    tickInterval = setInterval(() => playTick(true), 500);
+  }
+  // Buzzer at end
+  setTimeout(() => { stopTickTimer(); playBuzzer(); }, ms);
+}
+function stopTickTimer() {
+  clearInterval(tickInterval); clearTimeout(tickTimeout);
+  tickInterval = null; tickTimeout = null;
+}
+
+// Init audio on first user click (browser autoplay policy)
+document.addEventListener('click', () => ensureAudio(), { once: true });
+
 let ws, timerInterval;
 function connect() {
   ws = new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}`);
@@ -176,6 +268,7 @@ function handleMsg(msg) {
       }
       break;
     case 'game-start':
+      playGameStart();
       break;
     case 'new-round':
       break;
@@ -190,8 +283,10 @@ function handleMsg(msg) {
         co.appendChild(d);
       });
       startTimer(msg.timeMs);
+      startTickTimer(msg.timeMs);
       break;
     case 'show-question':
+      stopTickTimer();
       showScreen('questionScreen');
       document.getElementById('qRound').textContent = `Round ${msg.round} — ${msg.category}`;
       document.getElementById('questionText').innerHTML = formatQ(msg.question);
@@ -203,6 +298,7 @@ function handleMsg(msg) {
       document.getElementById('questionText').innerHTML = formatQ(msg.question);
       document.getElementById('lieCount').textContent = 'Waiting for lies...';
       startTimer(msg.timeMs);
+      startTickTimer(msg.timeMs);
       break;
     case 'lie-count':
       document.getElementById('lieCount').textContent = `${msg.count}/${msg.total} lies submitted`;
@@ -219,18 +315,18 @@ function handleMsg(msg) {
       });
       document.getElementById('voteCount').textContent = 'Voting...';
       startTimer(msg.timeMs);
+      startTickTimer(msg.timeMs);
       break;
     case 'vote-count':
       document.getElementById('voteCount').textContent = `${msg.count}/${msg.total} votes in`;
       break;
     case 'reveal':
+      stopTickTimer();
       showScreen('revealScreen');
       document.getElementById('revealQuestion').innerHTML = formatQ(msg.reveals.length > 0 ? '' : '');
-      // Retrieve question from voteQuestion
       document.getElementById('revealQuestion').innerHTML = document.getElementById('voteQuestion').innerHTML;
       const rg = document.getElementById('revealGrid');
       rg.innerHTML = '';
-      // Reveal one by one with animation
       msg.reveals.forEach((r, i) => {
         setTimeout(() => {
           const d = document.createElement('div');
@@ -242,6 +338,7 @@ function handleMsg(msg) {
           if (r.pickedBy.length > 0) html += `<div class="picked-by">Picked by: ${r.pickedBy.join(', ')}</div>`;
           d.innerHTML = html;
           rg.appendChild(d);
+          playReveal(r.isTrue);
         }, i * 2500);
       });
       break;
