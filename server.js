@@ -194,7 +194,7 @@ function syncPlayerToCurrentPhase(room, name) {
   }
 }
 
-// Sync heartbeat: broadcast current phase to all players every 10 seconds
+// Sync heartbeat: broadcast current phase to all players every 5 seconds
 setInterval(() => {
   for (const [code, room] of rooms) {
     if (room.state !== 'playing') continue;
@@ -204,7 +204,7 @@ setInterval(() => {
       }
     }
   }
-}, 10000);
+}, 5000);
 
 function startGame(room) {
   room.state = 'playing';
@@ -437,7 +437,7 @@ function doReveal(room) {
   });
 
   // After reveal, show fool of round (if any) then scoreboard then next question
-  const revealTime = Math.max(3000, revealData.length * 3000);
+  const revealTime = Math.max(2500, revealData.length * 2200);
   const foolDelay = foolData ? 4000 : 0;
   room.timer = setTimeout(() => {
     if (foolData) {
