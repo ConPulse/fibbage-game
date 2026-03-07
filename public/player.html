@@ -174,12 +174,20 @@ function handleMsg(msg) {
       updateScore(msg.score);
       if (msg.emoji) { myEmoji = msg.emoji; document.getElementById('playerName').textContent = msg.emoji + ' ' + name; }
       if (msg.phase === 'lobby') showScreen('lobbyScreen');
-      else showScreen('lobbyScreen');
+      else {
+        // Rejoining mid-game: show a waiting screen; syncPlayerToCurrentPhase will send the right phase message
+        showScreen('lieWaitScreen');
+        document.querySelector('#lieWaitScreen h2').textContent = 'Rejoining...';
+        document.querySelector('#lieWaitScreen p').textContent = 'Syncing to the game...';
+      }
       break;
     case 'player-list':
       break;
     case 'game-start':
       vib(200);
+      showScreen('lieWaitScreen');
+      document.querySelector('#lieWaitScreen h2').textContent = '🎮 Game Starting!';
+      document.querySelector('#lieWaitScreen p').textContent = 'Get ready...';
       break;
     case 'new-round':
       vib([100,50,100]);
@@ -298,6 +306,29 @@ function handleMsg(msg) {
       waitMsg.style.marginTop = '1rem';
       waitMsg.textContent = 'Waiting for host to start a new game...';
       gi.appendChild(waitMsg);
+      break;
+    case 'sync':
+      // Heartbeat sync: if player is on wrong screen, self-correct
+      if (msg.phase === 'category-select' && !document.getElementById('categoryScreen').classList.contains('active')) {
+        // Will get a proper category-select message from syncPlayerToCurrentPhase
+      }
+      if (msg.phase === 'reveal') {
+        showScreen('revealScreen');
+        document.getElementById('revealEmoji').textContent = '👀';
+        document.getElementById('revealTitle').textContent = 'Revealing answers...';
+        document.getElementById('revealInfo').innerHTML = '';
+      }
+      if (msg.phase === 'scoreboard' && !document.getElementById('scoreScreen').classList.contains('active')) {
+        // Will get scoreboard message
+      }
+      if (msg.phase === 'fool-of-round') {
+        showScreen('lieWaitScreen');
+        document.querySelector('#lieWaitScreen h2').textContent = '🎭';
+        document.querySelector('#lieWaitScreen p').textContent = 'Fool of the Round!';
+      }
+      if (msg.phase === 'game-over' && !document.getElementById('gameOverScreen').classList.contains('active')) {
+        // Will get game-over message
+      }
       break;
     case 'back-to-lobby':
       showScreen('lobbyScreen');

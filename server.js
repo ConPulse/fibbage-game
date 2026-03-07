@@ -157,7 +157,7 @@ function syncPlayerToCurrentPhase(room, name) {
         round: room.round,
         questionNum: room.questionNum,
         totalQuestions: questionsInRound(room.round),
-        timeMs: 5000 // shortened since timer already running
+        timeMs: 5000
       });
       break;
     case 'show-question':
@@ -165,10 +165,10 @@ function syncPlayerToCurrentPhase(room, name) {
       sendTo(ws, {
         type: 'lie-phase',
         question: room.currentQuestion.question,
-        timeMs: 15000 // give them some time even if phase started earlier
+        timeMs: 15000
       });
       break;
-    case 'vote':
+    case 'vote': {
       const displayAnswers = room.answerList.map((a,i) => ({ id: i, text: a.text }));
       const myAnswers = displayAnswers.filter(a => {
         const entry = room.answerList[a.id];
@@ -176,14 +176,35 @@ function syncPlayerToCurrentPhase(room, name) {
       });
       sendTo(ws, { type: 'your-choices', answers: myAnswers });
       break;
+    }
     case 'reveal':
-      sendTo(ws, { type: 'wait', message: 'Revealing answers...' });
+      sendTo(ws, { type: 'sync', phase: 'reveal', message: 'Revealing answers...' });
       break;
     case 'scoreboard':
       sendTo(ws, { type: 'scoreboard', players: playerList(room) });
       break;
+    case 'fool-of-round':
+      sendTo(ws, { type: 'sync', phase: 'fool-of-round', message: 'Fool of the Round!' });
+      break;
+    case 'game-over': {
+      const sorted = playerList(room).sort((a,b) => b.score - a.score);
+      sendTo(ws, { type: 'game-over', players: sorted });
+      break;
+    }
   }
 }
+
+// Sync heartbeat: broadcast current phase to all players every 10 seconds
+setInterval(() => {
+  for (const [code, room] of rooms) {
+    if (room.state !== 'playing') continue;
+    for (const p of Object.values(room.players)) {
+      if (p.ws && p.ws.readyState === 1) {
+        sendTo(p.ws, { type: 'sync', phase: room.phase });
+      }
+    }
+  }
+}, 10000);
 
 function startGame(room) {
   room.state = 'playing';

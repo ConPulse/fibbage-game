@@ -197,8 +197,9 @@ function playGameStart() {
   });
 }
 
-// === BACKGROUND MUSIC (Lo-fi ambient with Web Audio API) ===
+// === GAME MUSIC (Upbeat game show style with Web Audio API) ===
 let bgMusic = null;
+
 function startBgMusic() {
   if (bgMusic) return;
   const ctx = ensureAudio();
@@ -207,15 +208,16 @@ function startBgMusic() {
   master.connect(ctx.destination);
   const filter = ctx.createBiquadFilter();
   filter.type = 'lowpass';
-  filter.frequency.value = 400;
+  filter.frequency.value = 800;
   filter.Q.value = 1;
   filter.connect(master);
-  // Chord progression: Cmaj7 -> Am7 -> Fmaj7 -> G7 (lo-fi style)
+
+  // Upbeat game-show chord progression (faster, bouncier)
   const chords = [
-    [130.81, 164.81, 196.00, 246.94], // C E G B
-    [110.00, 130.81, 164.81, 196.00], // A C E G
-    [87.31, 110.00, 130.81, 164.81],  // F A C E
-    [98.00, 123.47, 146.83, 174.61],  // G B D F
+    [261.63, 329.63, 392.00, 523.25], // C major bright
+    [220.00, 277.18, 329.63, 440.00], // A minor
+    [174.61, 220.00, 261.63, 349.23], // F major
+    [196.00, 246.94, 293.66, 392.00], // G major
   ];
   let chordIdx = 0;
   const oscs = [];
@@ -223,7 +225,7 @@ function startBgMusic() {
   for (let i = 0; i < 4; i++) {
     const osc = ctx.createOscillator();
     const g = ctx.createGain();
-    osc.type = 'sine';
+    osc.type = i < 2 ? 'sine' : 'triangle';
     osc.frequency.value = chords[0][i];
     g.gain.value = 0.25;
     osc.connect(g);
@@ -232,24 +234,89 @@ function startBgMusic() {
     oscs.push(osc);
     gains.push(g);
   }
-  // Slowly cycle through chords
+
+  // Faster chord cycling (game show tempo ~130 BPM = ~1.8s per chord)
   const interval = setInterval(() => {
     chordIdx = (chordIdx + 1) % chords.length;
     const t = ctx.currentTime;
     for (let i = 0; i < 4; i++) {
-      oscs[i].frequency.linearRampToValueAtTime(chords[chordIdx][i], t + 2);
+      oscs[i].frequency.linearRampToValueAtTime(chords[chordIdx][i], t + 0.5);
     }
-  }, 4000);
-  bgMusic = { oscs, gains, master, filter, interval, ctx };
+  }, 1850);
+
+  // Bass line on separate oscillator
+  const bassOsc = ctx.createOscillator();
+  const bassGain = ctx.createGain();
+  bassOsc.type = 'triangle';
+  bassOsc.frequency.value = 130.81;
+  bassGain.gain.value = 0.3;
+  bassOsc.connect(bassGain);
+  bassGain.connect(master);
+  bassOsc.start();
+  const bassNotes = [130.81, 110.00, 87.31, 98.00];
+  let bassIdx = 0;
+  const bassInterval = setInterval(() => {
+    bassIdx = (bassIdx + 1) % bassNotes.length;
+    bassOsc.frequency.linearRampToValueAtTime(bassNotes[bassIdx], ctx.currentTime + 0.1);
+  }, 1850);
+
+  // Rhythmic hi-hat pattern
+  const rhythmInterval = setInterval(() => {
+    if (!bgMusic) return;
+    const bufferSize = ctx.sampleRate * 0.02;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * (1 - i/bufferSize);
+    const src = ctx.createBufferSource();
+    const g = ctx.createGain();
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass'; hp.frequency.value = 8000;
+    src.buffer = buffer;
+    g.gain.value = 0.06;
+    src.connect(hp); hp.connect(g); g.connect(master);
+    src.start();
+  }, 230);
+
+  bgMusic = { oscs, gains, master, filter, interval, ctx, bassOsc, bassGain, bassInterval, rhythmInterval, urgentLevel: 0 };
 }
+
 function stopBgMusic() {
   if (!bgMusic) return;
   clearInterval(bgMusic.interval);
+  clearInterval(bgMusic.bassInterval);
+  clearInterval(bgMusic.rhythmInterval);
   bgMusic.oscs.forEach(o => { try { o.stop(); } catch{} });
+  try { bgMusic.bassOsc.stop(); } catch{}
   bgMusic = null;
 }
-function pauseBgMusic() { if (bgMusic) bgMusic.master.gain.linearRampToValueAtTime(0.01, bgMusic.ctx.currentTime + 0.5); }
-function resumeBgMusic() { if (bgMusic) bgMusic.master.gain.linearRampToValueAtTime(0.12, bgMusic.ctx.currentTime + 0.5); }
+
+function pauseBgMusic() {
+  if (bgMusic) bgMusic.master.gain.linearRampToValueAtTime(0.01, bgMusic.ctx.currentTime + 0.5);
+}
+
+function resumeBgMusic() {
+  if (bgMusic) bgMusic.master.gain.linearRampToValueAtTime(0.12, bgMusic.ctx.currentTime + 0.5);
+}
+
+function setMusicUrgency(level) {
+  // level: 0=normal, 1=tense (last 10s), 2=critical (last 5s)
+  if (!bgMusic) return;
+  const ctx = bgMusic.ctx;
+  if (level >= 2) {
+    bgMusic.filter.frequency.linearRampToValueAtTime(2000, ctx.currentTime + 0.3);
+    bgMusic.master.gain.linearRampToValueAtTime(0.18, ctx.currentTime + 0.3);
+    bgMusic.oscs.forEach(o => { o.type = 'square'; });
+  } else if (level >= 1) {
+    bgMusic.filter.frequency.linearRampToValueAtTime(1200, ctx.currentTime + 0.3);
+    bgMusic.master.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.3);
+    bgMusic.oscs.forEach(o => { o.type = 'triangle'; });
+  } else {
+    bgMusic.filter.frequency.linearRampToValueAtTime(800, ctx.currentTime + 0.3);
+    bgMusic.master.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.3);
+    bgMusic.oscs.forEach(o => { if (bgMusic.oscs.indexOf(o) < 2) o.type = 'sine'; else o.type = 'triangle'; });
+  }
+  bgMusic.urgentLevel = level;
+}
 
 function playFoolSound() {
   const ctx = ensureAudio();
@@ -266,25 +333,45 @@ function playFoolSound() {
   });
 }
 
+function playDramaticBuzzer() {
+  const ctx = ensureAudio();
+  [200, 180, 150].forEach((freq, i) => {
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.value = freq;
+    g.gain.setValueAtTime(0.4, ctx.currentTime + i * 0.15);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 0.3);
+    osc.connect(g); g.connect(ctx.destination);
+    osc.start(ctx.currentTime + i * 0.15);
+    osc.stop(ctx.currentTime + i * 0.15 + 0.3);
+  });
+}
+
 let tickInterval, tickTimeout;
 function startTickTimer(ms) {
   stopTickTimer();
-  const normalEnd = ms - 10000; // last 10 seconds = urgent
-  if (normalEnd > 0) {
-    tickInterval = setInterval(() => playTick(false), 1000);
+  setMusicUrgency(0);
+  const tenSecMark = ms - 10000;
+  const fiveSecMark = ms - 5000;
+  if (tenSecMark > 0) {
     tickTimeout = setTimeout(() => {
-      clearInterval(tickInterval);
-      tickInterval = setInterval(() => playTick(true), 500); // faster urgent ticks
-    }, normalEnd);
+      setMusicUrgency(1);
+      // Also add ticks for last 10 seconds
+      tickInterval = setInterval(() => playTick(true), 500);
+    }, tenSecMark);
   } else {
     tickInterval = setInterval(() => playTick(true), 500);
   }
-  // Buzzer at end
-  setTimeout(() => { stopTickTimer(); playBuzzer(); }, ms);
+  if (fiveSecMark > 0) {
+    setTimeout(() => setMusicUrgency(2), fiveSecMark);
+  }
+  setTimeout(() => { stopTickTimer(); playDramaticBuzzer(); }, ms);
 }
 function stopTickTimer() {
   clearInterval(tickInterval); clearTimeout(tickTimeout);
   tickInterval = null; tickTimeout = null;
+  setMusicUrgency(0);
 }
 
 // Init audio on ANY user interaction (browser autoplay policy)
