@@ -18,9 +18,7 @@ const rooms = new Map();
 const PLAYER_COLORS = ['#e94560','#4ecdc4','#f39c12','#9b59b6','#2ecc71','#e67e22','#3498db','#1abc9c'];
 const PLAYER_EMOJIS = ['🦊','🐙','🦁','🐸','🦄','🐯','🦇','🐲'];
 
-// Auto-cleanup abandoned rooms every 5 minutes
 setInterval(() => {
-  const now = Date.now();
   for (const [code, room] of rooms) {
     const allDisconnected = Object.values(room.players).every(p => !p.ws);
     const hostGone = !room.hostWs || room.hostWs.readyState !== 1;
@@ -48,7 +46,6 @@ function isTooSimilar(lie, truth, alts) {
   for (const t of targets) {
     if (nl === t) return true;
     if (nl.includes(t) || t.includes(nl)) return true;
-    // Levenshtein
     if (t.length > 2 && nl.length > 2) {
       const dist = levenshtein(nl, t);
       if (dist <= Math.max(1, Math.floor(t.length * 0.3))) return true;
@@ -88,14 +85,9 @@ function playerList(room) {
 function pickQuestions(room) {
   let sourceQuestions = questions;
   if (room.customQuestions && Array.isArray(room.customQuestions) && room.customQuestions.length > 0) {
-    // Merge custom questions with default ones (custom first, then fill with defaults)
     const custom = room.customQuestions.map((q, i) => ({
-      id: 'custom_' + i,
-      category: q.category || 'Custom',
-      question: q.question,
-      answer: q.answer,
-      alternateAnswers: q.alternateAnswers || [],
-      decoys: q.decoys || []
+      id: 'custom_' + i, category: q.category || 'Custom', question: q.question,
+      answer: q.answer, alternateAnswers: q.alternateAnswers || [], decoys: q.decoys || []
     }));
     sourceQuestions = [...custom, ...questions];
   }
@@ -114,24 +106,19 @@ function getCategories(room) {
   const pool = room.questionPool;
   if (!pool || pool.length === 0) return [];
   const cats = [...new Set(pool.map(q=>q.category))];
-  // pick 3 random
-  const shuffled = cats.sort(()=>Math.random()-0.5);
-  return shuffled.slice(0, 3);
+  return cats.sort(()=>Math.random()-0.5).slice(0, 3);
 }
 
 function pickQuestionFromCategory(room, category) {
   const idx = room.questionPool.findIndex(q => q.category === category);
-  if (idx === -1) {
-    // fallback: pick any
-    return room.questionPool.splice(0,1)[0];
-  }
+  if (idx === -1) return room.questionPool.splice(0,1)[0];
   return room.questionPool.splice(idx, 1)[0];
 }
 
 function roundMultiplier(room) {
   if (room.round === 1) return 1;
   if (room.round === 2) return 2;
-  return 3; // final
+  return 3;
 }
 
 function questionsInRound(round) {
@@ -144,36 +131,71 @@ function clearTimer(room) {
   if (room.timer) { clearTimeout(room.timer); room.timer = null; }
 }
 
+function computeAwards(room) {
+  const awards = [];
+  const playerCount = Object.keys(room.players).length;
+
+  // Truth Detector
+  let maxCorrect = 0;
+  for (const p of Object.values(room.players)) { if ((p.correctPicks || 0) > maxCorrect) maxCorrect = p.correctPicks || 0; }
+  if (maxCorrect > 0) {
+    const winners = Object.values(room.players).filter(p => (p.correctPicks || 0) === maxCorrect);
+    if (winners.length < playerCount) {
+      for (const w of winners) awards.push({ title: 'Truth Detector', emoji: '🎯', playerName: w.name, playerEmoji: w.emoji, playerColor: w.color, stat: w.correctPicks + ' correct' });
+    }
+  }
+
+  // Most Gullible
+  let maxFooledStat = 0;
+  for (const p of Object.values(room.players)) { if ((p.timesFooled || 0) > maxFooledStat) maxFooledStat = p.timesFooled || 0; }
+  if (maxFooledStat > 0) {
+    const winners = Object.values(room.players).filter(p => (p.timesFooled || 0) === maxFooledStat);
+    if (winners.length < playerCount) {
+      for (const w of winners) awards.push({ title: 'Most Gullible', emoji: '🤡', playerName: w.name, playerEmoji: w.emoji, playerColor: w.color, stat: 'fooled ' + w.timesFooled + ' times' });
+    }
+  }
+
+  // Best Liar
+  let maxBL = 0;
+  for (const c of Object.values(room.bestLieScores || {})) { if (c > maxBL) maxBL = c; }
+  if (maxBL > 0) {
+    const blWinners = Object.entries(room.bestLieScores).filter(([n,c]) => c === maxBL);
+    if (blWinners.length < playerCount) {
+      for (const [n, c] of blWinners) {
+        const p = room.players[n];
+        awards.push({ title: 'Best Liar', emoji: '🎭', playerName: n, playerEmoji: p ? p.emoji : '', playerColor: p ? p.color : '', stat: c + ' best lie votes' });
+      }
+    }
+  }
+
+  // Master Manipulator
+  let maxPF = 0;
+  for (const p of Object.values(room.players)) { if ((p.peopleFooled || 0) > maxPF) maxPF = p.peopleFooled || 0; }
+  if (maxPF > 0) {
+    const winners = Object.values(room.players).filter(p => (p.peopleFooled || 0) === maxPF);
+    if (winners.length < playerCount) {
+      for (const w of winners) awards.push({ title: 'Master Manipulator', emoji: '🧠', playerName: w.name, playerEmoji: w.emoji, playerColor: w.color, stat: 'fooled ' + w.peopleFooled + ' people' });
+    }
+  }
+
+  return awards;
+}
+
 function syncPlayerToCurrentPhase(room, name) {
   const p = room.players[name];
   if (!p || !p.ws) return;
   const ws = p.ws;
-  
   switch (room.phase) {
     case 'category-select':
-      sendTo(ws, {
-        type: 'category-select',
-        categories: room.categories,
-        round: room.round,
-        questionNum: room.questionNum,
-        totalQuestions: questionsInRound(room.round),
-        timeMs: 5000
-      });
+      sendTo(ws, { type: 'category-select', categories: room.categories, round: room.round, questionNum: room.questionNum, totalQuestions: questionsInRound(room.round), timeMs: 5000 });
       break;
     case 'show-question':
     case 'lie':
-      sendTo(ws, {
-        type: 'lie-phase',
-        question: room.currentQuestion.question,
-        timeMs: 15000
-      });
+      sendTo(ws, { type: 'lie-phase', question: room.currentQuestion.question, timeMs: 15000 });
       break;
     case 'vote': {
       const displayAnswers = room.answerList.map((a,i) => ({ id: i, text: a.text }));
-      const myAnswers = displayAnswers.filter(a => {
-        const entry = room.answerList[a.id];
-        return entry.author !== name;
-      });
+      const myAnswers = displayAnswers.filter(a => room.answerList[a.id].author !== name);
       sendTo(ws, { type: 'your-choices', answers: myAnswers });
       break;
     }
@@ -197,21 +219,19 @@ function syncPlayerToCurrentPhase(room, name) {
       let bestLiar = null; let maxBL = 0;
       for (const [n, c] of Object.entries(room.bestLieScores || {})) { if (c > maxBL) { maxBL = c; bestLiar = n; } }
       let bestLiarData = null;
-      if (bestLiar && maxBL > 0) { const p = room.players[bestLiar]; bestLiarData = { name: bestLiar, emoji: p ? p.emoji : '', color: p ? p.color : '', votes: maxBL }; }
-      sendTo(ws, { type: 'game-over', players: sorted, bestLiar: bestLiarData, bestLieScores: room.bestLieScores });
+      if (bestLiar && maxBL > 0) { const bp = room.players[bestLiar]; bestLiarData = { name: bestLiar, emoji: bp ? bp.emoji : '', color: bp ? bp.color : '', votes: maxBL }; }
+      const awards = computeAwards(room);
+      sendTo(ws, { type: 'game-over', players: sorted, bestLiar: bestLiarData, bestLieScores: room.bestLieScores, awards: awards });
       break;
     }
   }
 }
 
-// Sync heartbeat: broadcast current phase to all players every 5 seconds
 setInterval(() => {
   for (const [code, room] of rooms) {
     if (room.state !== 'playing') continue;
     for (const p of Object.values(room.players)) {
-      if (p.ws && p.ws.readyState === 1) {
-        sendTo(p.ws, { type: 'sync', phase: room.phase });
-      }
+      if (p.ws && p.ws.readyState === 1) sendTo(p.ws, { type: 'sync', phase: room.phase });
     }
   }
 }, 5000);
@@ -220,7 +240,8 @@ function startGame(room) {
   room.state = 'playing';
   room.round = 1;
   room.questionNum = 0;
-  for (const p of Object.values(room.players)) p.score = 0;
+  room.nobodyGotItCount = 0;
+  for (const p of Object.values(room.players)) { p.score = 0; p.correctPicks = 0; p.timesFooled = 0; p.peopleFooled = 0; }
   pickQuestions(room);
   broadcast(room, { type: 'game-start', players: playerList(room) });
   nextQuestion(room);
@@ -232,63 +253,38 @@ function nextQuestion(room) {
   if (room.questionNum > totalInRound) {
     room.round++;
     room.questionNum = 1;
-    if (room.round > 3) {
-      endGame(room);
-      return;
-    }
+    if (room.round > 3) { endGame(room); return; }
     broadcast(room, { type: 'new-round', round: room.round });
   }
-  // Category select phase
   room.phase = 'category-select';
   room.categories = getCategories(room);
   room.categoryVotes = {};
   if (room.categories.length === 0) { endGame(room); return; }
-  broadcast(room, {
-    type: 'category-select',
-    categories: room.categories,
-    round: room.round,
-    questionNum: room.questionNum,
-    totalQuestions: questionsInRound(room.round),
-    timeMs: 15000
-  });
+  broadcast(room, { type: 'category-select', categories: room.categories, round: room.round, questionNum: room.questionNum, totalQuestions: questionsInRound(room.round), timeMs: 15000 });
   clearTimer(room);
   room.timer = setTimeout(() => selectCategory(room), 15000);
 }
 
 function selectCategory(room) {
   clearTimer(room);
-  // Tally votes or pick random
   const votes = {};
   for (const cat of Object.values(room.categoryVotes)) votes[cat] = (votes[cat]||0)+1;
   let chosen = room.categories[Math.floor(Math.random()*room.categories.length)];
   let max = 0;
   for (const [cat, count] of Object.entries(votes)) { if (count > max) { max=count; chosen=cat; } }
-
   const q = pickQuestionFromCategory(room, chosen);
   room.currentQuestion = q;
   room.lies = {};
   room.votes = {};
-
-  // Show question phase
   room.phase = 'show-question';
-  broadcast(room, {
-    type: 'show-question',
-    question: q.question,
-    category: q.category,
-    round: room.round,
-    timeMs: 3000
-  });
+  broadcast(room, { type: 'show-question', question: q.question, category: q.category, round: room.round, timeMs: 3000 });
   room.timer = setTimeout(() => startLiePhase(room), 3000);
 }
 
 function startLiePhase(room) {
   clearTimer(room);
   room.phase = 'lie';
-  broadcast(room, {
-    type: 'lie-phase',
-    question: room.currentQuestion.question,
-    timeMs: 45000
-  });
+  broadcast(room, { type: 'lie-phase', question: room.currentQuestion.question, timeMs: 45000 });
   room.timer = setTimeout(() => startVoting(room), 45000);
 }
 
@@ -297,7 +293,6 @@ function checkAllLiesIn(room) {
   const allIn = activePlayers.every(p => room.lies[p.name]);
   if (allIn && activePlayers.length > 0) {
     clearTimer(room);
-    // Show "All lies in!" transition before revealing answers
     broadcast(room, { type: 'all-lies-in' });
     room.timer = setTimeout(() => startVoting(room), 3000);
   }
@@ -306,47 +301,26 @@ function checkAllLiesIn(room) {
 function startVoting(room) {
   clearTimer(room);
   room.phase = 'vote';
-  // Build answer list: all lies + the truth + game decoys, shuffled
   const answers = [];
   const truth = room.currentQuestion.answer;
   answers.push({ text: truth, isTrue: true, author: null });
-  for (const [playerName, lie] of Object.entries(room.lies)) {
-    answers.push({ text: lie, isTrue: false, author: playerName });
-  }
-  // Add game-generated decoy lies to pad to at least 6 total options
+  for (const [playerName, lie] of Object.entries(room.lies)) answers.push({ text: lie, isTrue: false, author: playerName });
   const decoys = room.currentQuestion.decoys || [];
   const playerCount = Object.keys(room.lies).length;
-  const totalWithoutDecoys = 1 + playerCount; // truth + player lies
-  const decoysNeeded = Math.max(0, 6 - totalWithoutDecoys);
+  const decoysNeeded = Math.max(0, 6 - (1 + playerCount));
   const usedTexts = new Set(answers.map(a => normalize(a.text)));
   let decoysAdded = 0;
   for (const d of decoys) {
     if (decoysAdded >= decoysNeeded) break;
-    if (!usedTexts.has(normalize(d))) {
-      answers.push({ text: d, isTrue: false, author: '__GAME__' });
-      usedTexts.add(normalize(d));
-      decoysAdded++;
-    }
+    if (!usedTexts.has(normalize(d))) { answers.push({ text: d, isTrue: false, author: '__GAME__' }); usedTexts.add(normalize(d)); decoysAdded++; }
   }
-  // Shuffle
   room.answerList = answers.sort(() => Math.random() - 0.5);
   room.votes = {};
-
-  // Send to host (show all answers)
   const displayAnswers = room.answerList.map((a,i) => ({ id: i, text: a.text }));
-  broadcast(room, {
-    type: 'vote-phase',
-    question: room.currentQuestion.question,
-    answers: displayAnswers,
-    timeMs: 30000
-  });
-  // Each player shouldn't see their own lie — handled client-side by filtering
+  broadcast(room, { type: 'vote-phase', question: room.currentQuestion.question, answers: displayAnswers, timeMs: 30000 });
   for (const p of Object.values(room.players)) {
     if (p.ws && p.ws.readyState === 1) {
-      const myAnswers = displayAnswers.filter(a => {
-        const entry = room.answerList[a.id];
-        return entry.author !== p.name; // hide own lie
-      });
+      const myAnswers = displayAnswers.filter(a => room.answerList[a.id].author !== p.name);
       sendTo(p.ws, { type: 'your-choices', answers: myAnswers });
     }
   }
@@ -356,62 +330,37 @@ function startVoting(room) {
 function checkAllVotesIn(room) {
   const activePlayers = Object.values(room.players).filter(p => p.ws);
   const allIn = activePlayers.every(p => room.votes[p.name] !== undefined);
-  if (allIn && activePlayers.length > 0) {
-    clearTimer(room);
-    room.timer = setTimeout(() => doReveal(room), 1500);
-  }
+  if (allIn && activePlayers.length > 0) { clearTimer(room); room.timer = setTimeout(() => doReveal(room), 1500); }
 }
-
 
 function checkAllBestLieVotesIn(room) {
   const activePlayers = Object.values(room.players).filter(p => p.ws);
   const allIn = activePlayers.every(p => room.bestLieVotes[p.name] !== undefined);
-  if (allIn && activePlayers.length > 0) {
-    clearTimer(room);
-    resolveBestLieVote(room);
-  }
+  if (allIn && activePlayers.length > 0) { clearTimer(room); resolveBestLieVote(room); }
 }
 
 function startBestLieVote(room) {
   clearTimer(room);
-  // Collect player-submitted lies (not truth, not game decoys)
   const playerLies = [];
   room.bestLieLookup = {};
   let lieId = 0;
   for (const [playerName, lieText] of Object.entries(room.lies)) {
     const p = room.players[playerName];
-    if (p) {
-      const id = lieId++;
-      playerLies.push({ id, text: lieText });
-      room.bestLieLookup[id] = { author: playerName, text: lieText };
-    }
+    if (p) { const id = lieId++; playerLies.push({ id, text: lieText }); room.bestLieLookup[id] = { author: playerName, text: lieText }; }
   }
-  // Skip if 0 or 1 player lies
-  if (playerLies.length <= 1) {
-    showFoolAndScoreboard(room);
-    return;
-  }
+  if (playerLies.length <= 1) { showFoolAndScoreboard(room); return; }
   room.phase = 'best-lie-vote';
   room.bestLieVotes = {};
-  broadcast(room, {
-    type: 'best-lie-vote',
-    lies: playerLies,
-    timeMs: 15000
-  });
+  broadcast(room, { type: 'best-lie-vote', lies: playerLies, timeMs: 15000 });
   room.timer = setTimeout(() => resolveBestLieVote(room), 15000);
 }
 
 function resolveBestLieVote(room) {
   clearTimer(room);
   room.phase = 'best-lie-result';
-  // Tally votes by lieId
   const voteCounts = {};
-  for (const lieId of Object.values(room.bestLieVotes)) {
-    voteCounts[lieId] = (voteCounts[lieId] || 0) + 1;
-  }
-  // Find winner
-  let maxVotes = 0;
-  let winners = [];
+  for (const lieId of Object.values(room.bestLieVotes)) voteCounts[lieId] = (voteCounts[lieId] || 0) + 1;
+  let maxVotes = 0; let winners = [];
   for (const [lieId, count] of Object.entries(voteCounts)) {
     if (count > maxVotes) { maxVotes = count; winners = [lieId]; }
     else if (count === maxVotes) winners.push(lieId);
@@ -422,22 +371,10 @@ function resolveBestLieVote(room) {
     const entry = room.bestLieLookup[winnerLieId];
     const winnerName = entry.author;
     const p = room.players[winnerName];
-    // Update bestLieScores
     room.bestLieScores[winnerName] = (room.bestLieScores[winnerName] || 0) + 1;
-    winnerData = {
-      text: entry.text,
-      author: winnerName,
-      authorEmoji: p ? p.emoji : '',
-      authorColor: p ? p.color : '',
-      votes: maxVotes
-    };
+    winnerData = { text: entry.text, author: winnerName, authorEmoji: p ? p.emoji : '', authorColor: p ? p.color : '', votes: maxVotes };
   }
-  broadcast(room, {
-    type: 'best-lie-result',
-    winner: winnerData,
-    bestLieScores: { ...room.bestLieScores }
-  });
-  // Show result for 4 seconds, then continue to fool/scoreboard
+  broadcast(room, { type: 'best-lie-result', winner: winnerData, bestLieScores: { ...room.bestLieScores } });
   room.timer = setTimeout(() => showFoolAndScoreboard(room), 4000);
 }
 
@@ -445,19 +382,20 @@ function doReveal(room) {
   clearTimer(room);
   room.phase = 'reveal';
   const mult = roundMultiplier(room);
-  const results = [];
   const truth = room.currentQuestion.answer;
 
-  // Compute scoring
-  // For each answer, who picked it
-  const picks = {}; // answerId -> [playerNames]
+  const picks = {};
   for (const [playerName, answerId] of Object.entries(room.votes)) {
     if (!picks[answerId]) picks[answerId] = [];
     picks[answerId].push(playerName);
   }
 
-  // Score: picking the truth = 1000 * mult
-  // Fooling someone with your lie = 500 * mult per person fooled
+  // Nobody Got It check
+  const truthIdx = room.answerList.findIndex(a => a.isTrue);
+  const truthVoters = picks[truthIdx] || [];
+  const nobodyGotIt = truthVoters.length === 0;
+  if (nobodyGotIt) room.nobodyGotItCount = (room.nobodyGotItCount || 0) + 1;
+
   const scoreChanges = {};
   for (const p of Object.values(room.players)) scoreChanges[p.name] = 0;
 
@@ -465,50 +403,43 @@ function doReveal(room) {
     const answer = room.answerList[parseInt(answerId)];
     if (!answer) continue;
     if (answer.isTrue) {
-      for (const v of voters) scoreChanges[v] = (scoreChanges[v]||0) + 1000 * mult;
+      for (const v of voters) {
+        scoreChanges[v] = (scoreChanges[v]||0) + 1000 * mult;
+        if (room.players[v]) room.players[v].correctPicks = (room.players[v].correctPicks || 0) + 1;
+      }
     } else if (answer.author === '__GAME__') {
-      // Penalty for picking a game decoy
-      for (const v of voters) scoreChanges[v] = (scoreChanges[v]||0) - 500 * mult;
+      for (const v of voters) {
+        scoreChanges[v] = (scoreChanges[v]||0) - 500 * mult;
+        if (room.players[v]) room.players[v].timesFooled = (room.players[v].timesFooled || 0) + 1;
+      }
     } else if (answer.author) {
       scoreChanges[answer.author] = (scoreChanges[answer.author]||0) + 500 * mult * voters.length;
+      if (room.players[answer.author]) room.players[answer.author].peopleFooled = (room.players[answer.author].peopleFooled || 0) + voters.length;
+      for (const v of voters) {
+        if (room.players[v]) room.players[v].timesFooled = (room.players[v].timesFooled || 0) + 1;
+      }
     }
   }
 
-  // Apply scores
   for (const [name, change] of Object.entries(scoreChanges)) {
     if (room.players[name]) room.players[name].score += change;
   }
 
-  // Build reveal data
   const revealData = room.answerList.map((a, i) => {
     const authorPlayer = a.author && a.author !== '__GAME__' ? room.players[a.author] : null;
     const pickedByData = (picks[i] || []).map(pName => {
       const pp = room.players[pName];
       return { name: pName, emoji: pp ? pp.emoji : '', color: pp ? pp.color : '' };
     });
-    return {
-      id: i, text: a.text, isTrue: a.isTrue, author: a.author,
-      authorEmoji: authorPlayer ? authorPlayer.emoji : '',
-      authorColor: authorPlayer ? authorPlayer.color : '',
-      pickedBy: picks[i] || [],
-      pickedByDetails: pickedByData
-    };
+    return { id: i, text: a.text, isTrue: a.isTrue, author: a.author, authorEmoji: authorPlayer ? authorPlayer.emoji : '', authorColor: authorPlayer ? authorPlayer.color : '', pickedBy: picks[i] || [], pickedByDetails: pickedByData };
   });
 
-  // Determine Fool of the Round: which player's lie fooled the most people
-  let foolData = null;
-  let maxFooled = 0;
-  const foolCandidates = [];
+  let foolData = null; let maxFooled = 0; const foolCandidates = [];
   for (const [answerId, voters] of Object.entries(picks)) {
     const answer = room.answerList[parseInt(answerId)];
     if (!answer || answer.isTrue || answer.author === '__GAME__' || !answer.author) continue;
-    if (voters.length > maxFooled) {
-      maxFooled = voters.length;
-      foolCandidates.length = 0;
-      foolCandidates.push({ name: answer.author, count: voters.length, text: answer.text });
-    } else if (voters.length === maxFooled && voters.length > 0) {
-      foolCandidates.push({ name: answer.author, count: voters.length, text: answer.text });
-    }
+    if (voters.length > maxFooled) { maxFooled = voters.length; foolCandidates.length = 0; foolCandidates.push({ name: answer.author, count: voters.length, text: answer.text }); }
+    else if (voters.length === maxFooled && voters.length > 0) foolCandidates.push({ name: answer.author, count: voters.length, text: answer.text });
   }
   if (foolCandidates.length > 0 && maxFooled > 0) {
     const pick = foolCandidates[Math.floor(Math.random() * foolCandidates.length)];
@@ -516,31 +447,19 @@ function doReveal(room) {
     foolData = { name: pick.name, count: pick.count, text: pick.text, emoji: fp ? fp.emoji : '', color: fp ? fp.color : '' };
   }
 
-  broadcast(room, {
-    type: 'reveal',
-    reveals: revealData,
-    truth: truth,
-    scoreChanges,
-    players: playerList(room),
-    foolOfRound: foolData
-  });
+  broadcast(room, { type: 'reveal', reveals: revealData, truth, scoreChanges, players: playerList(room), foolOfRound: foolData, nobodyGotIt });
 
-  // Store foolData on room for later use
   room.currentFoolData = foolData;
-
-  // After reveal animation, go to Best Lie vote
   const revealTime = Math.max(2500, revealData.length * 2200);
-  room.timer = setTimeout(() => startBestLieVote(room), revealTime);
+  const extraDelay = nobodyGotIt ? 3000 : 0;
+  room.timer = setTimeout(() => startBestLieVote(room), revealTime + extraDelay);
 }
 
 function showFoolAndScoreboard(room) {
   clearTimer(room);
   const foolData = room.currentFoolData;
   const foolDelay = foolData ? 4000 : 0;
-  if (foolData) {
-    room.phase = 'fool-of-round';
-    broadcast(room, { type: 'fool-of-round', fool: foolData });
-  }
+  if (foolData) { room.phase = 'fool-of-round'; broadcast(room, { type: 'fool-of-round', fool: foolData }); }
   room.timer = setTimeout(() => {
     room.phase = 'scoreboard';
     broadcast(room, { type: 'scoreboard', players: playerList(room), round: room.round });
@@ -553,24 +472,16 @@ function endGame(room) {
   room.phase = 'game-over';
   room.state = 'ended';
   const sorted = playerList(room).sort((a,b) => b.score - a.score);
-  // Find best liar
-  let bestLiar = null;
-  let maxBL = 0;
-  for (const [name, count] of Object.entries(room.bestLieScores)) {
-    if (count > maxBL) { maxBL = count; bestLiar = name; }
-  }
+  let bestLiar = null; let maxBL = 0;
+  for (const [name, count] of Object.entries(room.bestLieScores)) { if (count > maxBL) { maxBL = count; bestLiar = name; } }
   let bestLiarData = null;
-  if (bestLiar && maxBL > 0) {
-    const p = room.players[bestLiar];
-    bestLiarData = { name: bestLiar, emoji: p ? p.emoji : '', color: p ? p.color : '', votes: maxBL };
-  }
-  broadcast(room, { type: 'game-over', players: sorted, bestLiar: bestLiarData, bestLieScores: room.bestLieScores });
+  if (bestLiar && maxBL > 0) { const p = room.players[bestLiar]; bestLiarData = { name: bestLiar, emoji: p ? p.emoji : '', color: p ? p.color : '', votes: maxBL }; }
+  const awards = computeAwards(room);
+  broadcast(room, { type: 'game-over', players: sorted, bestLiar: bestLiarData, bestLieScores: room.bestLieScores, awards });
 }
 
 wss.on('connection', (ws) => {
-  let myRoom = null;
-  let myName = null;
-  let isHost = false;
+  let myRoom = null; let myName = null; let isHost = false;
 
   ws.on('message', (raw) => {
     let msg;
@@ -579,16 +490,9 @@ wss.on('connection', (ws) => {
     switch (msg.type) {
       case 'create-room': {
         const code = genCode();
-        const room = {
-          code, hostWs: ws, players: {}, state: 'lobby', phase: 'lobby',
-          round: 0, questionNum: 0, timer: null, questionPool: [],
-          currentQuestion: null, lies: {}, votes: {}, answerList: [],
-          categories: [], categoryVotes: {}, customQuestions: msg.customQuestions || null,
-          bestLieScores: {}, bestLieVotes: {}
-        };
+        const room = { code, hostWs: ws, players: {}, state: 'lobby', phase: 'lobby', round: 0, questionNum: 0, timer: null, questionPool: [], currentQuestion: null, lies: {}, votes: {}, answerList: [], categories: [], categoryVotes: {}, customQuestions: msg.customQuestions || null, bestLieScores: {}, bestLieVotes: {}, nobodyGotItCount: 0 };
         rooms.set(code, room);
-        myRoom = code;
-        isHost = true;
+        myRoom = code; isHost = true;
         sendTo(ws, { type: 'room-created', code });
         break;
       }
@@ -597,41 +501,23 @@ wss.on('connection', (ws) => {
         const name = (msg.name||'').trim().substring(0, 16);
         const room = getRoom(code);
         if (!room) { sendTo(ws, { type: 'error', message: 'Room not found' }); return; }
-        if (room.state !== 'lobby' && !room.players[name]) {
-          sendTo(ws, { type: 'error', message: 'Game already in progress' }); return;
-        }
-        if (Object.keys(room.players).length >= 8 && !room.players[name]) {
-          sendTo(ws, { type: 'error', message: 'Room is full (max 8)' }); return;
-        }
+        if (room.state !== 'lobby' && !room.players[name]) { sendTo(ws, { type: 'error', message: 'Game already in progress' }); return; }
+        if (Object.keys(room.players).length >= 8 && !room.players[name]) { sendTo(ws, { type: 'error', message: 'Room is full (max 8)' }); return; }
         if (!name) { sendTo(ws, { type: 'error', message: 'Name required' }); return; }
-        // Check for duplicate name with active connection (not a rejoin)
-        if (room.players[name] && room.players[name].ws && room.players[name].ws.readyState === 1 && room.players[name].ws !== ws) {
-          sendTo(ws, { type: 'error', message: 'Name already taken! Pick another.' }); return;
-        }
-        // Rejoin or new join
-        if (room.players[name]) {
-          room.players[name].ws = ws;
-        } else {
-          const idx = Object.keys(room.players).length;
-          room.players[name] = { name, score: 0, ws, color: PLAYER_COLORS[idx % 8], emoji: PLAYER_EMOJIS[idx % 8] };
-        }
-        myRoom = code;
-        myName = name;
+        if (room.players[name] && room.players[name].ws && room.players[name].ws.readyState === 1 && room.players[name].ws !== ws) { sendTo(ws, { type: 'error', message: 'Name already taken! Pick another.' }); return; }
+        if (room.players[name]) { room.players[name].ws = ws; }
+        else { const idx = Object.keys(room.players).length; room.players[name] = { name, score: 0, ws, color: PLAYER_COLORS[idx % 8], emoji: PLAYER_EMOJIS[idx % 8], correctPicks: 0, timesFooled: 0, peopleFooled: 0 }; }
+        myRoom = code; myName = name;
         sendTo(ws, { type: 'joined', code, name, score: room.players[name].score, phase: room.phase, color: room.players[name].color, emoji: room.players[name].emoji });
         broadcast(room, { type: 'player-list', players: playerList(room) });
-        // Sync rejoining player to current game state
-        if (room.state === 'playing') {
-          syncPlayerToCurrentPhase(room, name);
-        }
+        if (room.state === 'playing') syncPlayerToCurrentPhase(room, name);
         break;
       }
       case 'host-join': {
         const code = (msg.code||'').toUpperCase();
         const room = getRoom(code);
         if (!room) { sendTo(ws, { type: 'error', message: 'Room not found' }); return; }
-        room.hostWs = ws;
-        myRoom = code;
-        isHost = true;
+        room.hostWs = ws; myRoom = code; isHost = true;
         sendTo(ws, { type: 'host-joined', code, players: playerList(room), phase: room.phase, state: room.state });
         break;
       }
@@ -639,9 +525,7 @@ wss.on('connection', (ws) => {
         if (!isHost || !myRoom) return;
         const room = getRoom(myRoom);
         if (!room || room.state !== 'lobby') return;
-        if (Object.keys(room.players).length < 2) {
-          sendTo(ws, { type: 'error', message: 'Need at least 2 players' }); return;
-        }
+        if (Object.keys(room.players).length < 2) { sendTo(ws, { type: 'error', message: 'Need at least 2 players' }); return; }
         startGame(room);
         break;
       }
@@ -651,13 +535,8 @@ wss.on('connection', (ws) => {
         if (!room || room.phase !== 'category-select') return;
         if (room.categories.includes(msg.category)) {
           room.categoryVotes[myName] = msg.category;
-          // Auto-advance when all players have voted
           const activePlayers = Object.values(room.players).filter(p => p.ws);
-          const allVoted = activePlayers.every(p => room.categoryVotes[p.name]);
-          if (allVoted && activePlayers.length > 0) {
-            clearTimer(room);
-            room.timer = setTimeout(() => selectCategory(room), 1000);
-          }
+          if (activePlayers.every(p => room.categoryVotes[p.name]) && activePlayers.length > 0) { clearTimer(room); room.timer = setTimeout(() => selectCategory(room), 1000); }
         }
         break;
       }
@@ -667,14 +546,12 @@ wss.on('connection', (ws) => {
         if (!room || room.phase !== 'lie') return;
         const lie = (msg.lie||'').trim();
         if (!lie || lie.length > 80) return;
-        if (isTooSimilar(lie, room.currentQuestion.answer, room.currentQuestion.alternateAnswers)) {
-          sendTo(ws, { type: 'lie-rejected', message: 'Too close to the real answer! Try again.' });
-          return;
-        }
+        if (isTooSimilar(lie, room.currentQuestion.answer, room.currentQuestion.alternateAnswers)) { sendTo(ws, { type: 'lie-rejected', message: 'Too close to the real answer! Try again.' }); return; }
         room.lies[myName] = lie;
         sendTo(ws, { type: 'lie-accepted' });
-        // Notify host
-        sendTo(room.hostWs, { type: 'lie-count', count: Object.keys(room.lies).length, total: Object.keys(room.players).length });
+        const activeLiePlayers = Object.values(room.players).filter(p => p.ws);
+        const lieWaiting = activeLiePlayers.filter(p => !room.lies[p.name]).map(p => ({ name: p.name, emoji: p.emoji, color: p.color }));
+        sendTo(room.hostWs, { type: 'lie-count', count: Object.keys(room.lies).length, total: Object.keys(room.players).length, waiting: lieWaiting });
         checkAllLiesIn(room);
         break;
       }
@@ -684,11 +561,12 @@ wss.on('connection', (ws) => {
         if (!room || room.phase !== 'vote') return;
         const aid = parseInt(msg.answerId);
         if (isNaN(aid) || aid < 0 || aid >= room.answerList.length) return;
-        // Can't vote for own lie
         if (room.answerList[aid].author === myName) return;
         room.votes[myName] = aid;
         sendTo(ws, { type: 'vote-accepted' });
-        sendTo(room.hostWs, { type: 'vote-count', count: Object.keys(room.votes).length, total: Object.keys(room.players).length });
+        const activeVotePlayers = Object.values(room.players).filter(p => p.ws);
+        const voteWaiting = activeVotePlayers.filter(p => room.votes[p.name] === undefined).map(p => ({ name: p.name, emoji: p.emoji, color: p.color }));
+        sendTo(room.hostWs, { type: 'vote-count', count: Object.keys(room.votes).length, total: Object.keys(room.players).length, waiting: voteWaiting });
         checkAllVotesIn(room);
         break;
       }
@@ -698,11 +576,12 @@ wss.on('connection', (ws) => {
         if (!room || room.phase !== 'best-lie-vote') return;
         const lieId = msg.lieId;
         if (lieId === undefined || !room.bestLieLookup || !room.bestLieLookup[lieId]) return;
-        // Can't vote for own lie
         if (room.bestLieLookup[lieId].author === myName) return;
         room.bestLieVotes[myName] = lieId;
         sendTo(ws, { type: 'best-lie-vote-accepted' });
-        sendTo(room.hostWs, { type: 'best-lie-vote-count', count: Object.keys(room.bestLieVotes).length, total: Object.keys(room.players).length });
+        const activeBLPlayers = Object.values(room.players).filter(p => p.ws);
+        const blWaiting = activeBLPlayers.filter(p => room.bestLieVotes[p.name] === undefined).map(p => ({ name: p.name, emoji: p.emoji, color: p.color }));
+        sendTo(room.hostWs, { type: 'best-lie-vote-count', count: Object.keys(room.bestLieVotes).length, total: Object.keys(room.players).length, waiting: blWaiting });
         checkAllBestLieVotesIn(room);
         break;
       }
@@ -710,11 +589,8 @@ wss.on('connection', (ws) => {
         if (!isHost || !myRoom) return;
         const room = getRoom(myRoom);
         if (!room) return;
-        room.state = 'lobby';
-        room.phase = 'lobby';
-        room.round = 0;
-        room.questionNum = 0;
-        for (const p of Object.values(room.players)) p.score = 0;
+        room.state = 'lobby'; room.phase = 'lobby'; room.round = 0; room.questionNum = 0; room.nobodyGotItCount = 0;
+        for (const p of Object.values(room.players)) { p.score = 0; p.correctPicks = 0; p.timesFooled = 0; p.peopleFooled = 0; }
         room.bestLieScores = {};
         broadcast(room, { type: 'back-to-lobby', players: playerList(room) });
         break;
@@ -725,10 +601,7 @@ wss.on('connection', (ws) => {
   ws.on('close', () => {
     if (myRoom && myName) {
       const room = getRoom(myRoom);
-      if (room && room.players[myName]) {
-        room.players[myName].ws = null;
-        broadcast(room, { type: 'player-list', players: playerList(room) });
-      }
+      if (room && room.players[myName]) { room.players[myName].ws = null; broadcast(room, { type: 'player-list', players: playerList(room) }); }
     }
   });
 });
