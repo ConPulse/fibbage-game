@@ -128,7 +128,11 @@ document.getElementById('joinUrl').textContent = location.host;
 // === SOUND SYSTEM (Web Audio API - no files needed) ===
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
-function ensureAudio() { if (!audioCtx) audioCtx = new AudioCtx(); return audioCtx; }
+function ensureAudio() {
+  if (!audioCtx) audioCtx = new AudioCtx();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
 
 function playTick(urgent) {
   const ctx = ensureAudio();
@@ -137,7 +141,7 @@ function playTick(urgent) {
   osc.connect(gain); gain.connect(ctx.destination);
   osc.frequency.value = urgent ? 900 : 600;
   osc.type = 'sine';
-  gain.gain.setValueAtTime(urgent ? 0.3 : 0.15, ctx.currentTime);
+  gain.gain.setValueAtTime(urgent ? 0.5 : 0.3, ctx.currentTime);
   gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
   osc.start(ctx.currentTime);
   osc.stop(ctx.currentTime + 0.1);
@@ -150,7 +154,7 @@ function playBuzzer() {
   osc.connect(gain); gain.connect(ctx.destination);
   osc.frequency.value = 200;
   osc.type = 'square';
-  gain.gain.setValueAtTime(0.3, ctx.currentTime);
+  gain.gain.setValueAtTime(0.5, ctx.currentTime);
   gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
   osc.start(ctx.currentTime);
   osc.stop(ctx.currentTime + 0.5);
@@ -186,7 +190,7 @@ function playGameStart() {
     osc.connect(gain); gain.connect(ctx.destination);
     osc.frequency.value = freq;
     osc.type = 'sine';
-    gain.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.12);
+    gain.gain.setValueAtTime(0.35, ctx.currentTime + i * 0.12);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 0.2);
     osc.start(ctx.currentTime + i * 0.12);
     osc.stop(ctx.currentTime + i * 0.12 + 0.2);
@@ -199,7 +203,7 @@ function startBgMusic() {
   if (bgMusic) return;
   const ctx = ensureAudio();
   const master = ctx.createGain();
-  master.gain.value = 0.06;
+  master.gain.value = 0.12;
   master.connect(ctx.destination);
   const filter = ctx.createBiquadFilter();
   filter.type = 'lowpass';
@@ -244,8 +248,8 @@ function stopBgMusic() {
   bgMusic.oscs.forEach(o => { try { o.stop(); } catch{} });
   bgMusic = null;
 }
-function pauseBgMusic() { if (bgMusic) bgMusic.master.gain.linearRampToValueAtTime(0.001, bgMusic.ctx.currentTime + 0.5); }
-function resumeBgMusic() { if (bgMusic) bgMusic.master.gain.linearRampToValueAtTime(0.06, bgMusic.ctx.currentTime + 0.5); }
+function pauseBgMusic() { if (bgMusic) bgMusic.master.gain.linearRampToValueAtTime(0.01, bgMusic.ctx.currentTime + 0.5); }
+function resumeBgMusic() { if (bgMusic) bgMusic.master.gain.linearRampToValueAtTime(0.12, bgMusic.ctx.currentTime + 0.5); }
 
 function playFoolSound() {
   const ctx = ensureAudio();
@@ -255,7 +259,7 @@ function playFoolSound() {
     osc.connect(gain); gain.connect(ctx.destination);
     osc.frequency.value = freq;
     osc.type = i % 2 === 0 ? 'sine' : 'triangle';
-    gain.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.1);
+    gain.gain.setValueAtTime(0.35, ctx.currentTime + i * 0.1);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.1 + 0.15);
     osc.start(ctx.currentTime + i * 0.1);
     osc.stop(ctx.currentTime + i * 0.1 + 0.15);
@@ -285,7 +289,11 @@ function stopTickTimer() {
 
 // Init audio on ANY user interaction (browser autoplay policy)
 ['click','touchstart','keydown'].forEach(evt => {
-  document.addEventListener(evt, () => ensureAudio(), { once: true });
+  document.addEventListener(evt, () => {
+    const ctx = ensureAudio();
+    if (ctx.state === 'suspended') ctx.resume();
+    console.log('[Sound] AudioContext unlocked:', ctx.state);
+  }, { once: false });
 });
 
 let ws, timerInterval;
@@ -489,9 +497,14 @@ function handleMsg(msg) {
 }
 
 document.getElementById('startBtn').onclick = () => {
+  // Unlock audio on user gesture (critical for TV/browser autoplay policy)
+  const ctx = ensureAudio();
+  if (ctx.state === 'suspended') ctx.resume();
   ws.send(JSON.stringify({type:'start-game'}));
 };
 document.getElementById('playAgainBtn').onclick = () => {
+  const ctx = ensureAudio();
+  if (ctx.state === 'suspended') ctx.resume();
   ws.send(JSON.stringify({type:'play-again'}));
 };
 </script>
