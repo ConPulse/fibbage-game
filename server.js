@@ -376,15 +376,14 @@ function startBestLieVote(room) {
   clearTimer(room);
   // Collect player-submitted lies (not truth, not game decoys)
   const playerLies = [];
+  room.bestLieLookup = {};
+  let lieId = 0;
   for (const [playerName, lieText] of Object.entries(room.lies)) {
     const p = room.players[playerName];
     if (p) {
-      playerLies.push({
-        text: lieText,
-        author: playerName,
-        authorEmoji: p.emoji || '',
-        authorColor: p.color || ''
-      });
+      const id = lieId++;
+      playerLies.push({ id, text: lieText });
+      room.bestLieLookup[id] = { author: playerName, text: lieText };
     }
   }
   // Skip if 0 or 1 player lies
@@ -405,26 +404,28 @@ function startBestLieVote(room) {
 function resolveBestLieVote(room) {
   clearTimer(room);
   room.phase = 'best-lie-result';
-  // Tally votes
+  // Tally votes by lieId
   const voteCounts = {};
-  for (const author of Object.values(room.bestLieVotes)) {
-    voteCounts[author] = (voteCounts[author] || 0) + 1;
+  for (const lieId of Object.values(room.bestLieVotes)) {
+    voteCounts[lieId] = (voteCounts[lieId] || 0) + 1;
   }
   // Find winner
   let maxVotes = 0;
   let winners = [];
-  for (const [author, count] of Object.entries(voteCounts)) {
-    if (count > maxVotes) { maxVotes = count; winners = [author]; }
-    else if (count === maxVotes) winners.push(author);
+  for (const [lieId, count] of Object.entries(voteCounts)) {
+    if (count > maxVotes) { maxVotes = count; winners = [lieId]; }
+    else if (count === maxVotes) winners.push(lieId);
   }
   let winnerData = null;
   if (winners.length > 0 && maxVotes > 0) {
-    const winnerName = winners[Math.floor(Math.random() * winners.length)];
+    const winnerLieId = winners[Math.floor(Math.random() * winners.length)];
+    const entry = room.bestLieLookup[winnerLieId];
+    const winnerName = entry.author;
     const p = room.players[winnerName];
     // Update bestLieScores
     room.bestLieScores[winnerName] = (room.bestLieScores[winnerName] || 0) + 1;
     winnerData = {
-      text: room.lies[winnerName] || '',
+      text: entry.text,
       author: winnerName,
       authorEmoji: p ? p.emoji : '',
       authorColor: p ? p.color : '',
@@ -695,12 +696,11 @@ wss.on('connection', (ws) => {
         if (!myRoom || !myName) return;
         const room = getRoom(myRoom);
         if (!room || room.phase !== 'best-lie-vote') return;
-        const author = msg.author;
+        const lieId = msg.lieId;
+        if (lieId === undefined || !room.bestLieLookup || !room.bestLieLookup[lieId]) return;
         // Can't vote for own lie
-        if (author === myName) return;
-        // Check author actually submitted a lie
-        if (!room.lies[author]) return;
-        room.bestLieVotes[myName] = author;
+        if (room.bestLieLookup[lieId].author === myName) return;
+        room.bestLieVotes[myName] = lieId;
         sendTo(ws, { type: 'best-lie-vote-accepted' });
         sendTo(room.hostWs, { type: 'best-lie-vote-count', count: Object.keys(room.bestLieVotes).length, total: Object.keys(room.players).length });
         checkAllBestLieVotesIn(room);

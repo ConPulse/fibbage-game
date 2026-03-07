@@ -311,14 +311,13 @@ function handleMsg(msg) {
       const blb = document.getElementById('bestLieButtons');
       blb.innerHTML = '';
       msg.lies.forEach(lie => {
-        if (lie.author === name) return; // can't vote for own
         const b = document.createElement('button');
         b.className = 'bestlie-btn';
-        b.innerHTML = '"' + lie.text + '"<div class="bl-author">' + (lie.authorEmoji||'') + ' ' + lie.author + '</div>';
+        b.innerHTML = '"' + lie.text + '"';
         b.onclick = () => {
           blb.querySelectorAll('.bestlie-btn').forEach(x=>x.classList.remove('selected'));
           b.classList.add('selected');
-          ws.send(JSON.stringify({type:'vote-best-lie', author: lie.author}));
+          ws.send(JSON.stringify({type:'vote-best-lie', lieId: lie.id}));
           vib(30);
         };
         blb.appendChild(b);

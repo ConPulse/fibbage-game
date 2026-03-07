@@ -625,7 +625,7 @@ function handleMsg(msg) {
       msg.lies.forEach(lie => {
         const d = document.createElement('div');
         d.className = 'best-lie-card';
-        d.innerHTML = '<div class="lie-text">"' + lie.text + '"</div><div class="lie-author">' + (lie.authorEmoji||'') + ' <span style="color:' + (lie.authorColor||'#f1c40f') + '">' + lie.author + '</span></div>';
+        d.innerHTML = '<div class="lie-text">"' + lie.text + '"</div>';
         blg.appendChild(d);
       });
       document.getElementById('bestLieCount').textContent = 'Waiting for votes...';
