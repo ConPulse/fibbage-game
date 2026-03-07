@@ -48,6 +48,19 @@ body{background:#1a1a2e;color:#fff;font-family:'Segoe UI',sans-serif;overflow:hi
 .crown{font-size:5rem}
 .lie-count{font-size:1.2rem;color:rgba(255,255,255,.5);margin-top:1rem}
 .info-text{font-size:1.3rem;color:rgba(255,255,255,.5);margin-top:1rem}
+
+/* Best Lie Vote */
+.best-lie-title{font-size:2.5rem;color:#f1c40f;margin-bottom:1.5rem;text-shadow:0 0 30px rgba(241,196,15,.4)}
+.best-lie-grid{display:flex;flex-wrap:wrap;gap:1.2rem;justify-content:center;margin:1.5rem 0;max-width:1000px}
+.best-lie-card{background:rgba(241,196,15,.08);border:2px solid rgba(241,196,15,.25);border-radius:14px;padding:20px 32px;font-size:1.5rem;min-width:250px;transition:all .5s;text-align:center}
+.best-lie-card .lie-text{font-size:1.5rem;margin-bottom:8px}
+.best-lie-card .lie-author{font-size:1rem;color:rgba(255,255,255,.6)}
+.best-lie-card.winner{border-color:#f1c40f;background:rgba(241,196,15,.2);box-shadow:0 0 40px rgba(241,196,15,.4);animation:goldGlow 1.5s ease infinite alternate}
+@keyframes goldGlow{0%{box-shadow:0 0 20px rgba(241,196,15,.3)}100%{box-shadow:0 0 50px rgba(241,196,15,.6)}}
+.best-liar-board{margin-top:1.5rem;font-size:1.1rem;color:rgba(255,255,255,.6)}
+.best-liar-board span{color:#f1c40f;font-weight:700}
+.best-liar-award{background:linear-gradient(135deg,rgba(241,196,15,.15),rgba(243,156,18,.15));border:2px solid #f1c40f;border-radius:12px;padding:1rem 2rem;margin-top:1.5rem;font-size:1.3rem;color:#f1c40f;text-align:center}
+
 /* Fool of the Round */
 .fool-banner{background:linear-gradient(135deg,rgba(243,156,18,.2),rgba(233,69,96,.2));border:2px solid #f39c12;border-radius:16px;padding:2rem 3rem;font-size:1.6rem;max-width:800px;animation:foolPop .5s ease;text-align:center}
 @keyframes foolPop{0%{transform:scale(0.5);opacity:0}70%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
@@ -93,6 +106,22 @@ body{background:#1a1a2e;color:#fff;font-family:'Segoe UI',sans-serif;overflow:hi
 <div class="screen" id="revealScreen">
 <p class="question-text" id="revealQuestion" style="font-size:1.6rem;margin-bottom:1.5rem"></p>
 <div class="answer-grid" id="revealGrid"></div>
+</div>
+
+
+<!-- Best Lie Vote -->
+<div class="screen" id="bestLieScreen">
+<div class="best-lie-title">🎭 Vote: Best Lie!</div>
+<div class="best-lie-grid" id="bestLieGrid"></div>
+<p class="lie-count" id="bestLieCount">Waiting for votes...</p>
+<div class="best-liar-board" id="bestLiarBoard"></div>
+</div>
+
+<!-- Best Lie Result -->
+<div class="screen" id="bestLieResultScreen">
+<div class="best-lie-title">🎭 Best Lie!</div>
+<div class="best-lie-grid" id="bestLieResultGrid"></div>
+<div class="best-liar-board" id="bestLiarBoardResult"></div>
 </div>
 
 <!-- Fool of the Round -->
@@ -316,6 +345,35 @@ function setMusicUrgency(level) {
     bgMusic.oscs.forEach(o => { if (bgMusic.oscs.indexOf(o) < 2) o.type = 'sine'; else o.type = 'triangle'; });
   }
   bgMusic.urgentLevel = level;
+}
+
+
+function playBestLie() {
+  const ctx = ensureAudio();
+  // Cheeky ascending fanfare with wobble
+  const notes = [523, 587, 659, 784, 880, 1047];
+  notes.forEach((freq, i) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.frequency.value = freq;
+    osc.type = i % 2 === 0 ? 'triangle' : 'sine';
+    // Add vibrato on last note
+    if (i === notes.length - 1) {
+      const lfo = ctx.createOscillator();
+      const lfoGain = ctx.createGain();
+      lfo.frequency.value = 6;
+      lfoGain.gain.value = 15;
+      lfo.connect(lfoGain);
+      lfoGain.connect(osc.frequency);
+      lfo.start(ctx.currentTime + i * 0.1);
+      lfo.stop(ctx.currentTime + i * 0.1 + 0.5);
+    }
+    gain.gain.setValueAtTime(0.3, ctx.currentTime + i * 0.1);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.1 + 0.3);
+    osc.start(ctx.currentTime + i * 0.1);
+    osc.stop(ctx.currentTime + i * 0.1 + 0.3);
+  });
 }
 
 function playFoolSound() {
@@ -558,6 +616,48 @@ function handleMsg(msg) {
         }, i * 1800);
       });
       break;
+
+    case 'best-lie-vote':
+      showScreen('bestLieScreen');
+      stopTickTimer();
+      const blg = document.getElementById('bestLieGrid');
+      blg.innerHTML = '';
+      msg.lies.forEach(lie => {
+        const d = document.createElement('div');
+        d.className = 'best-lie-card';
+        d.innerHTML = '<div class="lie-text">"' + lie.text + '"</div><div class="lie-author">' + (lie.authorEmoji||'') + ' <span style="color:' + (lie.authorColor||'#f1c40f') + '">' + lie.author + '</span></div>';
+        blg.appendChild(d);
+      });
+      document.getElementById('bestLieCount').textContent = 'Waiting for votes...';
+      startTimer(msg.timeMs);
+      startTickTimer(msg.timeMs);
+      break;
+    case 'best-lie-vote-count':
+      document.getElementById('bestLieCount').textContent = msg.count + '/' + msg.total + ' votes in';
+      break;
+    case 'best-lie-result':
+      stopTickTimer();
+      showScreen('bestLieResultScreen');
+      playBestLie();
+      const blrg = document.getElementById('bestLieResultGrid');
+      blrg.innerHTML = '';
+      if (msg.winner) {
+        const d = document.createElement('div');
+        d.className = 'best-lie-card winner';
+        d.innerHTML = '<div class="lie-text">"' + msg.winner.text + '"</div><div class="lie-author">' + (msg.winner.authorEmoji||'') + ' <span style="color:' + (msg.winner.authorColor||'#f1c40f') + '">' + msg.winner.author + '</span> — ' + msg.winner.votes + ' vote' + (msg.winner.votes>1?'s':'') + '</div>';
+        blrg.appendChild(d);
+      } else {
+        blrg.innerHTML = '<p style="color:rgba(255,255,255,.5)">No votes cast!</p>';
+      }
+      // Show running leaderboard
+      if (msg.bestLieScores) {
+        const board = document.getElementById('bestLiarBoardResult');
+        const entries = Object.entries(msg.bestLieScores).sort((a,b)=>b[1]-a[1]);
+        if (entries.length > 0) {
+          board.innerHTML = '🎭 Best Liar standings: ' + entries.map(([n,c]) => '<span>' + n + '</span> (' + c + ')').join(', ');
+        }
+      }
+      break;
     case 'fool-of-round':
       showScreen('foolScreen');
       playFoolSound();
@@ -574,6 +674,17 @@ function handleMsg(msg) {
       showScreen('gameOverScreen');
       document.getElementById('winnerName').textContent = (msg.players[0]?.emoji||'') + ' ' + (msg.players[0]?.name || 'Nobody');
       renderScores(msg.players, 'finalScores');
+      // Best Liar award
+      if (msg.bestLiar) {
+        let award = document.getElementById('bestLiarAward');
+        if (!award) {
+          award = document.createElement('div');
+          award.id = 'bestLiarAward';
+          award.className = 'best-liar-award';
+          document.getElementById('gameOverScreen').insertBefore(award, document.getElementById('playAgainBtn'));
+        }
+        award.innerHTML = '🎭 Best Liar: ' + (msg.bestLiar.emoji||'') + ' <span style="color:' + (msg.bestLiar.color||'#f1c40f') + '">' + msg.bestLiar.name + '</span> — ' + msg.bestLiar.votes + ' vote' + (msg.bestLiar.votes>1?'s':'');
+      }
       break;
     case 'back-to-lobby':
       stopBgMusic();

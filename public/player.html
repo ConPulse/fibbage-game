@@ -36,6 +36,13 @@ h2{font-size:1.5rem;margin-bottom:1rem}
 .question-display{font-size:1.1rem;line-height:1.4;margin-bottom:1.2rem;color:rgba(255,255,255,.8)}
 .error-msg{color:#e94560;font-size:.9rem;margin-top:8px;min-height:1.2rem}
 .waiting-icon{font-size:3rem;margin-bottom:1rem;animation:pulse 2s infinite}
+
+/* Best Lie Vote */
+.bestlie-btn{width:100%;max-width:400px;padding:18px;margin:6px 0;border:2px solid rgba(241,196,15,.25);border-radius:12px;background:rgba(241,196,15,.08);color:#fff;font-size:1.15rem;font-weight:500;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.bestlie-btn:active,.bestlie-btn.selected{background:rgba(241,196,15,.25);border-color:#f1c40f;transform:scale(.97)}
+.bestlie-btn .bl-author{font-size:.85rem;color:rgba(255,255,255,.5);margin-top:4px}
+.best-liar-award{background:rgba(241,196,15,.1);border:2px solid #f1c40f;border-radius:12px;padding:12px 20px;margin-top:12px;color:#f1c40f;font-size:1.1rem;text-align:center}
+
 @keyframes pulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
 .emoji-big{font-size:4rem;margin-bottom:1rem}
 </style>
@@ -108,6 +115,28 @@ h2{font-size:1.5rem;margin-bottom:1rem}
 <div class="emoji-big" id="revealEmoji">🎉</div>
 <h2 id="revealTitle">Results</h2>
 <div id="revealInfo"></div>
+</div>
+
+
+<!-- Best Lie Vote -->
+<div class="screen" id="bestLieVoteScreen">
+<h2 style="color:#f1c40f">🎭 Best Lie?</h2>
+<p class="sub">Vote for the funniest fake answer</p>
+<div id="bestLieButtons"></div>
+</div>
+
+<!-- Best Lie Wait -->
+<div class="screen" id="bestLieWaitScreen">
+<div class="emoji-big">🎭</div>
+<h2 style="color:#f1c40f">Vote Submitted!</h2>
+<p class="sub">Waiting for others...</p>
+</div>
+
+<!-- Best Lie Result -->
+<div class="screen" id="bestLieResultScreen">
+<div class="emoji-big">🎭</div>
+<h2 id="bestLieResultTitle" style="color:#f1c40f">Best Lie!</h2>
+<div id="bestLieResultInfo"></div>
 </div>
 
 <!-- Scoreboard -->
@@ -274,6 +303,46 @@ function handleMsg(msg) {
         ri.appendChild(d);
       }
       break;
+
+    case 'best-lie-vote':
+      showScreen('bestLieVoteScreen');
+      startTimer(msg.timeMs);
+      vib(200);
+      const blb = document.getElementById('bestLieButtons');
+      blb.innerHTML = '';
+      msg.lies.forEach(lie => {
+        if (lie.author === name) return; // can't vote for own
+        const b = document.createElement('button');
+        b.className = 'bestlie-btn';
+        b.innerHTML = '"' + lie.text + '"<div class="bl-author">' + (lie.authorEmoji||'') + ' ' + lie.author + '</div>';
+        b.onclick = () => {
+          blb.querySelectorAll('.bestlie-btn').forEach(x=>x.classList.remove('selected'));
+          b.classList.add('selected');
+          ws.send(JSON.stringify({type:'vote-best-lie', author: lie.author}));
+          vib(30);
+        };
+        blb.appendChild(b);
+      });
+      break;
+    case 'best-lie-vote-accepted':
+      showScreen('bestLieWaitScreen');
+      break;
+    case 'best-lie-result':
+      showScreen('bestLieResultScreen');
+      vib([100,50,100]);
+      const blri = document.getElementById('bestLieResultInfo');
+      blri.innerHTML = '';
+      if (msg.winner) {
+        document.getElementById('bestLieResultTitle').textContent = 'Best Lie: ' + (msg.winner.authorEmoji||'') + ' ' + msg.winner.author;
+        const d = document.createElement('div');
+        d.className = 'result-card';
+        d.style.borderColor = '#f1c40f';
+        d.innerHTML = '<div style="font-size:1.2rem;color:#f1c40f">"' + msg.winner.text + '"</div><div style="color:rgba(255,255,255,.5);margin-top:6px">' + msg.winner.votes + ' vote' + (msg.winner.votes>1?'s':'') + '</div>';
+        blri.appendChild(d);
+      } else {
+        document.getElementById('bestLieResultTitle').textContent = 'No votes!';
+      }
+      break;
     case 'scoreboard':
       showScreen('scoreScreen');
       const si = document.getElementById('scoreInfo');
@@ -301,6 +370,13 @@ function handleMsg(msg) {
         d.innerHTML = `<strong>${i+1}. ${p.name}</strong> — <span style="color:#4ecdc4">${p.score} pts</span>`;
         gi.appendChild(d);
       });
+      // Best Liar award
+      if (msg.bestLiar) {
+        const award = document.createElement('div');
+        award.className = 'best-liar-award';
+        award.innerHTML = '🎭 Best Liar: ' + (msg.bestLiar.emoji||'') + ' ' + msg.bestLiar.name + ' — ' + msg.bestLiar.votes + ' vote' + (msg.bestLiar.votes>1?'s':'');
+        gi.appendChild(award);
+      }
       const waitMsg = document.createElement('p');
       waitMsg.className = 'sub';
       waitMsg.style.marginTop = '1rem';
@@ -320,6 +396,18 @@ function handleMsg(msg) {
       }
       if (msg.phase === 'scoreboard' && !document.getElementById('scoreScreen').classList.contains('active')) {
         // Will get scoreboard message
+      }
+      if (msg.phase === 'best-lie-vote') {
+        if (!document.getElementById('bestLieVoteScreen').classList.contains('active') && !document.getElementById('bestLieWaitScreen').classList.contains('active')) {
+          showScreen('bestLieWaitScreen');
+          document.querySelector('#bestLieWaitScreen h2').textContent = '🎭 Voting...';
+          document.querySelector('#bestLieWaitScreen p').textContent = 'Best Lie vote in progress';
+        }
+      }
+      if (msg.phase === 'best-lie-result') {
+        if (!document.getElementById('bestLieResultScreen').classList.contains('active')) {
+          showScreen('bestLieResultScreen');
+        }
       }
       if (msg.phase === 'fool-of-round') {
         showScreen('lieWaitScreen');

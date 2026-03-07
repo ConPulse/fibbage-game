@@ -183,12 +183,22 @@ function syncPlayerToCurrentPhase(room, name) {
     case 'scoreboard':
       sendTo(ws, { type: 'scoreboard', players: playerList(room) });
       break;
+    case 'best-lie-vote':
+      sendTo(ws, { type: 'sync', phase: 'best-lie-vote', message: 'Vote for Best Lie!' });
+      break;
+    case 'best-lie-result':
+      sendTo(ws, { type: 'sync', phase: 'best-lie-result', message: 'Best Lie revealed!' });
+      break;
     case 'fool-of-round':
       sendTo(ws, { type: 'sync', phase: 'fool-of-round', message: 'Fool of the Round!' });
       break;
     case 'game-over': {
       const sorted = playerList(room).sort((a,b) => b.score - a.score);
-      sendTo(ws, { type: 'game-over', players: sorted });
+      let bestLiar = null; let maxBL = 0;
+      for (const [n, c] of Object.entries(room.bestLieScores || {})) { if (c > maxBL) { maxBL = c; bestLiar = n; } }
+      let bestLiarData = null;
+      if (bestLiar && maxBL > 0) { const p = room.players[bestLiar]; bestLiarData = { name: bestLiar, emoji: p ? p.emoji : '', color: p ? p.color : '', votes: maxBL }; }
+      sendTo(ws, { type: 'game-over', players: sorted, bestLiar: bestLiarData, bestLieScores: room.bestLieScores });
       break;
     }
   }
@@ -352,6 +362,84 @@ function checkAllVotesIn(room) {
   }
 }
 
+
+function checkAllBestLieVotesIn(room) {
+  const activePlayers = Object.values(room.players).filter(p => p.ws);
+  const allIn = activePlayers.every(p => room.bestLieVotes[p.name] !== undefined);
+  if (allIn && activePlayers.length > 0) {
+    clearTimer(room);
+    resolveBestLieVote(room);
+  }
+}
+
+function startBestLieVote(room) {
+  clearTimer(room);
+  // Collect player-submitted lies (not truth, not game decoys)
+  const playerLies = [];
+  for (const [playerName, lieText] of Object.entries(room.lies)) {
+    const p = room.players[playerName];
+    if (p) {
+      playerLies.push({
+        text: lieText,
+        author: playerName,
+        authorEmoji: p.emoji || '',
+        authorColor: p.color || ''
+      });
+    }
+  }
+  // Skip if 0 or 1 player lies
+  if (playerLies.length <= 1) {
+    showFoolAndScoreboard(room);
+    return;
+  }
+  room.phase = 'best-lie-vote';
+  room.bestLieVotes = {};
+  broadcast(room, {
+    type: 'best-lie-vote',
+    lies: playerLies,
+    timeMs: 15000
+  });
+  room.timer = setTimeout(() => resolveBestLieVote(room), 15000);
+}
+
+function resolveBestLieVote(room) {
+  clearTimer(room);
+  room.phase = 'best-lie-result';
+  // Tally votes
+  const voteCounts = {};
+  for (const author of Object.values(room.bestLieVotes)) {
+    voteCounts[author] = (voteCounts[author] || 0) + 1;
+  }
+  // Find winner
+  let maxVotes = 0;
+  let winners = [];
+  for (const [author, count] of Object.entries(voteCounts)) {
+    if (count > maxVotes) { maxVotes = count; winners = [author]; }
+    else if (count === maxVotes) winners.push(author);
+  }
+  let winnerData = null;
+  if (winners.length > 0 && maxVotes > 0) {
+    const winnerName = winners[Math.floor(Math.random() * winners.length)];
+    const p = room.players[winnerName];
+    // Update bestLieScores
+    room.bestLieScores[winnerName] = (room.bestLieScores[winnerName] || 0) + 1;
+    winnerData = {
+      text: room.lies[winnerName] || '',
+      author: winnerName,
+      authorEmoji: p ? p.emoji : '',
+      authorColor: p ? p.color : '',
+      votes: maxVotes
+    };
+  }
+  broadcast(room, {
+    type: 'best-lie-result',
+    winner: winnerData,
+    bestLieScores: { ...room.bestLieScores }
+  });
+  // Show result for 4 seconds, then continue to fool/scoreboard
+  room.timer = setTimeout(() => showFoolAndScoreboard(room), 4000);
+}
+
 function doReveal(room) {
   clearTimer(room);
   room.phase = 'reveal';
@@ -436,19 +524,27 @@ function doReveal(room) {
     foolOfRound: foolData
   });
 
-  // After reveal, show fool of round (if any) then scoreboard then next question
+  // Store foolData on room for later use
+  room.currentFoolData = foolData;
+
+  // After reveal animation, go to Best Lie vote
   const revealTime = Math.max(2500, revealData.length * 2200);
+  room.timer = setTimeout(() => startBestLieVote(room), revealTime);
+}
+
+function showFoolAndScoreboard(room) {
+  clearTimer(room);
+  const foolData = room.currentFoolData;
   const foolDelay = foolData ? 4000 : 0;
+  if (foolData) {
+    room.phase = 'fool-of-round';
+    broadcast(room, { type: 'fool-of-round', fool: foolData });
+  }
   room.timer = setTimeout(() => {
-    if (foolData) {
-      broadcast(room, { type: 'fool-of-round', fool: foolData });
-    }
-    room.timer = setTimeout(() => {
-      room.phase = 'scoreboard';
-      broadcast(room, { type: 'scoreboard', players: playerList(room), round: room.round });
-      room.timer = setTimeout(() => nextQuestion(room), 5000);
-    }, foolDelay);
-  }, revealTime);
+    room.phase = 'scoreboard';
+    broadcast(room, { type: 'scoreboard', players: playerList(room), round: room.round });
+    room.timer = setTimeout(() => nextQuestion(room), 5000);
+  }, foolDelay);
 }
 
 function endGame(room) {
@@ -456,7 +552,18 @@ function endGame(room) {
   room.phase = 'game-over';
   room.state = 'ended';
   const sorted = playerList(room).sort((a,b) => b.score - a.score);
-  broadcast(room, { type: 'game-over', players: sorted });
+  // Find best liar
+  let bestLiar = null;
+  let maxBL = 0;
+  for (const [name, count] of Object.entries(room.bestLieScores)) {
+    if (count > maxBL) { maxBL = count; bestLiar = name; }
+  }
+  let bestLiarData = null;
+  if (bestLiar && maxBL > 0) {
+    const p = room.players[bestLiar];
+    bestLiarData = { name: bestLiar, emoji: p ? p.emoji : '', color: p ? p.color : '', votes: maxBL };
+  }
+  broadcast(room, { type: 'game-over', players: sorted, bestLiar: bestLiarData, bestLieScores: room.bestLieScores });
 }
 
 wss.on('connection', (ws) => {
@@ -475,7 +582,8 @@ wss.on('connection', (ws) => {
           code, hostWs: ws, players: {}, state: 'lobby', phase: 'lobby',
           round: 0, questionNum: 0, timer: null, questionPool: [],
           currentQuestion: null, lies: {}, votes: {}, answerList: [],
-          categories: [], categoryVotes: {}, customQuestions: msg.customQuestions || null
+          categories: [], categoryVotes: {}, customQuestions: msg.customQuestions || null,
+          bestLieScores: {}, bestLieVotes: {}
         };
         rooms.set(code, room);
         myRoom = code;
@@ -583,6 +691,21 @@ wss.on('connection', (ws) => {
         checkAllVotesIn(room);
         break;
       }
+      case 'vote-best-lie': {
+        if (!myRoom || !myName) return;
+        const room = getRoom(myRoom);
+        if (!room || room.phase !== 'best-lie-vote') return;
+        const author = msg.author;
+        // Can't vote for own lie
+        if (author === myName) return;
+        // Check author actually submitted a lie
+        if (!room.lies[author]) return;
+        room.bestLieVotes[myName] = author;
+        sendTo(ws, { type: 'best-lie-vote-accepted' });
+        sendTo(room.hostWs, { type: 'best-lie-vote-count', count: Object.keys(room.bestLieVotes).length, total: Object.keys(room.players).length });
+        checkAllBestLieVotesIn(room);
+        break;
+      }
       case 'play-again': {
         if (!isHost || !myRoom) return;
         const room = getRoom(myRoom);
@@ -592,6 +715,7 @@ wss.on('connection', (ws) => {
         room.round = 0;
         room.questionNum = 0;
         for (const p of Object.values(room.players)) p.score = 0;
+        room.bestLieScores = {};
         broadcast(room, { type: 'back-to-lobby', players: playerList(room) });
         break;
       }
