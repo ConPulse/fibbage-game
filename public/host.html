@@ -35,8 +35,8 @@ body{background:#1a1a2e;color:#fff;font-family:'Segoe UI',sans-serif;overflow:hi
 /* Reveal */
 .answer-card.truth{border-color:#2ecc71;background:rgba(46,204,113,.15);box-shadow:0 0 30px rgba(46,204,113,.3)}
 .answer-card.lie{border-color:#e94560;background:rgba(233,69,96,.1)}
-.picked-by{font-size:.9rem;color:#f39c12;margin-top:6px}
-.author{font-size:.85rem;color:#4ecdc4;margin-top:4px}
+.picked-by{font-size:1.3rem;color:#f39c12;margin-top:6px}
+.author{font-size:1.2rem;color:#4ecdc4;margin-top:4px}
 /* Scoreboard */
 .score-list{list-style:none;max-width:600px;width:100%}
 .score-item{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;margin:8px 0;background:rgba(255,255,255,.06);border-radius:12px;font-size:1.5rem;transition:all .5s}
@@ -188,6 +188,7 @@ function playTick(urgent) {
   gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
   osc.start(ctx.currentTime);
   osc.stop(ctx.currentTime + 0.1);
+  osc.onended = () => { osc.disconnect(); gain.disconnect(); };
 }
 
 function playBuzzer() {
@@ -201,6 +202,7 @@ function playBuzzer() {
   gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
   osc.start(ctx.currentTime);
   osc.stop(ctx.currentTime + 0.5);
+  osc.onended = () => { osc.disconnect(); gain.disconnect(); };
 }
 
 function playReveal(correct) {
@@ -216,12 +218,14 @@ function playReveal(correct) {
     gain.gain.setValueAtTime(0.25, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
     osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.4);
+    osc.onended = () => { osc.disconnect(); gain.disconnect(); };
   } else {
     osc.frequency.setValueAtTime(400, ctx.currentTime);
     osc.frequency.setValueAtTime(350, ctx.currentTime + 0.15);
     gain.gain.setValueAtTime(0.2, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
     osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.3);
+    osc.onended = () => { osc.disconnect(); gain.disconnect(); };
   }
 }
 
@@ -237,6 +241,7 @@ function playGameStart() {
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 0.2);
     osc.start(ctx.currentTime + i * 0.12);
     osc.stop(ctx.currentTime + i * 0.12 + 0.2);
+    osc.onended = () => { osc.disconnect(); gain.disconnect(); };
   });
 }
 
@@ -318,6 +323,7 @@ function startBgMusic() {
     g.gain.value = 0.06;
     src.connect(hp); hp.connect(g); g.connect(master);
     src.start();
+    src.onended = () => { src.disconnect(); hp.disconnect(); g.disconnect(); };
   }, 230);
 
   bgMusic = { oscs, gains, master, filter, interval, ctx, bassOsc, bassGain, bassInterval, rhythmInterval, urgentLevel: 0 };
@@ -328,8 +334,9 @@ function stopBgMusic() {
   clearInterval(bgMusic.interval);
   clearInterval(bgMusic.bassInterval);
   clearInterval(bgMusic.rhythmInterval);
-  bgMusic.oscs.forEach(o => { try { o.stop(); } catch{} });
-  try { bgMusic.bassOsc.stop(); } catch{}
+  bgMusic.oscs.forEach((o, i) => { try { o.stop(); o.disconnect(); } catch{} try { bgMusic.gains[i].disconnect(); } catch{} });
+  try { bgMusic.bassOsc.stop(); bgMusic.bassOsc.disconnect(); bgMusic.bassGain.disconnect(); } catch{}
+  try { bgMusic.filter.disconnect(); bgMusic.master.disconnect(); } catch{}
   bgMusic = null;
 }
 
@@ -387,6 +394,7 @@ function playBestLie() {
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.1 + 0.3);
     osc.start(ctx.currentTime + i * 0.1);
     osc.stop(ctx.currentTime + i * 0.1 + 0.3);
+    osc.onended = () => { osc.disconnect(); gain.disconnect(); };
   });
 }
 
@@ -402,6 +410,7 @@ function playFoolSound() {
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.1 + 0.15);
     osc.start(ctx.currentTime + i * 0.1);
     osc.stop(ctx.currentTime + i * 0.1 + 0.15);
+    osc.onended = () => { osc.disconnect(); gain.disconnect(); };
   });
 }
 
@@ -417,6 +426,7 @@ function playDramaticBuzzer() {
     osc.connect(g); g.connect(ctx.destination);
     osc.start(ctx.currentTime + i * 0.15);
     osc.stop(ctx.currentTime + i * 0.15 + 0.3);
+    osc.onended = () => { osc.disconnect(); g.disconnect(); };
   });
 }
 
@@ -430,6 +440,7 @@ function playNobodyGotIt() {
     g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.25 + 0.4);
     osc.connect(g); g.connect(ctx.destination);
     osc.start(ctx.currentTime + i * 0.25); osc.stop(ctx.currentTime + i * 0.25 + 0.4);
+    osc.onended = () => { osc.disconnect(); g.disconnect(); };
   });
   const bass = ctx.createOscillator(); const bg = ctx.createGain();
   bass.type = 'square'; bass.frequency.value = 80;
@@ -437,6 +448,7 @@ function playNobodyGotIt() {
   bg.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.0);
   bass.connect(bg); bg.connect(ctx.destination);
   bass.start(ctx.currentTime + 1.0); bass.stop(ctx.currentTime + 2.0);
+  bass.onended = () => { bass.disconnect(); bg.disconnect(); };
 }
 
 function playAwardSound() {
@@ -448,6 +460,7 @@ function playAwardSound() {
     gain.gain.setValueAtTime(0.3, ctx.currentTime + i * 0.12);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 0.25);
     osc.start(ctx.currentTime + i * 0.12); osc.stop(ctx.currentTime + i * 0.12 + 0.25);
+    osc.onended = () => { osc.disconnect(); gain.disconnect(); };
   });
 }
 
@@ -665,7 +678,7 @@ function handleMsg(msg) {
         setTimeout(() => {
           const d = document.createElement('div');
           d.className = 'answer-card ' + (r.isTrue ? 'truth' : 'lie');
-          let html = `<div style="font-size:1.6rem">${r.text}</div>`;
+          let html = `<div style="font-size:2rem">${r.text}</div>`;
           if (r.isTrue) html += `<div class="author">✅ THE TRUTH</div>`;
           else if (r.author === '__GAME__') html += `<div class="author" style="color:#f39c12">🎮 Game Decoy</div>`;
           else if (r.author) html += `<div class="author">Written by ${r.authorEmoji||''} <span style="color:${r.authorColor||'#4ecdc4'}">${r.author}</span></div>`;
@@ -676,7 +689,7 @@ function handleMsg(msg) {
           d.innerHTML = html;
           rg.appendChild(d);
           playReveal(r.isTrue);
-        }, i * 1800);
+        }, i * 2800);
       });
       }, revealDelay);
       break;
@@ -712,18 +725,10 @@ function handleMsg(msg) {
       if (msg.winner) {
         const d = document.createElement('div');
         d.className = 'best-lie-card winner';
-        d.innerHTML = '<div class="lie-text">"' + msg.winner.text + '"</div><div class="lie-author">' + (msg.winner.authorEmoji||'') + ' <span style="color:' + (msg.winner.authorColor||'#f1c40f') + '">' + msg.winner.author + '</span> — ' + msg.winner.votes + ' vote' + (msg.winner.votes>1?'s':'') + '</div>';
+        d.innerHTML = '<div class="lie-text">"' + msg.winner.text + '"</div><div class="lie-author">' + msg.winner.votes + ' vote' + (msg.winner.votes>1?'s':'') + '</div>';
         blrg.appendChild(d);
       } else {
         blrg.innerHTML = '<p style="color:rgba(255,255,255,.5)">No votes cast!</p>';
-      }
-      // Show running leaderboard
-      if (msg.bestLieScores) {
-        const board = document.getElementById('bestLiarBoardResult');
-        const entries = Object.entries(msg.bestLieScores).sort((a,b)=>b[1]-a[1]);
-        if (entries.length > 0) {
-          board.innerHTML = '🎭 Best Liar standings: ' + entries.map(([n,c]) => '<span>' + n + '</span> (' + c + ')').join(', ');
-        }
       }
       break;
     case 'fool-of-round':

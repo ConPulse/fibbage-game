@@ -116,15 +116,16 @@ function pickQuestionFromCategory(room, category) {
 }
 
 function roundMultiplier(room) {
+  return 1;
+}
+function __old_roundMultiplier(room) {
   if (room.round === 1) return 1;
   if (room.round === 2) return 2;
   return 3;
 }
 
 function questionsInRound(round) {
-  if (round === 1) return 3;
-  if (round === 2) return 3;
-  return 1;
+  return 3;
 }
 
 function clearTimer(room) {
@@ -348,6 +349,12 @@ function startBestLieVote(room) {
     const p = room.players[playerName];
     if (p) { const id = lieId++; playerLies.push({ id, text: lieText }); room.bestLieLookup[id] = { author: playerName, text: lieText }; }
   }
+  // Include game decoys in best lie vote
+  if (room.answerList) {
+    for (const a of room.answerList) {
+      if (a.author === '__GAME__') { const id = lieId++; playerLies.push({ id, text: a.text }); room.bestLieLookup[id] = { author: '__GAME__', text: a.text }; }
+    }
+  }
   if (playerLies.length <= 1) { showFoolAndScoreboard(room); return; }
   room.phase = 'best-lie-vote';
   room.bestLieVotes = {};
@@ -370,11 +377,12 @@ function resolveBestLieVote(room) {
     const winnerLieId = winners[Math.floor(Math.random() * winners.length)];
     const entry = room.bestLieLookup[winnerLieId];
     const winnerName = entry.author;
-    const p = room.players[winnerName];
-    room.bestLieScores[winnerName] = (room.bestLieScores[winnerName] || 0) + 1;
-    winnerData = { text: entry.text, author: winnerName, authorEmoji: p ? p.emoji : '', authorColor: p ? p.color : '', votes: maxVotes };
+    if (winnerName && winnerName !== '__GAME__') {
+      room.bestLieScores[winnerName] = (room.bestLieScores[winnerName] || 0) + 1;
+    }
+    winnerData = { text: entry.text, votes: maxVotes };
   }
-  broadcast(room, { type: 'best-lie-result', winner: winnerData, bestLieScores: { ...room.bestLieScores } });
+  broadcast(room, { type: 'best-lie-result', winner: winnerData });
   room.timer = setTimeout(() => showFoolAndScoreboard(room), 4000);
 }
 
@@ -450,8 +458,8 @@ function doReveal(room) {
   broadcast(room, { type: 'reveal', reveals: revealData, truth, scoreChanges, players: playerList(room), foolOfRound: foolData, nobodyGotIt });
 
   room.currentFoolData = foolData;
-  const revealTime = Math.max(2500, revealData.length * 2200);
-  const extraDelay = nobodyGotIt ? 3000 : 0;
+  const revealTime = Math.max(3500, revealData.length * 3200);
+  const extraDelay = nobodyGotIt ? 3500 : 0;
   room.timer = setTimeout(() => startBestLieVote(room), revealTime + extraDelay);
 }
 

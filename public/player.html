@@ -338,7 +338,7 @@ function handleMsg(msg) {
       const blri = document.getElementById('bestLieResultInfo');
       blri.innerHTML = '';
       if (msg.winner) {
-        document.getElementById('bestLieResultTitle').textContent = 'Best Lie: ' + (msg.winner.authorEmoji||'') + ' ' + msg.winner.author;
+        document.getElementById('bestLieResultTitle').textContent = 'Best Lie!';
         const d = document.createElement('div');
         d.className = 'result-card';
         d.style.borderColor = '#f1c40f';
