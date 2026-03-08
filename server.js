@@ -118,11 +118,6 @@ function pickQuestionFromCategory(room, category) {
 function roundMultiplier(room) {
   return 1;
 }
-function __old_roundMultiplier(room) {
-  if (room.round === 1) return 1;
-  if (room.round === 2) return 2;
-  return 3;
-}
 
 function questionsInRound(round) {
   return 3;
