@@ -177,6 +177,10 @@ function ensureAudio() {
   return audioCtx;
 }
 
+function autoCleanup(osc, ...nodes) {
+  osc.onended = () => { osc.disconnect(); nodes.forEach(n => { try { n.disconnect(); } catch(e){} }); };
+}
+
 function playTick(urgent) {
   const ctx = ensureAudio();
   const osc = ctx.createOscillator();
@@ -322,6 +326,7 @@ function startBgMusic() {
     src.buffer = buffer;
     g.gain.value = 0.06;
     src.connect(hp); hp.connect(g); g.connect(master);
+    src.onended = () => { src.disconnect(); hp.disconnect(); g.disconnect(); };
     src.start();
     src.onended = () => { src.disconnect(); hp.disconnect(); g.disconnect(); };
   }, 230);

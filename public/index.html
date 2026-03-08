@@ -36,6 +36,17 @@ input::placeholder{color:rgba(255,255,255,.4)}
 .rules-close{position:absolute;top:12px;right:16px;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;opacity:.6;transition:opacity .2s}
 .rules-close:hover{opacity:1}
 .rules-got-it{display:block;margin:1.5rem auto 0;padding:12px 40px;border:none;border-radius:10px;background:linear-gradient(135deg,#4ecdc4,#2ca89e);color:#fff;font-size:1.1rem;font-weight:700;cursor:pointer}
+.how-btn{background:none;border:2px solid rgba(255,255,255,.15);color:rgba(255,255,255,.6);padding:12px 28px;border-radius:10px;font-size:1.1rem;cursor:pointer;transition:all .2s;margin-bottom:1.5rem}
+.how-btn:hover{border-color:#4ecdc4;color:#4ecdc4}
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.92);z-index:100;overflow-y:auto;padding:2rem}
+.modal-overlay.active{display:flex;align-items:flex-start;justify-content:center}
+.modal-content{background:#1a1a2e;border:2px solid rgba(78,205,196,.3);border-radius:16px;padding:2rem;max-width:520px;width:100%;margin:2rem auto;text-align:left}
+.modal-content h2{color:#e94560;font-size:1.8rem;margin-bottom:1.2rem;text-align:center}
+.modal-content h3{color:#4ecdc4;font-size:1.15rem;margin:1.2rem 0 .5rem}
+.modal-content p,.modal-content li{color:rgba(255,255,255,.8);font-size:1rem;line-height:1.6;margin-bottom:.4rem}
+.modal-content ul{list-style:none;padding:0}
+.modal-content li::before{content:'';margin-right:6px}
+.modal-close{display:block;margin:1.5rem auto 0;padding:14px 40px;background:linear-gradient(135deg,#4ecdc4,#2ca89e);color:#fff;border:none;border-radius:10px;font-size:1.2rem;font-weight:700;cursor:pointer}
 </style>
 </head>
 <body>
@@ -47,6 +58,7 @@ input::placeholder{color:rgba(255,255,255,.4)}
 <button class="btn btn-primary" id="createBtn">Create Game</button>
 </div>
 <button class="how-to-play-btn" id="howToPlayBtn">📖 How to Play</button>
+<button class="how-btn" onclick="document.getElementById('howModal').classList.add('active')">📖 How to Play</button>
 <div class="or">— or join a game —</div>
 <div class="card">
 <h2>Join a Game</h2>
@@ -93,6 +105,36 @@ input::placeholder{color:rgba(255,255,255,.4)}
 </div>
 </div>
 
+<div class="modal-overlay" id="howModal" onclick="if(event.target===this)this.classList.remove('active')">
+<div class="modal-content">
+<h2>📖 HOW TO PLAY</h2>
+<h3>🎯 The Goal</h3>
+<p>Be the best liar. Fool your friends. Find the truth.</p>
+<h3>📝 Each Question</h3>
+<ul>
+<li>1️⃣ A trivia question appears with a blank</li>
+<li>2️⃣ Everyone writes a fake answer (a lie!)</li>
+<li>3️⃣ All answers get mixed together — including the real one</li>
+<li>4️⃣ Pick which answer you think is TRUE</li>
+<li>5️⃣ Vote for the Best Lie</li>
+</ul>
+<h3>💰 Scoring</h3>
+<ul>
+<li>✅ Find the truth: <strong>+1,000 pts</strong></li>
+<li>🎭 Someone picks YOUR lie: <strong>+500 pts</strong> per person fooled</li>
+<li>💀 Pick a game decoy: <strong>-500 pts</strong></li>
+</ul>
+<h3>🏆 The Game</h3>
+<p>9 questions. Most points wins. Best Liar award at the end.</p>
+<h3>🎭 Tips</h3>
+<ul>
+<li>💡 Make your lies sound believable</li>
+<li>😂 The best lies are funny AND plausible</li>
+<li>🤔 The most obvious answer is probably a lie</li>
+</ul>
+<button class="modal-close" onclick="document.getElementById('howModal').classList.remove('active')">Got it! 👍</button>
+</div>
+</div>
 <script>
 let customQuestions = null;
 
