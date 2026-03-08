@@ -7,6 +7,19 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#1a1a2e;color:#fff;font-family:'Segoe UI',sans-serif;overflow:hidden;height:100vh}
+.game-controls{position:fixed;bottom:20px;right:20px;display:none;gap:8px;z-index:15}
+.game-controls.active{display:flex}
+.ctrl-btn{padding:8px 16px;border:1px solid rgba(255,255,255,.2);border-radius:8px;background:rgba(0,0,0,.5);color:rgba(255,255,255,.6);font-size:.85rem;cursor:pointer;transition:all .2s;backdrop-filter:blur(4px)}
+.ctrl-btn:hover{border-color:rgba(255,255,255,.4);color:#fff}
+.ctrl-btn.paused{border-color:#f39c12;color:#f39c12}
+.pause-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:50;flex-direction:column;align-items:center;justify-content:center}
+.pause-overlay.active{display:flex}
+.pause-text{font-size:4rem;color:#f39c12;font-weight:900;text-shadow:0 0 40px rgba(243,156,18,.4)}
+.pause-sub{font-size:1.5rem;color:rgba(255,255,255,.5);margin-top:1rem}
+.pause-btns{display:flex;gap:1rem;margin-top:2rem}
+.pause-btns button{padding:14px 32px;border-radius:12px;font-size:1.2rem;font-weight:700;cursor:pointer;border:none}
+.pause-resume{background:linear-gradient(135deg,#4ecdc4,#2ca89e);color:#fff}
+.pause-exit{background:linear-gradient(135deg,#e94560,#c23152);color:#fff}
 .room-code{position:fixed;top:20px;right:30px;background:rgba(233,69,96,.2);border:2px solid #e94560;border-radius:12px;padding:10px 24px;font-size:1.5rem;font-weight:700;letter-spacing:6px;z-index:10}
 .timer-bar{position:fixed;top:0;left:0;height:6px;background:linear-gradient(90deg,#4ecdc4,#2ecc71);transition:width .3s linear;z-index:20}
 .screen{display:none;flex-direction:column;align-items:center;justify-content:center;height:100vh;width:100%;padding:2rem;text-align:center}
@@ -84,6 +97,18 @@ body{background:#1a1a2e;color:#fff;font-family:'Segoe UI',sans-serif;overflow:hi
 <body>
 <div class="room-code" id="roomCode"></div>
 <div class="timer-bar" id="timerBar" style="width:0%"></div>
+<div class="game-controls" id="gameControls">
+<button class="ctrl-btn" id="pauseBtn" onclick="togglePause()">⏸ Pause</button>
+<button class="ctrl-btn" id="exitBtn" onclick="confirmExit()">✕ End Game</button>
+</div>
+<div class="pause-overlay" id="pauseOverlay">
+<div class="pause-text">⏸ PAUSED</div>
+<div class="pause-sub">Game is paused</div>
+<div class="pause-btns">
+<button class="pause-resume" onclick="togglePause()">▶ Resume</button>
+<button class="pause-exit" onclick="doExit()">✕ End Game</button>
+</div>
+</div>
 
 <!-- Lobby -->
 <div class="screen active" id="lobby">
@@ -576,6 +601,7 @@ function handleMsg(msg) {
     case 'game-start':
       playGameStart();
       startBgMusic();
+      document.getElementById('gameControls').classList.add('active');
       break;
     case 'new-round':
       break;
@@ -749,6 +775,7 @@ function handleMsg(msg) {
       break;
     case 'game-over':
       stopBgMusic();
+      document.getElementById('gameControls').classList.remove('active');
       showScreen('gameOverScreen');
       document.getElementById('winnerName').textContent = (msg.players[0]?.emoji||'') + ' ' + (msg.players[0]?.name || 'Nobody');
       renderScores(msg.players, 'finalScores');
@@ -766,6 +793,7 @@ function handleMsg(msg) {
       break;
     case 'back-to-lobby':
       stopBgMusic();
+      document.getElementById('gameControls').classList.remove('active');
       showScreen('lobby');
       renderPlayers(msg.players, 'lobbyPlayers');
       break;
@@ -783,6 +811,25 @@ document.getElementById('playAgainBtn').onclick = () => {
   if (ctx.state === 'suspended') ctx.resume();
   ws.send(JSON.stringify({type:'play-again'}));
 };
+
+let gamePaused = false;
+function togglePause() {
+  gamePaused = !gamePaused;
+  document.getElementById('pauseOverlay').classList.toggle('active', gamePaused);
+  document.getElementById('pauseBtn').classList.toggle('paused', gamePaused);
+  document.getElementById('pauseBtn').textContent = gamePaused ? '▶ Resume' : '⏸ Pause';
+  if (gamePaused) { pauseBgMusic(); ws.send(JSON.stringify({type:'pause-game'})); }
+  else { resumeBgMusic(); ws.send(JSON.stringify({type:'resume-game'})); }
+}
+function confirmExit() {
+  document.getElementById('pauseOverlay').classList.add('active');
+  document.querySelector('.pause-sub').textContent = 'End the game for everyone?';
+}
+function doExit() {
+  ws.send(JSON.stringify({type:'end-game'}));
+  document.getElementById('pauseOverlay').classList.remove('active');
+  gamePaused = false;
+}
 </script>
 </body>
 </html>

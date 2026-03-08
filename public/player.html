@@ -423,6 +423,15 @@ function handleMsg(msg) {
         // Will get game-over message
       }
       break;
+    case 'game-paused':
+      showScreen('lieWaitScreen');
+      document.querySelector('#lieWaitScreen .emoji-big').textContent = '⏸';
+      document.querySelector('#lieWaitScreen h2').textContent = 'Game Paused';
+      document.querySelector('#lieWaitScreen p').textContent = 'Waiting for host to resume...';
+      break;
+    case 'game-resumed':
+      // syncPlayerToCurrentPhase will send the right screen
+      break;
     case 'back-to-lobby':
       showScreen('lobbyScreen');
       updateScore(0);

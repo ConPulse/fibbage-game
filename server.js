@@ -581,6 +581,40 @@ wss.on('connection', (ws) => {
         checkAllBestLieVotesIn(room);
         break;
       }
+      case 'pause-game': {
+        if (!isHost || !myRoom) return;
+        const room = getRoom(myRoom);
+        if (!room || room.state !== 'playing') return;
+        clearTimer(room);
+        room.paused = true;
+        broadcast(room, { type: 'game-paused' });
+        break;
+      }
+      case 'resume-game': {
+        if (!isHost || !myRoom) return;
+        const room = getRoom(myRoom);
+        if (!room || room.state !== 'playing' || !room.paused) return;
+        room.paused = false;
+        broadcast(room, { type: 'game-resumed' });
+        // Re-sync all players to current phase
+        for (const name of Object.keys(room.players)) syncPlayerToCurrentPhase(room, name);
+        // Restart the current phase timer
+        switch (room.phase) {
+          case 'category-select': room.timer = setTimeout(() => selectCategory(room), 15000); break;
+          case 'lie': room.timer = setTimeout(() => startVoting(room), 45000); break;
+          case 'vote': room.timer = setTimeout(() => doReveal(room), 30000); break;
+          case 'best-lie-vote': room.timer = setTimeout(() => resolveBestLieVote(room), 15000); break;
+        }
+        break;
+      }
+      case 'end-game': {
+        if (!isHost || !myRoom) return;
+        const room = getRoom(myRoom);
+        if (!room) return;
+        room.paused = false;
+        endGame(room);
+        break;
+      }
       case 'play-again': {
         if (!isHost || !myRoom) return;
         const room = getRoom(myRoom);

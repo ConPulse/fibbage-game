@@ -21,8 +21,6 @@ input::placeholder{color:rgba(255,255,255,.4)}
 .btn-accent{background:linear-gradient(135deg,#4ecdc4,#2ca89e);color:#fff;box-shadow:0 4px 20px rgba(78,205,196,.3)}
 .or{color:rgba(255,255,255,.3);margin:1rem 0;font-size:.9rem}
 .error{color:#e94560;font-size:.9rem;margin-top:.5rem;display:none}
-.how-to-play-btn{background:none;border:none;color:#f39c12;font-size:1.1rem;cursor:pointer;padding:8px 16px;margin-bottom:1rem;transition:opacity .2s;text-decoration:underline;text-underline-offset:4px}
-.how-to-play-btn:hover{opacity:.8}
 .rules-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.92);z-index:100;display:none;align-items:center;justify-content:center;padding:1rem}
 .rules-overlay.active{display:flex}
 .rules-content{background:#1a1a2e;border:2px solid rgba(255,255,255,.15);border-radius:16px;padding:2rem;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;position:relative;text-align:left;line-height:1.6}
@@ -57,7 +55,6 @@ input::placeholder{color:rgba(255,255,255,.4)}
 <h2>Host a Game</h2>
 <button class="btn btn-primary" id="createBtn">Create Game</button>
 </div>
-<button class="how-to-play-btn" id="howToPlayBtn">📖 How to Play</button>
 <button class="how-btn" onclick="document.getElementById('howModal').classList.add('active')">📖 How to Play</button>
 <div class="or">— or join a game —</div>
 <div class="card">
@@ -66,42 +63,6 @@ input::placeholder{color:rgba(255,255,255,.4)}
 <input type="text" id="name" placeholder="Your Name" maxlength="16">
 <button class="btn btn-accent" id="joinBtn">Join</button>
 <p class="error" id="err"></p>
-</div>
-</div>
-
-<div class="rules-overlay" id="rulesOverlay">
-<div class="rules-content">
-<button class="rules-close" id="rulesClose">&times;</button>
-<h2>HOW TO PLAY</h2>
-<h3>🎯 THE GOAL</h3>
-<p>Be the best liar. Fool your friends. Find the truth.</p>
-<h3>📝 EACH ROUND</h3>
-<ol>
-<li>A trivia question appears with a blank</li>
-<li>Everyone writes a fake answer (a lie!)</li>
-<li>All answers get mixed together — including the real one</li>
-<li>Pick which answer you think is TRUE</li>
-<li>Vote for the Best Lie</li>
-</ol>
-<h3>💰 SCORING</h3>
-<ul>
-<li>Find the truth: +1,000 pts (×2 in R2, ×3 in R3)</li>
-<li>Someone picks YOUR lie: +500 pts per person fooled</li>
-<li>Pick a game decoy: -500 pts (ouch!)</li>
-</ul>
-<h3>🏆 ROUNDS</h3>
-<ul>
-<li>Round 1: 3 questions (×1 points)</li>
-<li>Round 2: 3 questions (×2 points)</li>
-<li>Round 3: 1 final question (×3 points)</li>
-</ul>
-<h3>🎭 TIPS</h3>
-<ul>
-<li>Make your lies sound believable</li>
-<li>The best lies are funny AND plausible</li>
-<li>Don't pick the most obvious answer — it's probably a lie</li>
-</ul>
-<button class="rules-got-it" id="rulesGotIt">Got it!</button>
 </div>
 </div>
 
@@ -138,10 +99,6 @@ input::placeholder{color:rgba(255,255,255,.4)}
 <script>
 let customQuestions = null;
 
-document.getElementById('howToPlayBtn').onclick = () => document.getElementById('rulesOverlay').classList.add('active');
-document.getElementById('rulesClose').onclick = () => document.getElementById('rulesOverlay').classList.remove('active');
-document.getElementById('rulesGotIt').onclick = () => document.getElementById('rulesOverlay').classList.remove('active');
-document.getElementById('rulesOverlay').onclick = (e) => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('active'); };
 
 document.getElementById('createBtn').onclick = () => {
   const ws = new WebSocket(`${location.protocol==='https:' ? 'wss' : 'ws'}://${location.host}`);
