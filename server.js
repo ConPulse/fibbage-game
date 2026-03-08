@@ -183,7 +183,7 @@ function syncPlayerToCurrentPhase(room, name) {
   const ws = p.ws;
   switch (room.phase) {
     case 'category-select':
-      sendTo(ws, { type: 'category-select', categories: room.categories, round: room.round, questionNum: room.questionNum, totalQuestions: questionsInRound(room.round), timeMs: 5000 });
+      sendTo(ws, { type: 'category-select', categories: room.categories, questionNum: room.questionNum, totalQuestions: 9, timeMs: 5000 });
       break;
     case 'show-question':
     case 'lie':
@@ -234,7 +234,6 @@ setInterval(() => {
 
 function startGame(room) {
   room.state = 'playing';
-  room.round = 1;
   room.questionNum = 0;
   room.nobodyGotItCount = 0;
   for (const p of Object.values(room.players)) { p.score = 0; p.correctPicks = 0; p.timesFooled = 0; p.peopleFooled = 0; }
@@ -245,18 +244,12 @@ function startGame(room) {
 
 function nextQuestion(room) {
   room.questionNum++;
-  const totalInRound = questionsInRound(room.round);
-  if (room.questionNum > totalInRound) {
-    room.round++;
-    room.questionNum = 1;
-    if (room.round > 3) { endGame(room); return; }
-    broadcast(room, { type: 'new-round', round: room.round });
-  }
+  if (room.questionNum > 9) { endGame(room); return; }
   room.phase = 'category-select';
   room.categories = getCategories(room);
   room.categoryVotes = {};
   if (room.categories.length === 0) { endGame(room); return; }
-  broadcast(room, { type: 'category-select', categories: room.categories, round: room.round, questionNum: room.questionNum, totalQuestions: questionsInRound(room.round), timeMs: 15000 });
+  broadcast(room, { type: 'category-select', categories: room.categories, questionNum: room.questionNum, totalQuestions: 9, timeMs: 15000 });
   clearTimer(room);
   room.timer = setTimeout(() => selectCategory(room), 15000);
 }
@@ -273,7 +266,7 @@ function selectCategory(room) {
   room.lies = {};
   room.votes = {};
   room.phase = 'show-question';
-  broadcast(room, { type: 'show-question', question: q.question, category: q.category, round: room.round, timeMs: 3000 });
+  broadcast(room, { type: 'show-question', question: q.question, category: q.category, timeMs: 3000 });
   room.timer = setTimeout(() => startLiePhase(room), 3000);
 }
 
@@ -384,7 +377,7 @@ function resolveBestLieVote(room) {
 function doReveal(room) {
   clearTimer(room);
   room.phase = 'reveal';
-  const mult = roundMultiplier(room);
+  const mult = 1;
   const truth = room.currentQuestion.answer;
 
   const picks = {};
@@ -465,7 +458,7 @@ function showFoolAndScoreboard(room) {
   if (foolData) { room.phase = 'fool-of-round'; broadcast(room, { type: 'fool-of-round', fool: foolData }); }
   room.timer = setTimeout(() => {
     room.phase = 'scoreboard';
-    broadcast(room, { type: 'scoreboard', players: playerList(room), round: room.round });
+    broadcast(room, { type: 'scoreboard', players: playerList(room) });
     room.timer = setTimeout(() => nextQuestion(room), 5000);
   }, foolDelay);
 }
@@ -592,7 +585,7 @@ wss.on('connection', (ws) => {
         if (!isHost || !myRoom) return;
         const room = getRoom(myRoom);
         if (!room) return;
-        room.state = 'lobby'; room.phase = 'lobby'; room.round = 0; room.questionNum = 0; room.nobodyGotItCount = 0;
+        room.state = 'lobby'; room.phase = 'lobby'; room.questionNum = 0; room.nobodyGotItCount = 0;
         for (const p of Object.values(room.players)) { p.score = 0; p.correctPicks = 0; p.timesFooled = 0; p.peopleFooled = 0; }
         room.bestLieScores = {};
         broadcast(room, { type: 'back-to-lobby', players: playerList(room) });

@@ -576,7 +576,7 @@ function handleMsg(msg) {
       break;
     case 'category-select':
       showScreen('categoryScreen');
-      document.getElementById('roundBadge').textContent = `Round ${msg.round} — Question ${msg.questionNum}/${msg.totalQuestions}`;
+      document.getElementById('roundBadge').textContent = `Question ${msg.questionNum} of ${msg.totalQuestions}`;
       const co = document.getElementById('catOptions');
       co.innerHTML = '';
       msg.categories.forEach(cat => {
@@ -590,7 +590,7 @@ function handleMsg(msg) {
     case 'show-question':
       stopTickTimer();
       showScreen('questionScreen');
-      document.getElementById('qRound').textContent = `Round ${msg.round} — ${msg.category}`;
+      document.getElementById('qRound').textContent = msg.category;
       document.getElementById('questionText').innerHTML = formatQ(msg.question);
       document.getElementById('lieCount').textContent = '';
       startTimer(msg.timeMs);
