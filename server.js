@@ -446,8 +446,13 @@ function doReveal(room) {
   broadcast(room, { type: 'reveal', reveals: revealData, truth, scoreChanges, players: playerList(room), foolOfRound: foolData, nobodyGotIt });
 
   room.currentFoolData = foolData;
-  const revealTime = Math.max(3500, revealData.length * 3200);
+  // Scale reveal speed by player count — more players = faster per-answer reveal
+  // 2p: 3.2s each (relaxed), 4p: 2.6s, 6p: 2.2s, 8p: 1.8s
+  const playerCount = Object.keys(room.players).length;
+  const perAnswerMs = Math.max(1800, 3200 - (playerCount - 2) * 230);
+  const revealTime = Math.max(3500, revealData.length * perAnswerMs);
   const extraDelay = nobodyGotIt ? 3500 : 0;
+  broadcast(room, { type: 'reveal-timing', perAnswerMs, totalMs: revealTime });
   room.timer = setTimeout(() => startBestLieVote(room), revealTime + extraDelay);
 }
 

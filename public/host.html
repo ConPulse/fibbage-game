@@ -688,6 +688,9 @@ function handleMsg(msg) {
         document.getElementById('voteCount').textContent = '\u2705 All votes are in!';
       }
       break;
+    case 'reveal-timing':
+      window.__revealPerAnswerMs = Math.max(1400, msg.perAnswerMs - 400);
+      break;
     case 'reveal': {
       stopTickTimer();
       pauseBgMusic();
@@ -720,7 +723,7 @@ function handleMsg(msg) {
           d.innerHTML = html;
           rg.appendChild(d);
           playReveal(r.isTrue);
-        }, i * 2800);
+        }, i * (window.__revealPerAnswerMs || 2800));
       });
       }, revealDelay);
       break;
