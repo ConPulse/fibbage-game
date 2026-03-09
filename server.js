@@ -346,7 +346,7 @@ function startBestLieVote(room) {
   if (playerLies.length <= 1) { showFoolAndScoreboard(room); return; }
   room.phase = 'best-lie-vote';
   room.bestLieVotes = {};
-  broadcast(room, { type: 'best-lie-vote', lies: allLies, timeMs: 15000 });
+  broadcast(room, { type: 'best-lie-vote', lies: playerLies, timeMs: 15000 });
   room.timer = setTimeout(() => resolveBestLieVote(room), 15000);
 }
 
