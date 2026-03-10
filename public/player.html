@@ -402,19 +402,14 @@ function handleMsg(msg) {
       if (msg.phase === 'scoreboard' && !document.getElementById('scoreScreen').classList.contains('active')) {
         // Will get scoreboard message
       }
-      if (msg.phase === 'best-lie-vote') {
-        if (!document.getElementById('bestLieVoteScreen').classList.contains('active') && !document.getElementById('bestLieWaitScreen').classList.contains('active')) {
-          showScreen('bestLieWaitScreen');
-          document.querySelector('#bestLieWaitScreen h2').textContent = '🎭 Voting...';
-          document.querySelector('#bestLieWaitScreen p').textContent = 'Best Lie vote in progress';
-        }
+      // best-lie phases removed
+      // best-lie phases removed — show waiting screen
+      if (msg.phase === 'best-lie-vote' || msg.phase === 'best-lie-result') {
+        showScreen('revealScreen');
+        document.getElementById('revealEmoji').textContent = '👀';
+        document.getElementById('revealTitle').textContent = 'Hang tight...';
+        document.getElementById('revealInfo').innerHTML = '';
       }
-      if (msg.phase === 'best-lie-result') {
-        if (!document.getElementById('bestLieResultScreen').classList.contains('active')) {
-          showScreen('bestLieResultScreen');
-        }
-      }
-      if (msg.phase === 'fool-of-round') {
         showScreen('lieWaitScreen');
         document.querySelector('#lieWaitScreen h2').textContent = '🎭';
         document.querySelector('#lieWaitScreen p').textContent = 'Fool of the Round!';

@@ -187,7 +187,11 @@ function syncPlayerToCurrentPhase(room, name) {
       break;
     case 'show-question':
     case 'lie':
-      sendTo(ws, { type: 'lie-phase', question: room.currentQuestion.question, timeMs: 15000 });
+      sendTo(ws, { type: 'lie-phase', question: room.currentQuestion.question, timeMs: 15000, isReconnect: true });
+      break;
+    case 'scoreboard':
+    case 'fool-of-round':
+      sendTo(ws, { type: 'scoreboard', players: playerList(room) });
       break;
     case 'vote': {
       const displayAnswers = room.answerList.map((a,i) => ({ id: i, text: a.text }));
@@ -196,16 +200,15 @@ function syncPlayerToCurrentPhase(room, name) {
       break;
     }
     case 'reveal':
-      sendTo(ws, { type: 'sync', phase: 'reveal', message: 'Revealing answers...' });
-      break;
-    case 'scoreboard':
-      sendTo(ws, { type: 'scoreboard', players: playerList(room) });
+      if (room.lastRevealData) {
+        sendTo(ws, room.lastRevealData);
+      } else {
+        sendTo(ws, { type: 'sync', phase: 'reveal', message: 'Revealing answers...' });
+      }
       break;
     case 'best-lie-vote':
-      sendTo(ws, { type: 'sync', phase: 'best-lie-vote', message: 'Vote for Best Lie!' });
-      break;
     case 'best-lie-result':
-      sendTo(ws, { type: 'sync', phase: 'best-lie-result', message: 'Best Lie revealed!' });
+      sendTo(ws, { type: 'sync', phase: 'reveal', message: 'Moving on...' });
       break;
     case 'fool-of-round':
       sendTo(ws, { type: 'sync', phase: 'fool-of-round', message: 'Fool of the Round!' });
@@ -443,7 +446,9 @@ function doReveal(room) {
     foolData = { name: pick.name, count: pick.count, text: pick.text, emoji: fp ? fp.emoji : '', color: fp ? fp.color : '' };
   }
 
-  broadcast(room, { type: 'reveal', reveals: revealData, truth, scoreChanges, players: playerList(room), foolOfRound: foolData, nobodyGotIt });
+  const revealMsg = { type: 'reveal', reveals: revealData, truth, scoreChanges, players: playerList(room), foolOfRound: foolData, nobodyGotIt };
+  room.lastRevealData = revealMsg;
+  broadcast(room, revealMsg);
 
   room.currentFoolData = foolData;
   // Scale reveal speed by player count — more players = faster per-answer reveal
@@ -453,7 +458,7 @@ function doReveal(room) {
   const revealTime = Math.max(3500, revealData.length * perAnswerMs);
   const extraDelay = nobodyGotIt ? 3500 : 0;
   broadcast(room, { type: 'reveal-timing', perAnswerMs, totalMs: revealTime });
-  room.timer = setTimeout(() => startBestLieVote(room), revealTime + extraDelay);
+  room.timer = setTimeout(() => showFoolAndScoreboard(room), revealTime + extraDelay);
 }
 
 function showFoolAndScoreboard(room) {
@@ -608,7 +613,7 @@ wss.on('connection', (ws) => {
           case 'category-select': room.timer = setTimeout(() => selectCategory(room), 15000); break;
           case 'lie': room.timer = setTimeout(() => startVoting(room), 45000); break;
           case 'vote': room.timer = setTimeout(() => doReveal(room), 30000); break;
-          case 'best-lie-vote': room.timer = setTimeout(() => resolveBestLieVote(room), 15000); break;
+          // best-lie-vote removed
         }
         break;
       }
